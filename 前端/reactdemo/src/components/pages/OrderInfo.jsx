@@ -26,6 +26,9 @@ class OrderInfo extends React.Component{
                 OrderInfo --
                 <span>{theNumber}</span>
                 <Button type="primary" onClick={this.add}>Add</Button>
+                <div className="demo">
+                    后台运维页面-订单明细
+                </div>
             </div>
         )
     }
