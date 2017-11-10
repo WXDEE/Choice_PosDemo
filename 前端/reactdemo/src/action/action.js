@@ -1,3 +1,6 @@
+/**
+ * Created by Knove on 2017/11/10.
+ */
 import * as type from '../action/type';
 
 export function addNum(){
