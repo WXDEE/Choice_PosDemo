@@ -7,8 +7,8 @@ import React from 'react';
 class FoodInfo extends React.Component{
     render(){
         return(
-            <div>
-                FoodInfo
+            <div className="demo">
+              后台运维页面-菜品信息
             </div>
         )
     }

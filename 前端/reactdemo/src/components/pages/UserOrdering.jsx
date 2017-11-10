@@ -7,8 +7,8 @@ import React from 'react';
 class UserOrdering extends React.Component{
     render(){
         return(
-            <div>
-                UserOrdering
+            <div className="demo">
+                服务员订餐页面
             </div>
         )
     }
