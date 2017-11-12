@@ -59,7 +59,7 @@ class OrderInfo extends React.Component{
             title: '消费金额',
             dataIndex: 'Money',
             key: 'money',
-            render: text => <span>{text}$</span>,
+            render: text => <span>{text}¥</span>,
         }, {
             title: '订单状态',
             dataIndex: 'State',
@@ -105,6 +105,41 @@ class OrderInfo extends React.Component{
             Money: '323',
             State:'已结账',
         }];
+        const listColumns = [{
+            title: '菜品名',
+            dataIndex: 'FoodName',
+            key: 'name',
+        }, {
+            title: '数量(份)',
+            dataIndex: 'Num',
+            key: 'num',
+        }, {
+            title: '单价',
+            dataIndex: 'Price',
+            key: 'price',
+        }
+        ];
+
+        const listData = [{
+            key: '1',
+            FoodName: '糖醋里脊',
+            Num: '1',
+            Price: '200',
+            render:text=><spam>text¥</spam>
+        },{
+            key: '2',
+            FoodName: '油炸冰淇淋',
+            Num: '2',
+            Price: '170',
+            render:text=><spam>text¥</spam>
+        },{
+            key: '3',
+            FoodName: '糖醋里脊',
+            Num: '1',
+            Price: '200',
+            render:text=><spam>text¥</spam>
+        }];
+
         return(
             <div>
          {/*       OrderInfo --
@@ -158,13 +193,15 @@ class OrderInfo extends React.Component{
                         <hr  className="doLine" />
                         <section className="">
                             <Table
-                                columns={columns}
-                                dataSource={data}
+                                columns={listColumns}
+                                dataSource={listData}
+                                pagination={false}
                                 className="listInfo"
                                 size="small"
                             />
                         </section>
                         <hr  className="doLine" />
+                        <div style={{marginLeft:'10%'}}>共计金额：570¥</div>
                     </Modal>
                 </div>
 
