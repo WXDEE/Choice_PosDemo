@@ -1,5 +1,10 @@
 package com.choice.entity;
 
+/**
+ * 
+ * @author liuxu
+ *
+ */
 public class Student {
 	private Integer sid;
 	private String sname;
