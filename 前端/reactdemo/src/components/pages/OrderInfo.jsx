@@ -107,7 +107,7 @@ class OrderInfo extends React.Component{
         }];
         return(
             <div>
-             {/*   OrderInfo --
+         {/*       OrderInfo --
                 <span>{theNumber}</span>
                 <Button type="primary" onClick={this.add}>Add</Button>
                 <div className="demo">
