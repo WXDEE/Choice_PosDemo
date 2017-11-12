@@ -2,22 +2,39 @@
  * Created by Knove on 2017/11/9.
  */
 import React from 'react';
-import { Button,Input,DatePicker ,Table,Icon} from 'antd';
+import { Button,Input,DatePicker ,Table,Icon,Modal} from 'antd';
 import { addNum } from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
 class OrderInfo extends React.Component{
+
     constructor(props) {
         super(props);
         this.state = {
+            visible: false
         }
        this.add=this.add.bind(this);
+        this.showModal=this.showModal.bind(this);
+        this.handleCancel=this.handleCancel.bind(this);
     }
     add() {
         const { addNum } = this.props;
         addNum();
     }
+
+    showModal (){
+        this.setState({
+            visible: true,
+        });
+    }
+    handleCancel (e) {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
     render(){
+
         const theNumber = this.props.dataA;
         function onChange(date, dateString) {
             console.log(date, dateString);
@@ -51,7 +68,7 @@ class OrderInfo extends React.Component{
             title: '操作',
             dataIndex: 'Func',
             key: 'func',
-            render: text => <a href="#">查看明细</a>,
+            render: text => <a href="#" onClick={this.showModal}>查看明细</a>,
         }
     ];
 
@@ -103,7 +120,7 @@ class OrderInfo extends React.Component{
                         <DatePicker onChange={onChange} className="datePicker" />
                         至<DatePicker onChange={onChange} className="datePicker" />
                     </div>
-                    <div className="normalInput"><Button type="primary" >查询</Button></div>
+                    <div className="normalInput"><Button type="primary" >查询</Button><Button type="primary" >清空</Button></div>
 
                 </section>
                 <div className="tableMain">
@@ -116,7 +133,41 @@ class OrderInfo extends React.Component{
                         className=""
                         size="small"
                     />
+                    <Modal
+                        title="订单明细"
+                        visible={this.state.visible}
+                        onCancel={this.handleCancel}
+                        footer={<Button type="primary" onClick={this.handleCancel}>关闭</Button>}
+                    >
+                       <table className="listInfo">
+                           <tbody>
+                           <tr>
+                               <td>订单号</td>
+                               <td>099287</td>
+                           </tr>
+                           <tr>
+                               <td>桌号</td>
+                               <td>022</td>
+                           </tr>
+                           <tr>
+                               <td>下单时间</td>
+                               <td>2017-11-11 10:00</td>
+                           </tr>
+                           </tbody>
+                       </table>
+                        <hr  className="doLine" />
+                        <section className="">
+                            <Table
+                                columns={columns}
+                                dataSource={data}
+                                className="listInfo"
+                                size="small"
+                            />
+                        </section>
+                        <hr  className="doLine" />
+                    </Modal>
                 </div>
+
 
             </div>
         )
