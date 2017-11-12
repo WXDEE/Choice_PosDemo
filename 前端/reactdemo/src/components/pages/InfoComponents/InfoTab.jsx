@@ -10,6 +10,7 @@ function doPageA()  {
         })
 }
 function doPageB()  {
+    //hashHistory实现类似get方法带参数跳转
     hashHistory.push({
         pathname: 'main/FoodInfo'
     })

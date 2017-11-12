@@ -3,13 +3,19 @@
  */
 import React from 'react';
 import InfoTab from './InfoComponents/InfoTab';
+import {Table,Icon} from 'antd';
 
 class FoodInfo extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+        }
+    }
     render(){
         return(
             <div >
                 <InfoTab infoNum="2" />
-              后台运维页面-菜品信息
+
             </div>
         )
     }

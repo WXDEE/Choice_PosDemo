@@ -10,5 +10,5 @@ export function addNum(){
   }
 }
 export const addNumWithStore=()=>{
-    return {type: type.REQUEST_DATA}
+    return {type: type.RECEIVE_DATA}
 }
