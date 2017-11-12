@@ -28,7 +28,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 
 
-	<context:property-placeholder location="classpath:resource/db.properties" />
+	<context:property-placeholder location="classpath:resource/db.properties" ignore-unresolvable="true" />
 	<!-- 数据库连接池 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
         destroy-method="close">
