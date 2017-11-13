@@ -107,4 +107,20 @@ public class Dish {
 
 	public Dish() {
 	}
+
+	@Override
+	public String toString() {
+		return "Dish{" +
+				"id=" + id +
+				", dcId='" + dcId + '\'' +
+				", dName='" + dName + '\'' +
+				", dCn='" + dCn + '\'' +
+				", dDate='" + dDate + '\'' +
+				", dMaterial='" + dMaterial + '\'' +
+				", dRemark='" + dRemark + '\'' +
+				", dCount='" + dCount + '\'' +
+				", dPrice='" + dPrice + '\'' +
+				", dStatus='" + dStatus + '\'' +
+				'}';
+	}
 }

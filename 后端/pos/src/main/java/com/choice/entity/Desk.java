@@ -30,4 +30,12 @@ public class Desk {
 	public Desk() {
 	}
 
+	@Override
+	public String toString() {
+		return "Desk{" +
+				"id=" + id +
+				", deNum='" + deNum + '\'' +
+				", deStatus='" + deStatus + '\'' +
+				'}';
+	}
 }

@@ -27,4 +27,12 @@ public class DishCatelog {
 
 	public DishCatelog() {
 	}
+
+	@Override
+	public String toString() {
+		return "DishCatelog{" +
+				"id=" + id +
+				", dcName='" + dcName + '\'' +
+				'}';
+	}
 }

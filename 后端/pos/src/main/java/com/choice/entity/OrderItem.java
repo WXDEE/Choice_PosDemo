@@ -58,4 +58,15 @@ public class OrderItem {
 
 	public OrderItem() {
 	}
+
+	@Override
+	public String toString() {
+		return "OrderItem{" +
+				"id=" + id +
+				", oId='" + oId + '\'' +
+				", dId='" + dId + '\'' +
+				", oiCount='" + oiCount + '\'' +
+				", oiStatus='" + oiStatus + '\'' +
+				'}';
+	}
 }

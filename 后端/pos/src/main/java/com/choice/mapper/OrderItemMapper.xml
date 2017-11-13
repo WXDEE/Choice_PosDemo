@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.choice.mapper.OrderItemMapper" >
+    <insert id="save" parameterType="OrderItem">
+       insert into order_item(o_id,d_id,oi_count,oi_status)
+       values(#{oId},#{dId},#{oiCount},#{oiStatus});
+    </insert>
+    <select id="selectByOid" parameterType="java.lang.String" resultType="OrderItem">
+       select * from order_item where o_id = #{id};
+    </select>
+    <update id="updateDishStatus">
+        update order_item set oi_status="1" where id=#{_parament};
+    </update>
+</mapper>
