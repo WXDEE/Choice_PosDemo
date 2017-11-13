@@ -4,7 +4,7 @@
 import React from 'react';
 import InfoTab from './InfoComponents/InfoTab';
 import {Table, Icon, DatePicker, Input, Button, Modal, Form} from 'antd';
-
+const { TextArea } = Input;
 const FormItem = Form.Item;
 
 const InfoForm = Form.create()(
@@ -45,10 +45,10 @@ const InfoForm = Form.create()(
                         })(<Input/>)}
                     </FormItem>
                     <FormItem label={"原料"}>
-                        {getFieldDecorator("material")(<textarea/>)}
+                        {getFieldDecorator("material")(<TextArea/>)}
                     </FormItem>
                     <FormItem label={"备注"}>
-                        {getFieldDecorator("remark")(<textarea/>)}
+                        {getFieldDecorator("remark")(<TextArea/>)}
                     </FormItem>
                 </Form>
             </Modal>
@@ -260,15 +260,15 @@ class FoodInfo extends React.Component {
                     >
                         <div className="editInfo">
                             <div>菜品名称： 麻婆豆腐</div>
-                            <div>菜品单价：<input type="text" defaultValue="￥10"></input></div>
-                            <div>菜品余量：<input type="text" defaultValue="0"></input></div>
+                            <div>菜品单价：<Input type="text" defaultValue="￥10"></Input></div>
+                            <div>菜品余量：<Input type="text" defaultValue="0"></Input></div>
                             <div className="clearFix">
                                 <span>菜品原料：</span>
-                                <textarea defaultValue="麻婆、豆腐"></textarea>
+                                <TextArea defaultValue="麻婆、豆腐"></TextArea>
                             </div>
                             <div className="clearFix">
                                 <span>菜品备注：</span>
-                                <textarea defaultValue="对辣椒过敏者慎食"></textarea>
+                                <TextArea defaultValue="对辣椒过敏者慎食"></TextArea>
                             </div>
                         </div>
 
