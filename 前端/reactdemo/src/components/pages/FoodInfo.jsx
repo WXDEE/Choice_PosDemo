@@ -25,7 +25,7 @@ const InfoForm = Form.create()(
                         })(<Input/>)}
                     </FormItem>
                     <FormItem label={"菜品单价"}>
-                        {getFieldDecorator("type", {
+                        {getFieldDecorator("price", {
                             rules:[{required:true, message:"菜品单价不能为空"}]
                         })(<Input/>)}
                     </FormItem>
