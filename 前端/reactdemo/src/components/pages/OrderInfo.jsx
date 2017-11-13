@@ -68,7 +68,7 @@ class OrderInfo extends React.Component{
             title: '操作',
             dataIndex: 'Func',
             key: 'func',
-            render: text => <a href="#" onClick={this.showModal}>查看明细</a>,
+            render: text => <a  onClick={this.showModal}>查看明细</a>,
         }
     ];
 
