@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Button,Input,DatePicker ,Table,Icon,Modal} from 'antd';
-import { addNum } from '../../action/action';
+import { addNum ,orderInit} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
 class OrderInfo extends React.Component{
@@ -16,6 +16,8 @@ class OrderInfo extends React.Component{
        this.add=this.add.bind(this);
         this.showModal=this.showModal.bind(this);
         this.handleCancel=this.handleCancel.bind(this);
+        const { orderInit } = this.props;
+        orderInit();
     }
     add() {
         const { addNum } = this.props;
@@ -36,6 +38,7 @@ class OrderInfo extends React.Component{
     render(){
 
         const theNumber = this.props.dataA;
+
         function onChange(date, dateString) {
             console.log(date, dateString);
         }
@@ -72,39 +75,6 @@ class OrderInfo extends React.Component{
         }
     ];
 
-        const data = [{
-            key: '1',
-            ID: '0H234',
-            Time: '2017-11-11  10:00',
-            FoodNum: '12',
-            DeskID: '2',
-            Money: '323',
-            State:'待付款',
-        },{
-            key: '2',
-            ID: '0H234',
-            Time: '2017-11-11  10:00',
-            FoodNum: '12',
-            DeskID: '1',
-            Money: '323',
-            State:'已下单',
-        },{
-            key: '3',
-            ID: '0H234',
-            Time: '2017-11-11  10:00',
-            FoodNum: '12',
-            DeskID: '5',
-            Money: '323',
-            State:'已结账',
-        },{
-            key: '4',
-            ID: '0H234',
-            Time: '2017-11-11  10:00',
-            FoodNum: '12',
-            DeskID: '4',
-            Money: '323',
-            State:'已结账',
-        }];
         const listColumns = [{
             title: '菜品名',
             dataIndex: 'FoodName',
@@ -164,7 +134,7 @@ class OrderInfo extends React.Component{
                     <span className="tableDate">订单量：<span className="tableMoney">50,000.00笔</span></span>
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.props.mainTable}
                         className=""
                         size="small"
                     />
@@ -212,10 +182,10 @@ class OrderInfo extends React.Component{
 
 }
 const mapStateToProps  = (state) => {
-    return { dataA: state.httpData.theNumber};
+    return { dataA: state.httpData.theNumber,mainTable:state.httpData.orderTable};
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
-OrderInfo = connect(mapStateToProps , {addNum})(OrderInfo);
+OrderInfo = connect(mapStateToProps , {addNum,orderInit})(OrderInfo);
 export default OrderInfo;
 
 

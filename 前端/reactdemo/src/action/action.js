@@ -2,6 +2,15 @@
  * Created by Knove on 2017/11/10.
  */
 import * as type from '../action/type';
+export function orderInit(){
+    return (dispatch)=>{
+        dispatch(orderInitDo());
+        //你可以在此处向服务器请求数据
+    }
+}
+export const orderInitDo=()=>{
+    return {type: type.REQUEST_ORDER}
+}
 
 export function addNum(){
   return (dispatch)=>{
