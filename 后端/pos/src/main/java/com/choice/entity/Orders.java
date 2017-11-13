@@ -2,12 +2,12 @@ package com.choice.entity;
 
 public class Orders {
 	private Integer id;
-	private String oNum;
-	private String oDate;
-	private String oStatus;
-	private String deNum;
-	private String oTotal;
-	private String odCount;
+	private String oNum;//订单编号
+	private String oDate;//下单时间
+	private String oStatus;//订单状态 0：已下单 1：待付款 2：已结账
+	private String deNum;//桌子编号
+	private String oTotal;//总计金额
+	private String odCount;//订单菜品数量
 	public Integer getId() {
 		return id;
 	}

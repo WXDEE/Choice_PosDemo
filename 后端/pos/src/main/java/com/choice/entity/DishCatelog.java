@@ -1,9 +1,9 @@
 package com.choice.entity;
 
 public class DishCatelog {
-	 private Integer id;
-	 private String dcNum;
-	 private String dcName;
+	private Integer id;
+	private String dcNum;//菜品类目编号
+	private String dcName;//菜品类目名称
 	public Integer getId() {
 		return id;
 	}

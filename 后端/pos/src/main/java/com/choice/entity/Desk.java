@@ -2,8 +2,8 @@ package com.choice.entity;
 
 public class Desk {
 	private Integer id;
-	private String deNum;
-	private String deStatus;
+	private String deNum;//桌子编号
+	private String deStatus;//桌子状态 0：未使用 1：已使用
 	public Integer getId() {
 		return id;
 	}

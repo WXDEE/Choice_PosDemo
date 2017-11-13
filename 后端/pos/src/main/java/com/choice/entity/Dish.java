@@ -2,16 +2,23 @@ package com.choice.entity;
 
 public class Dish {
 	private Integer id;
-	private String dNum;
-	private String dcNum;
-	private String dName;
-	private String dCn;
-	private String dDate;
-	private String dMaterial;
-	private String dRemark;
-	private String dCount;
-	private String dStatus;
-	
+	private String dNum;//菜品编号
+	private String dcNum;//菜品类目编号
+	private String dName;//菜品名称
+	private String dCn;//菜品汉拼首字母
+	private String dDate;//菜品上架日期
+	private String dMaterial;//菜品原料
+	private String dRemark;//菜品备注
+	private String dCount;//菜品库存数量
+	private String dPrice;//菜品价格
+	private String dStatus;//菜品状态 0：已删除 1：未删除
+	public String getdPrice() {
+		return dPrice;
+	}
+
+	public void setdPrice(String dPrice) {
+		this.dPrice = dPrice;
+	}
 	public Integer getId() {
 		return id;
 	}
