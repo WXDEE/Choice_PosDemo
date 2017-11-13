@@ -4,18 +4,30 @@
 import * as type from '../action/type';
 export function orderInit(){
     return (dispatch)=>{
-        dispatch(orderInitDo());
-        //你可以在此处向服务器请求数据
+        fetch("http://localhost:3000/data.json")
+            .then((response)=>{
+                if(response.status!==200){
+                    console.log("和后台交互时候出现问题，状态码为："+response.status);
+                    return;
+                }
+                response.json().then((data)=>{
+                    dispatch(orderInitDo(data));
+                });
+
+        }).catch(function(err){
+            console.log("Fetch错误:"+err);
+        });
+
     }
 }
-export const orderInitDo=()=>{
-    return {type: type.REQUEST_ORDER}
+export const orderInitDo=(date)=>{
+    return {type: type.REQUEST_ORDER,date:date}
 }
 
 export function addNum(){
   return (dispatch)=>{
+
     dispatch(addNumWithStore());
-    //你可以在此处向服务器请求数据
   }
 }
 export const addNumWithStore=()=>{
