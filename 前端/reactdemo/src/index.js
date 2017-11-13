@@ -15,6 +15,8 @@ import './style/index.less';
 const middleware = [thunk];
 const store = createStore(reducer,composeWithDevTools(),applyMiddleware(...middleware));
 console.log(store.getState());
+let ScreenHeight=document.body.clientHeight;
+console.log(ScreenHeight);
 ReactDOM.render(
     <Provider store={store}>
         <CRouter store={store}  />
