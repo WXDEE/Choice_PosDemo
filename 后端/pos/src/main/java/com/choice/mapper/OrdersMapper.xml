@@ -8,7 +8,7 @@
     <select id="selectAll" resultType="Orders">
         select * from orders;
     </select>
-    <select id="selectAll" resultType="Orders">
+    <select id="search" resultType="Orders">
         select id,o_num,o_date,od_count,de_id,o_total,o_status from orders
         <where>
             <if test="oNum != null">
