@@ -11,6 +11,7 @@
         <include refid="Base_Column_List" />
         from dish
         where dc_id = #{dcId}
+        and d_status = '1'
     </select>
     <insert id="insertDish"  parameterType="Dish">
         insert into dish
@@ -126,6 +127,7 @@
         select  <include refid="Base_Column_List" />
         from dish
         <where>
+            and d_status = '1'
             <if test="dName != null">
                 AND  d_name like '%${dName}%'
             </if>
@@ -136,18 +138,19 @@
         ORDER by d_date desc
     </select>
     <select id="selectEmptyDish" resultType="Dish">
-        select id,d_name from dish where d_count = '0';
+        select id,d_name from dish where d_count = '0' and d_status = '1';
     </select>
     <select id="selectNotEnoughCount" parameterType="java.lang.String"
             resultType="java.lang.Integer">
         <![CDATA[
-        select count(*) as sum from dish where d_count < #{num};
+        select count(*) as sum from dish where d_count < #{num}
         ]]>
+        and d_status = '1';
     </select>
     <select id="selectEmptyCount" resultType="java.lang.Integer">
-        select count(*) as sum from dish where d_count = '0';
+        select count(*) as sum from dish where d_count = '0' and d_status = '1';
     </select>
     <select id="selectDishCount" resultType="java.lang.Integer">
-        select count(*) from dish;
+        select count(*) from dish where d_status = '1';
     </select>
 </mapper>
