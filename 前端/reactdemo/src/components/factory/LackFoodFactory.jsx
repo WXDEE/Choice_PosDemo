@@ -1,6 +1,6 @@
 /**
  * Created by Knove on 2017/11/13.
- *  描述：制造桌子的工厂
+ *  描述：制造余量不足菜品的工厂
  */
 import React from 'react';
 import { Card  } from 'antd';
