@@ -9,4 +9,6 @@ import java.util.List;
 public interface OrderItemService {
     //根据订单id查询订单详细
     ServerResponse<List<OrderItem>> queryOrderItemByOrdersId(String ordersId);
+    //根据订单详情上菜
+    ServerResponse upDish(String ordersItemId);
 }

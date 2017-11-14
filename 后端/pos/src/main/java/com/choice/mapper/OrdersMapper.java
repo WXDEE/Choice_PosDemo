@@ -19,6 +19,6 @@ public interface OrdersMapper {
 	//查询营业额
 	String selectOrdersToatal();
 	//点击结账，修改订单状态为已付款
-	Integer updateOrdersStatus(Integer id);
+	Integer updateOrdersStatus(String id);
 
 }

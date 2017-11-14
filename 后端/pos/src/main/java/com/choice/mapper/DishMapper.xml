@@ -70,7 +70,7 @@
                 #{dCount},
             </if>
             <if test="dStatus != null" >
-                #{dStatus},
+                1,
             </if>
         </trim>
     </insert>
@@ -126,15 +126,10 @@
     <select id="selectDishByDNameAndDDate" resultType="Dish">
         select  <include refid="Base_Column_List" />
         from dish
-        <where>
-            and d_status = '1'
-            <if test="dName != null">
-                AND  d_name like '%${dName}%'
-            </if>
-            <if test="sdDate != null">
-                and d_date between #{sdDate} and #{edDate}
-            </if>
-        </where>
+        where d_status = '1'
+        <if test="dName != null">
+            AND  d_name like '%${dName}%'
+        </if>
         ORDER by d_date desc
     </select>
     <select id="selectEmptyDish" resultType="Dish">

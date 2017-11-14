@@ -70,23 +70,57 @@ public class OrdersServiceImpl implements OrdersService {
 		}
     }
 
-    public ServerResponse<PageInfo<Orders>> queryOrdersByNumAndDate(Integer oNum, Integer oDate, Integer pageNum, Integer pageSize) {
-        return null;
-    }
+	public ServerResponse<String> queryOrdersCount() {
+		try {
+			String OrdersCount=ordersMapper.selectOrdesCount();
+			return ServerResponse.createBySuccess(OrdersCount);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ServerResponse.createByError();
+		}
 
-    public ServerResponse<String> queryOrdersCount() {
-        return null;
-    }
+	}
 
-    public ServerResponse<String> querySumTotal() {
-        return null;
-    }
+	public ServerResponse<String> querySumTotal() {
+		try {
+			String SumTotal=ordersMapper.selectOrdersToatal();
+			return ServerResponse.createBySuccess(SumTotal);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ServerResponse.createByError();
+		}
+	}
 
-    public ServerResponse settleAccount(String id) {
-        return null;
-    }
+	public ServerResponse settleAccount(String id) {
+		try {
+			Integer sta=ordersMapper.updateOrdersStatus(id);
+			if(sta==1){
+				return ServerResponse.createBySuccess();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return ServerResponse.createByError();
+	}
 
-    public ServerResponse upDish(String ordersItemId) {
-        return null;
-    }
+	@Override
+	public ServerResponse<PageInfo<Orders>> queryOrdersByNumAndDate(
+			String oNum, String sDate, String eDate, Integer pageNum,
+			Integer pageSize) {
+		// TODO Auto-generated method stub
+		try {
+			PageHelper.startPage(pageNum, pageSize);
+			if(sDate==null||eDate==null){
+				sDate=null;
+				eDate=null;
+			}
+			List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
+			PageInfo<Orders> pageInfo = new PageInfo<Orders>(orders);
+			return ServerResponse.createBySuccess(pageInfo);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ServerResponse.createByError();
+		}
+
+	}
 }

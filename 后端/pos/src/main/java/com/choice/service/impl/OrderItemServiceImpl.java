@@ -24,4 +24,19 @@ public class OrderItemServiceImpl implements OrderItemService {
 			return ServerResponse.createByError();
 		}
     }
+
+	@Override
+	public ServerResponse upDish(String ordersItemId) {
+		// TODO Auto-generated method stub
+
+		try {
+			Integer sta=orderItemMapper.updateDishStatus(ordersItemId);
+			if(sta==1){
+				return ServerResponse.createBySuccess();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return ServerResponse.createByError();
+	}
 }

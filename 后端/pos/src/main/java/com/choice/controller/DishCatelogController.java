@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping("dishCatelog")
+@RequestMapping("/dishCatelog")
 public class DishCatelogController {
 
     @Autowired
     public DishCatelogService dishCatelogService;
-    @RequestMapping("/")
+    @RequestMapping("list")
     @ResponseBody
     public ServerResponse queryAllDishCatelog(){
         return dishCatelogService.queryAllDishCatelog();

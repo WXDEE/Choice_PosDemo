@@ -5,10 +5,12 @@ import com.choice.common.ServerResponse;
 import com.choice.entity.Dish;
 import com.choice.mapper.DishMapper;
 import com.choice.service.DishService;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,35 +20,89 @@ public class DishServiceImpl implements DishService {
 	private DishMapper dishMapper;
 	
     public ServerResponse<List<Dish>> queryDishByCatelog(String catelog) {
-        return null;
+		try {
+			List<Dish> dishList = dishMapper.selectDishByCatelog(catelog);
+			return ServerResponse.createBySuccess(dishList);
+		} catch (Exception e) {
+			return ServerResponse.createByError();
+		}
     }
 
     public ServerResponse addDish(Dish dish) {
-        return null;
-    }
+		try {
+			Integer result = dishMapper.insertDish(dish);
+			if(result.equals(1)){
+                return ServerResponse.createBySuccess();
+            }else {
+                return ServerResponse.createByError();
+            }
+		} catch (Exception e) {
+			return ServerResponse.createByError();
+		}
+	}
 
     public ServerResponse updateDish(Dish dish) {
-        return null;
-    }
+		try {
+			Integer result = dishMapper.updateDish(dish);
+			if(result.equals(1)){
+                return ServerResponse.createBySuccess();
+            }else {
+                return ServerResponse.createByError();
+            }
+		} catch (Exception e) {
+			return ServerResponse.createByError();
+		}
+	}
 
-    public ServerResponse deleteDish(String id) {
-        return null;
+    public ServerResponse deleteDish(Integer id) {
+		try {
+			Integer result = dishMapper.deleteDishById(id);
+			if(result.equals(1)){
+				return ServerResponse.createBySuccess();
+			}else {
+				return ServerResponse.createByError();
+			}
+		} catch (Exception e) {
+			return ServerResponse.createByError();
+		}
     }
 
     public ServerResponse<List<Dish>> queryDishByCn(String cn) {
-        return null;
-    }
+		try {
+			List<Dish> dishList = dishMapper.selectDishByCn(cn);
+			return ServerResponse.createBySuccess(dishList);
+		} catch (Exception e) {
+			return ServerResponse.createByError();
+		}
 
-    public ServerResponse<PageInfo<List<Dish>>> queryDishByNameAndDate(String dName, String sdDate, String edDate, Integer pageNum, Integer pageSize) {
-        return null;
-    }
 
-    public ServerResponse<PageInfo<List<Dish>>> queryDish(Integer pageNum, Integer pageSize) {
-        return null;
-    }
+	}
 
-    public ServerResponse<List<Dish>> queryDishWithNotEnough() {
-        return null;
+    public ServerResponse<PageInfo> queryDishByNameAndDate(String dName, String sdDate, String edDate, Integer pageNum, Integer pageSize) {
+		try {
+			if(sdDate==null||edDate==null){
+				sdDate = null;
+				edDate = null;
+			}
+			PageHelper.startPage(pageNum,pageSize);
+			List<Dish> dishList = dishMapper.selectDishByDNameAndDDate(dName, sdDate,edDate);
+			PageInfo pageInfo = new PageInfo(dishList);
+			return ServerResponse.createBySuccess(pageInfo);
+		} catch (Exception e) {
+			return ServerResponse.createByError();
+		}
+
+	}
+
+    public ServerResponse<PageInfo> queryDish(Integer pageNum, Integer pageSize) {
+		try {
+			PageHelper.startPage(pageNum,pageSize);
+			List<Dish> dishList = dishMapper.selectDish();
+			PageInfo pageInfo = new PageInfo(dishList);
+			return ServerResponse.createBySuccess(pageInfo);
+		} catch (Exception e) {
+			return ServerResponse.createByError();
+		}
     }
 
     public ServerResponse<List<Dish>> queryDishWithNone() {

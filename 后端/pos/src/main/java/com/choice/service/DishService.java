@@ -14,15 +14,13 @@ public interface DishService {
     //更新菜品
     ServerResponse updateDish(Dish dish);
     //删除菜品
-    ServerResponse deleteDish(String id);
+    ServerResponse deleteDish(Integer id);
     //根据菜品汉拼首字母模糊查询菜品
     ServerResponse<List<Dish>> queryDishByCn(String cn);
     //根据菜品名称和上架日期查询菜品（分页）
-    ServerResponse<PageInfo<List<Dish>>> queryDishByNameAndDate(String dName, String sdDate, String edDate,Integer pageNum,Integer pageSize);
+    ServerResponse<PageInfo> queryDishByNameAndDate(String dName, String sdDate, String edDate,Integer pageNum,Integer pageSize);
     //查询菜品（分页）
-    ServerResponse<PageInfo<List<Dish>>> queryDish(Integer pageNum,Integer pageSize);
-    //查询余量不足菜品
-    ServerResponse<List<Dish>> queryDishWithNotEnough();
+    ServerResponse<PageInfo> queryDish(Integer pageNum,Integer pageSize);
     //查询售空菜品
     ServerResponse<List<Dish>> queryDishWithNone();
     //查询售空菜品数量

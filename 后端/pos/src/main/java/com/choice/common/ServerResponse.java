@@ -12,6 +12,7 @@ public class ServerResponse<T> implements Serializable {
     private int status;
     private String msg;
     private T data;
+
     private ServerResponse(int status) {
         this.status = status;
     }
