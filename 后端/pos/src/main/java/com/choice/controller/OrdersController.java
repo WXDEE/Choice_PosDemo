@@ -38,7 +38,7 @@ public class OrdersController {
 		return ordersService.queryOrdersByNumAndDate(oNum, sDate, eDate, pageNum, pageSize);
 	}
 	//查询订单数量
-	@RequestMapping("orders/count")
+	@RequestMapping("count")
 	@ResponseBody
 	public  ServerResponse<String> queryOrdersCount(){
 		return ordersService.queryOrdersCount();
