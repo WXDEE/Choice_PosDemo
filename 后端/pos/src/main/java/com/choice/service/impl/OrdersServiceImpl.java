@@ -63,7 +63,7 @@ public class OrdersServiceImpl implements OrdersService {
 				resultDate.setoDate(orders.getoDate());
 				resultDate.setOdCount(orders.getOdCount());
 				resultDate.setoNum(orders.getoNum());
-				resultDate.setoStatus(orders.getoStatus());
+				resultDate.setoStatus("已下单");
 				resultDate.setoTotal(orders.getoTotal());
 				resultDate.setOrderItemList(orderItemList);
 				ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(resultDate);
