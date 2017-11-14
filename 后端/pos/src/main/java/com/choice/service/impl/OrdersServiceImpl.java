@@ -1,13 +1,16 @@
 package com.choice.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -16,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
+import com.choice.entity.Desk;
 import com.choice.entity.OrderItem;
 import com.choice.entity.Orders;
+import com.choice.mapper.DeskMapper;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
 import com.choice.service.OrdersService;
@@ -30,6 +35,8 @@ import com.github.pagehelper.PageInfo;
 public class OrdersServiceImpl implements OrdersService {
 	@Autowired
 	private OrdersMapper ordersMapper;
+	@Autowired
+	private DeskMapper deskMapper;
 	@Autowired
 	private OrderItemMapper orderItemMapper;
 	@Resource(name = "jmsTemplate")
@@ -128,11 +135,27 @@ public class OrdersServiceImpl implements OrdersService {
 	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) {
 		// TODO Auto-generated method stub
 		try {
-			if(sDate==null||eDate==null){
+			if(sDate==null||StringUtils.isBlank(sDate)||
+					eDate==null||StringUtils.isBlank(sDate)){
 				sDate=null;
 				eDate=null;
 			}
 			List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
+			List<Desk> desks=deskMapper.selectAllDesk();
+			Map<String, String> map=new HashMap<String, String>();
+			for (Desk desk : desks) {
+				map.put(desk.getId().toString(), desk.getDeNum());
+			}
+			for (Orders orders2 : orders) {
+				orders2.setDeId(map.get(orders2.getDeId()));
+				switch(orders2.getoStatus()){
+				 case "0":orders2.setoStatus("已下单 ");break;
+				 case "1":orders2.setoStatus("代付款 ");break;
+				 case "2":orders2.setoStatus("已结账 ");break;
+				 default :break;
+				}
+			}
+			
 			return ServerResponse.createBySuccess(orders);
 		} catch (Exception e) {
 			// TODO: handle exception

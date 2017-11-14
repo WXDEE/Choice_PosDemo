@@ -17,6 +17,7 @@ public class DishCatelogController {
 
     @Autowired
     public DishCatelogService dishCatelogService;
+    
     @RequestMapping("list")
     @ResponseBody
     public ServerResponse queryAllDishCatelog(HttpServletResponse response){

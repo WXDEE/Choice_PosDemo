@@ -13,6 +13,8 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping("/orders")
 public class OrdersController {
@@ -21,7 +23,8 @@ public class OrdersController {
 	
 	@RequestMapping("add")
 	@ResponseBody
-	public ServerResponse<OrdersDTO> addOrders(OrdersDTO ordersDTO){
+	public ServerResponse<OrdersDTO> addOrders(HttpServletResponse response,OrdersDTO ordersDTO){
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<OrdersDTO> result = ordersService.addOrders(ordersDTO);
 		return result;
 	}
@@ -36,25 +39,29 @@ public class OrdersController {
 	//根据订单编号和下单时间查询订单（若条件为空不参与查询，分页）
 	@RequestMapping("list")
 	@ResponseBody
-	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate){
+	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(HttpServletResponse response,String oNum, String sDate, String eDate){
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		return ordersService.queryOrdersByNumAndDate(oNum, sDate, eDate);
 	}
 	//查询订单数量
 	@RequestMapping("count")
 	@ResponseBody
-	public  ServerResponse<String> queryOrdersCount(){
+	public  ServerResponse<String> queryOrdersCount(HttpServletResponse response){
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		return ordersService.queryOrdersCount();
 	}
 	//查询总营业额
 	@RequestMapping("sumTotal")
 	@ResponseBody
-	public  ServerResponse<String> querySumTotal(){
+	public  ServerResponse<String> querySumTotal(HttpServletResponse response){
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		return ordersService.querySumTotal();
 	}
 	//根据订单id结账
 	@RequestMapping("settleAccount")
 	@ResponseBody
-	public  ServerResponse settleAccount(String id){
+	public  ServerResponse settleAccount(HttpServletResponse response,String id){
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		return ordersService.settleAccount(id);
 	}
 }
