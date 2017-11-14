@@ -2,13 +2,15 @@
  * Created by Knove on 2017/11/9.
  */
 import React from 'react';
+import moment from 'moment';
 import InfoTab from './InfoComponents/InfoTab';
-import { foodInit} from '../../action/action';
+import {dataSearch,foodInit} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import {Table, Icon, DatePicker, Input, Button, Modal, Form} from 'antd';
 const { TextArea } = Input;
 const FormItem = Form.Item;
-
+let g_date;
+let g_date1;
 const InfoForm = Form.create()(
     props => {
         const {visible, onCancel, onOk, form} = props;
@@ -64,7 +66,8 @@ class FoodInfo extends React.Component {
         super(props);
         this.state = {
             visible: false,
-            visible1:false
+            visible1:false,
+            value:"",
         };
         this.showModal = this.showModal.bind(this);
         this.handleOk = this.handleOk.bind(this);
@@ -74,9 +77,12 @@ class FoodInfo extends React.Component {
         this.showModal1 = this.showModal1.bind(this);
         this.handleOk1 = this.handleOk1.bind(this);
         this.handleCancel1 = this.handleCancel1.bind(this);
+        this.handleChange=this.handleChange.bind(this);
+        this.handleSearch=this.handleSearch.bind(this);
 
         const {foodInit}=this.props;
         foodInit();
+
     }
     //添加菜品
     showModal() {
@@ -122,13 +128,28 @@ class FoodInfo extends React.Component {
             visible1: false,
         })
     }
+    //修改value值
+    handleChange(e){
+        this.setState({
+            value:e.target.value,
+        })
+    }
+    handleSearch(e){
+        e.preventDefault();
+        let data=[this.state.value,g_date,g_date1];
+        const {dataSearch}=this.props;
+        dataSearch(data);
+    }
 
     render() {
         let loading=true;
         if(this.props.loading)
             loading=false;
         function onChange(date, dateString) {
-            console.log(date, dateString);
+            g_date=dateString;
+        }
+        function onChange1(date, dateString) {
+            g_date1=dateString;
         }
         const columns = [{
             title: '菜品名称',
@@ -169,14 +190,14 @@ class FoodInfo extends React.Component {
                 <InfoTab infoNum="2"/>
                 <div className="funcTitle">
                     <div className="smallInput">
-                        菜品名称<Input className="datePicker"/>
+                        菜品名称<Input className="datePicker" value={this.state.value} onChange={this.handleChange}/>
                     </div>
                     <div className="smallInput">
                         上架时间<DatePicker onChange={onChange} className="datePicker"/>
-                        至<DatePicker onChange={onChange} className="datePicker"/>
+                        至<DatePicker onChange={onChange1} className="datePicker"/>
                     </div>
                     <div className="smallInput">
-                        <Button type="primary">查询</Button>
+                        <Button type="primary" onClick={this.handleSearch}>查询</Button>
                     </div>
                     <div className="smallInput">
                         <Button type="primary">刷新</Button>
@@ -235,6 +256,6 @@ class FoodInfo extends React.Component {
 const mapStateToProps = (state) =>{
     return {foodMain:state.httpData.foodTable,loading:state.httpData.ok};
 }
-FoodInfo=connect(mapStateToProps,{foodInit})(FoodInfo);
+FoodInfo=connect(mapStateToProps,{foodInit,dataSearch})(FoodInfo);
 //后面的FoodInfo是UI组件，前面的FoodInfo是通过connect生成的容器组件
 export default FoodInfo;

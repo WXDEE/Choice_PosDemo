@@ -62,3 +62,47 @@ export const pointNowDesktoStore=(number)=>{
     return {type: type.POINT_DESK,deskNumber:number}
 }
 
+//查询数据
+export function dataSearch(data) {
+    return dispatch=>{
+        fetch("http://localhost:3000/data_try.json",{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body:data,
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+//查询数据
+export function orderSearch(data) {
+    return dispatch=>{
+        fetch("http://localhost:3000/data_try.json",{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body:data,
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
