@@ -16,11 +16,11 @@
             <if test="oNum != null">
                 o_num like '%${oNum}%'
             </if>
-            <if test="bDate != null ">
-                and o_date between #{bDate} and #{eDate}
+            <if test="sDate != null ">
+                and o_date between #{sDate} and #{eDate}
             </if>
-            order by  o_date  desc
         </where>
+        order by  o_date  desc
     </select>
 
     <select id="selectOrdesCount" resultType="java.lang.String">

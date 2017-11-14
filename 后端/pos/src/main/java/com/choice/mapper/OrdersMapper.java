@@ -12,7 +12,7 @@ public interface OrdersMapper {
 	List<Orders> selectAll();
 	//根据订单编号和下单时间查询订单(空条件不参与查询)
 	List<Orders> selectAllSearch(@Param("oNum") String oNum,
-						   @Param("bDate") String bDate,
+						   @Param("sDate") String sDate,
 						   @Param("eDate") String eDate);
 	//查询订单数
 	String selectOrdesCount();
