@@ -3,19 +3,25 @@
  */
 import React from 'react';
 import { Button,Input,DatePicker ,Table,Icon,Modal} from 'antd';
-import { addNum ,orderInit} from '../../action/action';
+import { addNum ,orderInit,orderSearch} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
+let g_date;
+let g_date1;
+
 class OrderInfo extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            visible: false,
+            value:"",
         }
        this.add=this.add.bind(this);
         this.showModal=this.showModal.bind(this);
         this.handleCancel=this.handleCancel.bind(this);
+        this.handleChange=this.handleChange.bind(this);
+        this.handleSearch=this.handleSearch.bind(this);
         const { orderInit } = this.props;
         orderInit();
     }
@@ -35,6 +41,18 @@ class OrderInfo extends React.Component{
             visible: false,
         });
     }
+    //修改value值
+    handleChange(e){
+        this.setState({
+            value:e.target.value,
+        })
+    }
+    handleSearch(e){
+        e.preventDefault();
+        let data=[this.state.value,g_date,g_date1];
+        const {orderSearch}=this.props;
+        orderSearch(data);
+    }
     render(){
 
         const theNumber = this.props.dataA;
@@ -44,8 +62,12 @@ class OrderInfo extends React.Component{
         if(this.props.loading)loading=false;
 
         function onChange(date, dateString) {
-            console.log(date, dateString);
+            g_date=dateString;
         }
+        function onChange1(date, dateString) {
+            g_date1=dateString;
+        }
+
         const columns = [{
             title: '订单编号',
             dataIndex: 'ID',
@@ -124,12 +146,12 @@ class OrderInfo extends React.Component{
                 </div>*/}
                 <InfoTab infoNum="1" />
                 <section className="funcTitle">
-                    <div className="normalInput">订单编号 <Input  className="datePicker" /></div>
+                    <div className="normalInput">订单编号 <Input  className="datePicker" value={this.state.value} onChange={this.handleChange}/></div>
                     <div className="normalInput">下单时间
                         <DatePicker onChange={onChange} className="datePicker" />
-                        至<DatePicker onChange={onChange} className="datePicker" />
+                        至<DatePicker onChange={onChange1} className="datePicker" />
                     </div>
-                    <div className="normalInput"><Button type="primary" >查询</Button><Button type="primary" >清空</Button></div>
+                    <div className="normalInput"><Button type="primary" onClick={this.handleSearch}>查询</Button><Button type="primary" >清空</Button></div>
 
                 </section>
                 <div className="tableMain">
@@ -193,7 +215,7 @@ const mapStateToProps  = (state) => {
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
-OrderInfo = connect(mapStateToProps , {addNum,orderInit})(OrderInfo);
+OrderInfo = connect(mapStateToProps , {addNum,orderInit,orderSearch})(OrderInfo);
 export default OrderInfo;
 
 
