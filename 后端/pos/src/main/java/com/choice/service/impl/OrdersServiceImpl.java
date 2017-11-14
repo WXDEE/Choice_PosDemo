@@ -104,9 +104,7 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(
-			String oNum, String sDate, String eDate, Integer pageNum,
-			Integer pageSize) {
+	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) {
 		// TODO Auto-generated method stub
 		try {
 			if(sDate==null||eDate==null){
