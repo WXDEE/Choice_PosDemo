@@ -40,9 +40,7 @@
             <if test="dCount != null" >
                 d_count,
             </if>
-            <if test="dStatus != null" >
                 d_status,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="dcId != null" >
@@ -69,9 +67,7 @@
             <if test="dCount != null" >
                 #{dCount},
             </if>
-            <if test="dStatus != null" >
-                1,
-            </if>
+           1
         </trim>
     </insert>
     <update id="updateDish" parameterType="Dish">
