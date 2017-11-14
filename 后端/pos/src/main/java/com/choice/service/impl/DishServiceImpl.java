@@ -6,7 +6,9 @@ import com.choice.entity.Dish;
 import com.choice.entity.DishCatelog;
 import com.choice.mapper.DishCatelogMapper;
 import com.choice.mapper.DishMapper;
+import com.choice.mapper.JedisClient;
 import com.choice.service.DishService;
+import com.choice.util.JsonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -24,8 +26,20 @@ public class DishServiceImpl implements DishService {
 	@Autowired
 	private DishCatelogMapper dishCatelogMapper;
 
+	@Autowired
+	private JedisClient jedisClient;
 	public ServerResponse<List<Dish>> queryDishByCatelog(String catelog) {
 		try {
+			try {
+				String json = jedisClient.hget(Const.DISH_CACHE, catelog);
+				if(!StringUtils.isBlank(json)){
+					jedisClient.expire(Const.DISH_CACHE, 1000);
+					List<Dish> dishList = JsonUtils.jsonToList(json, Dish.class);
+					return ServerResponse.createBySuccess(dishList);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 			List<Dish> dishList = dishMapper.selectDishByCatelog(catelog);
 			List<DishCatelog> dishCatelogList = dishCatelogMapper.selectList();
 			Map<String,String> map = new HashMap();
@@ -34,6 +48,13 @@ public class DishServiceImpl implements DishService {
 			}
 			for(Dish dish : dishList){
 				dish.setDcId(map.get(dish.getDcId()));
+			}
+			try {
+				String json = JsonUtils.objectToJson(dishList);
+				jedisClient.hset(Const.DISH_CACHE, catelog, json);
+				jedisClient.expire(Const.DISH_CACHE, 1000);
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
 			return ServerResponse.createBySuccess(dishList);
 		} catch (Exception e) {
