@@ -11,7 +11,7 @@ public interface OrdersMapper {
 	//查询全部订单
 	List<Orders> selectAll();
 	//根据订单编号和下单时间查询订单(空条件不参与查询)
-	List<Orders> search(@Param("oNum") String oNum,
+	List<Orders> selectAllSearch(@Param("oNum") String oNum,
 						   @Param("bDate") String bDate,
 						   @Param("eDate") String eDate);
 	//查询订单数

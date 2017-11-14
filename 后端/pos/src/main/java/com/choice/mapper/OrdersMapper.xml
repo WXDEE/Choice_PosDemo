@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.choice.mapper.OrdersMapper" >
-    <insert id="save" parameterType="Orders">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="Orders">
         insert into orders(o_num,o_date,o_status,de_id,o_total,od_count)
          values(#{oNum},#{oDate},#{oStatus},#{deId},#{oTotal},#{odCount});
     </insert>
+    
     <select id="selectAll" resultType="Orders">
-        select * from orders;
+        select * from orders
     </select>
-    <select id="search" resultType="Orders">
+    
+    <select id="selectAllSearch" resultType="Orders">
         select id,o_num,o_date,od_count,de_id,o_total,o_status from orders
         <where>
             <if test="oNum != null">

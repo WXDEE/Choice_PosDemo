@@ -29,4 +29,6 @@ public interface DishService {
     ServerResponse<String> queryDishCountWithNone();
     //查询余量不足菜品数
     ServerResponse<String> queryDishCountithNotEnough();
+    //查询菜品种类数
+    ServerResponse<String> queryDishCount();
 }
