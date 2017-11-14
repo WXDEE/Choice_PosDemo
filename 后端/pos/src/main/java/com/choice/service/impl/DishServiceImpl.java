@@ -78,17 +78,16 @@ public class DishServiceImpl implements DishService {
 
 	}
 
-    public ServerResponse<PageInfo> queryDishByNameAndDate(String dName, String sdDate, String edDate, Integer pageNum, Integer pageSize) {
+    public ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) {
 		try {
 			if(sdDate==null||edDate==null){
 				sdDate = null;
 				edDate = null;
 			}
-			PageHelper.startPage(pageNum,pageSize);
 			List<Dish> dishList = dishMapper.selectDishByDNameAndDDate(dName, sdDate,edDate);
-			PageInfo pageInfo = new PageInfo(dishList);
-			return ServerResponse.createBySuccess(pageInfo);
+			return ServerResponse.createBySuccess(dishList);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ServerResponse.createByError();
 		}
 

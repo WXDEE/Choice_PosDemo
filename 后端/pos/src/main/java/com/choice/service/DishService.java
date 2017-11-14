@@ -18,7 +18,7 @@ public interface DishService {
     //根据菜品汉拼首字母模糊查询菜品
     ServerResponse<List<Dish>> queryDishByCn(String cn);
     //根据菜品名称和上架日期查询菜品（分页）
-    ServerResponse<PageInfo> queryDishByNameAndDate(String dName, String sdDate, String edDate,Integer pageNum,Integer pageSize);
+    ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate);
     //查询菜品（分页）
     ServerResponse<PageInfo> queryDish(Integer pageNum,Integer pageSize);
     //查询售空菜品

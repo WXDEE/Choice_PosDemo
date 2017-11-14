@@ -104,19 +104,17 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public ServerResponse<PageInfo<Orders>> queryOrdersByNumAndDate(
+	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(
 			String oNum, String sDate, String eDate, Integer pageNum,
 			Integer pageSize) {
 		// TODO Auto-generated method stub
 		try {
-			PageHelper.startPage(pageNum, pageSize);
 			if(sDate==null||eDate==null){
 				sDate=null;
 				eDate=null;
 			}
 			List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
-			PageInfo<Orders> pageInfo = new PageInfo<Orders>(orders);
-			return ServerResponse.createBySuccess(pageInfo);
+			return ServerResponse.createBySuccess(orders);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return ServerResponse.createByError();
