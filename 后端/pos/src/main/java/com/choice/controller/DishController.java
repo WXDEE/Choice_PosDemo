@@ -16,7 +16,7 @@ public class DishController {
 	@Autowired
 	private DishService dishService;
 
-	
+
 	@RequestMapping(value = "catelog")
 	@ResponseBody
 	public ServerResponse queryDishByCatelog(String catelog) {
@@ -25,6 +25,7 @@ public class DishController {
 	@RequestMapping(value = "add")
 	@ResponseBody
 	public ServerResponse addDish(Dish dish){
+		System.out.println(dish);
 		return dishService.addDish(dish);
 	}
 	@RequestMapping("update")
@@ -46,8 +47,8 @@ public class DishController {
 	}
 	@RequestMapping("list")
 	@ResponseBody
-	public ServerResponse queryDishByNameAndDate(String dName, String sdDate, String edDate, Integer pageNum, Integer pageSize){
-		return dishService.queryDishByNameAndDate(dName,sdDate,edDate,pageNum,pageSize);
+	public ServerResponse queryDishByNameAndDate(String dName, String sdDate, String edDate){
+		return dishService.queryDishByNameAndDate(dName,sdDate,edDate);
 	}
 	/*@RequestMapping("/")
 	@ResponseBody
