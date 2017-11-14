@@ -39,6 +39,10 @@ class OrderInfo extends React.Component{
 
         const theNumber = this.props.dataA;
 
+        //表格状态
+        let loading=true;
+        if(this.props.loading)loading=false;
+
         function onChange(date, dateString) {
             console.log(date, dateString);
         }
@@ -137,6 +141,7 @@ class OrderInfo extends React.Component{
                         dataSource={this.props.mainTable}
                         className=""
                         size="small"
+                        loading={loading}
                     />
                     <Modal
                         title="订单明细"
@@ -182,7 +187,10 @@ class OrderInfo extends React.Component{
 
 }
 const mapStateToProps  = (state) => {
-    return { dataA: state.httpData.theNumber,mainTable:state.httpData.orderTable};
+    return { dataA: state.httpData.theNumber,
+        mainTable:state.httpData.orderTable,//表格数据
+        loading:state.httpData.ok, //表格是否加载完毕
+    };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
 OrderInfo = connect(mapStateToProps , {addNum,orderInit})(OrderInfo);
