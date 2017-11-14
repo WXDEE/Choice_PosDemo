@@ -3,6 +3,8 @@
  */
 import React from 'react';
 import InfoTab from './InfoComponents/InfoTab';
+import { foodInit} from '../../action/action';
+import { connect } from 'react-redux'; // 引入connect
 import {Table, Icon, DatePicker, Input, Button, Modal, Form} from 'antd';
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -72,6 +74,9 @@ class FoodInfo extends React.Component {
         this.showModal1 = this.showModal1.bind(this);
         this.handleOk1 = this.handleOk1.bind(this);
         this.handleCancel1 = this.handleCancel1.bind(this);
+
+        const {foodInit}=this.props;
+        foodInit();
     }
     //添加菜品
     showModal() {
@@ -122,58 +127,6 @@ class FoodInfo extends React.Component {
         function onChange(date, dateString) {
             console.log(date, dateString);
         }
-
-        const data = [{
-            key: 1,
-            name: '麻婆豆腐',
-            price: '￥10',
-            num: 0,
-            date: "2017-11-11",
-            initial: 'MPDF',
-            type: '素菜',
-            material: '麻婆、豆腐',
-            remark: '对辣椒过敏者慎食'
-        }, {
-            key: 2,
-            name: '麻婆豆腐',
-            price: '￥10',
-            num: 0,
-            date: "2017-11-11",
-            initial: 'MPDF',
-            type: '素菜',
-            material: '麻婆、豆腐',
-            remark: '对辣椒过敏者慎食'
-        }, {
-            key: 3,
-            name: '麻婆豆腐',
-            price: '￥10',
-            num: 0,
-            date: "2017-11-11",
-            initial: 'MPDF',
-            type: '素菜',
-            material: '麻婆、豆腐',
-            remark: '对辣椒过敏者慎食'
-        }, {
-            key: 4,
-            name: '麻婆豆腐',
-            price: '￥10',
-            num: 0,
-            date: "2017-11-11",
-            initial: 'MPDF',
-            type: '素菜',
-            material: '麻婆、豆腐',
-            remark: '对辣椒过敏者慎食'
-        }, {
-            key: 5,
-            name: '麻婆豆腐',
-            price: '￥10',
-            num: 0,
-            date: "2017-11-11",
-            initial: 'MPDF',
-            type: '素菜',
-            material: '麻婆、豆腐',
-            remark: '对辣椒过敏者慎食'
-        }];
         const columns = [{
             title: '菜品名称',
             dataIndex: 'name'
@@ -207,7 +160,6 @@ class FoodInfo extends React.Component {
                     <span className="ant-divider"/>
                     <a >删除</a>
                 </span>
-
         }];
         return (
             <div>
@@ -241,7 +193,7 @@ class FoodInfo extends React.Component {
                        <div><span className="redLine"></span>已售空菜品</div>
                        <div><span className="yellowLine"></span>余量不足菜品</div>
                     </span>
-                    <Table dataSource={data} columns={columns} size={"small"}/>
+                    <Table dataSource={this.props.foodMain} columns={columns} size={"small"}/>
                     <InfoForm
                         ref={this.saveFormRef}
                         visible={this.state.visible}
@@ -271,13 +223,14 @@ class FoodInfo extends React.Component {
                                 <TextArea defaultValue="对辣椒过敏者慎食"></TextArea>
                             </div>
                         </div>
-
                     </Modal>
-
                 </div>
             </div>
         )
     }
 }
-
+const mapStateToProps = (state) =>{
+    return {foodMain:state.httpData.foodTable};
+}
+FoodInfo=connect(mapStateToProps,{foodInit})(FoodInfo);
 export default FoodInfo;
