@@ -122,7 +122,7 @@ class SelectFood extends React.Component{
 
                 </section>
                     <section className="detailsButton">
-                        <Button type="primary" size="large">提交订单</Button>
+                        <Button type="primary" size="large" >提交订单</Button>
                         <Button type="primary"size="large">取消订单</Button>
                     </section>
                 </Card>

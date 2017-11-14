@@ -4,17 +4,18 @@
 import React from 'react';
 import moment from 'moment';
 import InfoTab from './InfoComponents/InfoTab';
-import {dataSearch,foodInit} from '../../action/action';
+import {dataSearch, foodInit, addFood, deleteFood} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import {Table, Icon, DatePicker, Input, Button, Modal, Form} from 'antd';
 const { TextArea } = Input;
 const FormItem = Form.Item;
 let g_date;
 let g_date1;
+
 const InfoForm = Form.create()(
     props => {
         const {visible, onCancel, onOk, form} = props;
-        const {getFieldDecorator} = form;
+        const {getFieldDecorator,getFieldProps } = form;
         return (
             <Modal
                 onOk={onOk}
@@ -22,37 +23,41 @@ const InfoForm = Form.create()(
                 visible={visible}
                 title={"添加菜品"}
             >
-                <Form layout={"horizontal"}>
+                <Form layout={"horizontal"} >
                     <FormItem label={"菜品名称"} layout={"horizontal"}>
-                        {getFieldDecorator("name", {
+                        {getFieldDecorator("dName", {
                             rules:[{required:true, message:"菜品名称不能为空"}]
-                        })(<Input/>)}
+                        })(<Input  />)}
                     </FormItem>
                     <FormItem label={"菜品单价"}>
-                        {getFieldDecorator("price", {
+                        {getFieldDecorator("dPrice", {
                             rules:[{required:true, message:"菜品单价不能为空"}]
                         })(<Input/>)}
                     </FormItem>
                     <FormItem label={"菜品余量"}>
-                        {getFieldDecorator("num", {
+                        {getFieldDecorator("dCount", {
                             rules:[{required:true, message:"菜品余量不能为空"}]
                         })(<Input/>)}
                     </FormItem>
                     <FormItem label={"汉拼首字母"}>
-                        {getFieldDecorator("initial", {
+                        {getFieldDecorator("dCn", {
                             rules:[{required:true, message:"汉拼首字母不能为空"}]
                         })(<Input/>)}
                     </FormItem>
                     <FormItem label={"所属类别"}>
-                        {getFieldDecorator("type", {
+                        {getFieldDecorator("dcId", {
                             rules:[{required:true, message:"所属类别不能为空"}]
                         })(<Input/>)}
                     </FormItem>
                     <FormItem label={"原料"}  >
-                        {getFieldDecorator("material")(<TextArea/>)}
+                        {getFieldDecorator("dMaterial")(<TextArea/>)}
                     </FormItem>
                     <FormItem label={"备注"}>
-                        {getFieldDecorator("remark")(<TextArea/>)}
+                        {getFieldDecorator("dRemark")(<TextArea/>)}
+                    </FormItem>
+                    <FormItem
+                        wrapperCol={{ span: 12, offset: 6 }}
+                    >
                     </FormItem>
                 </Form>
             </Modal>
@@ -79,7 +84,7 @@ class FoodInfo extends React.Component {
         this.handleCancel1 = this.handleCancel1.bind(this);
         this.handleChange=this.handleChange.bind(this);
         this.handleSearch=this.handleSearch.bind(this);
-
+        this.handleDelete=this.handleDelete.bind(this);
         const {foodInit}=this.props;
         foodInit();
 
@@ -93,8 +98,14 @@ class FoodInfo extends React.Component {
     saveFormRef(form){
         this.form=form;
     }
+
     handleOk(e) {
+
         const form=this.form;
+        const {addFood}=this.props;
+        addFood(form.getFieldsValue());
+
+
         form.validateFields((err,value)=>{
             if(err)
                 return;
@@ -103,6 +114,8 @@ class FoodInfo extends React.Component {
                 visible: false,
             })
         });
+
+
     }
     handleCancel(e) {
         console.log(e);
@@ -136,11 +149,18 @@ class FoodInfo extends React.Component {
     }
     handleSearch(e){
         e.preventDefault();
-        let data=[this.state.value,g_date,g_date1];
+        let data={
+            dName:this.state.value,
+            sdDate:g_date,
+            edDate:g_date1};
         const {dataSearch}=this.props;
         dataSearch(data);
     }
+  handleDelete(id){
+      const {deleteFood}=this.props;
+     deleteFood();
 
+  }
     render() {
         let loading=true;
         if(this.props.loading)
@@ -153,28 +173,28 @@ class FoodInfo extends React.Component {
         }
         const columns = [{
             title: '菜品名称',
-            dataIndex: 'name'
+            dataIndex: 'dName'
         }, {
             title: '菜品单价',
-            dataIndex: 'price'
+            dataIndex: 'dPrice'
         }, {
             title: '菜品余量',
-            dataIndex: 'num'
+            dataIndex: 'dCount'
         }, {
             title: '上架日期',
-            dataIndex: 'date'
+            dataIndex: 'dDate'
         }, {
             title: '汉拼首字母',
-            dataIndex: 'initial'
+            dataIndex: 'dCn'
         }, {
             title: '所属类别',
-            dataIndex: 'type'
+            dataIndex: 'dcId'
         }, {
             title: '原料',
-            dataIndex: 'material'
+            dataIndex: 'dMaterial'
         }, {
             title: '备注',
-            dataIndex: 'remark'
+            dataIndex: 'dRemark'
         }, {
             title: '操作',
             dataIndex: 'opera',
@@ -182,7 +202,7 @@ class FoodInfo extends React.Component {
                 <span>
                     <a onClick={this.showModal1}>编辑</a>
                     <span className="ant-divider"/>
-                    <a >删除</a>
+                    <a onClick={this.handleDelete} >删除</a>
                 </span>
         }];
         return (
@@ -199,25 +219,21 @@ class FoodInfo extends React.Component {
                     <div className="smallInput">
                         <Button type="primary" onClick={this.handleSearch}>查询</Button>
                     </div>
-                    <div className="smallInput">
-                        <Button type="primary">刷新</Button>
-                    </div>
                     <div>
                         <Button type="primary" onClick={this.showModal}>添加菜品</Button>
                     </div>
                 </div>
                 <div className="tableMain clearFix">
-                    <span className="tableDate">菜品种类数：<span className="tableMoney">50种</span></span>
+                    <span className="tableDate">菜品种类数：<span className="tableMoney">{this.props.foodSum}种</span></span>
                     <span className="tableDate">|</span>
-                    <span className="tableDate">售空菜品数：<span className="tableMoney">5种</span></span>
+                    <span className="tableDate">售空菜品数：<span className="tableMoney">{this.props.nullCount}种</span></span>
                     <span className="tableDate">|</span>
-                    <span className="tableDate">余量不足菜品数：<span className="tableMoney">10种</span></span>
-                    <span className="tableDate">余量不足菜品数：<span className="tableMoney">10种</span></span>
+                    <span className="tableDate">余量不足菜品数：<span className="tableMoney">{this.props.lowCount}种</span></span>
                     <span className="tableRight">
                        <div><span className="redLine"></span>已售空菜品</div>
                        <div><span className="yellowLine"></span>余量不足菜品</div>
                     </span>
-                    <Table dataSource={this.props.foodMain} columns={columns} size={"small"} loading={loading}/>
+                    <Table dataSource={this.props.foodMain} columns={columns} size={"small"} loading={loading} pagination={{pageSize:5}}/>
                     <InfoForm
                         ref={this.saveFormRef}
                         visible={this.state.visible}
@@ -254,8 +270,29 @@ class FoodInfo extends React.Component {
     }
 }
 const mapStateToProps = (state) =>{
-    return {foodMain:state.httpData.foodTable,loading:state.httpData.ok};
+    //获取菜品总数
+    let count=0;
+    //获取已售空菜品总数
+    let nullCount=0;
+    //获取余量不足菜品数
+    let lowCount=0;
+
+    for(let i in state.httpData.foodTable){
+        count ++;
+        if(state.httpData.foodTable[i].dCount==0){
+            nullCount++;
+        }else if(state.httpData.foodTable[i].dCount>0&&state.httpData.foodTable[i].dCount<50){
+            lowCount++;
+        }
+    }
+    return {
+        foodMain:state.httpData.foodTable,
+        loading:state.httpData.success,
+        foodSum:count,
+        nullCount:nullCount,
+        lowCount:lowCount,
+    };
 }
-FoodInfo=connect(mapStateToProps,{foodInit,dataSearch})(FoodInfo);
+FoodInfo=connect(mapStateToProps,{foodInit,dataSearch,addFood,deleteFood})(FoodInfo);
 //后面的FoodInfo是UI组件，前面的FoodInfo是通过connect生成的容器组件
 export default FoodInfo;

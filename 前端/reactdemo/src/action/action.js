@@ -5,7 +5,11 @@ import * as type from '../action/type';
 //订单页面的初始化
 export function orderInit(){
     return (dispatch)=>{
-        fetch("http://localhost:3000/data.json")
+        fetch("http://localhost:8080/orders/list",{
+            method: 'POST',
+            mode: 'cors',
+            cache: 'default'
+        })
             .then((response)=>{
                 if(response.status!==200){
                     console.log("和后台交互时候出现问题，状态码为："+response.status);
@@ -27,7 +31,11 @@ export const orderInitDo=(data)=>{
 //菜品页面的初始化
 export function foodInit(){
     return (dispatch)=>{
-        fetch("http://localhost:3000/data_food.json")
+        fetch("http://localhost:8080/dish/list",{
+            method: 'POST',
+            mode: 'cors',
+            cache: 'default'
+        })
             .then(response=>{
                 if(response.status!==200){
                     console.log("和后台交互时候出现问题，状态码为："+response.status);
@@ -66,7 +74,8 @@ export const pointNowDesktoStore=(number)=>{
 //初始化服务员订餐页面
 export function initOrdering(){
 return (dispatch)=>{
-    let deskSum=16;   //获取到桌子数量
+
+    let deskSum=14;   //获取到桌子数量
 
     let deskArray=new Array();  //新建桌子的集合
     for(let i=0;i<deskSum+1;i++){
@@ -121,37 +130,134 @@ export const numberFoodDetailstoStore=(nowDeskNum,nowFoodNum,newFoodNumber)=>{
     return {type: type.NUMBER_FOOD,nowDeskNum:nowDeskNum,nowFoodNum:nowFoodNum,newFoodNumber:newFoodNumber}
 }
 
-//查询数据
+//查询菜品
 export function dataSearch(data) {
+    /*
+    解决跨域问题
+    */
     return dispatch=>{
-        fetch("http://localhost:3000/data_try.json",{
+        fetch("http://localhost:8080/dish/list",{
             method:'POST',
-            headers:{
-                'Content-Type': 'application/json'
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
-            body:data,
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "dName="+data.dName+"&sdDate="+data.sdDate+"&edDate="+data.edDate,
         }).then((response)=>{
             if(response.status!==200){
                 console.log("存入数据时出错，状态码为"+response.status);
                 return ;
             }
             response.json().then(json=>{
-                console.log(json);
+                dispatch(foodInitDo(json));
             })
         }).catch(err=>{
             console.log("fetch错误"+err);
         })
     }
 }
-//查询数据
+//查询订单
 export function orderSearch(data) {
     return dispatch=>{
-        fetch("http://localhost:3000/data_try.json",{
+        fetch("http://localhost:8080/orders/list",{
             method:'POST',
-            headers:{
-                'Content-Type': 'application/json'
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
-            body:data,
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "oNum="+data.dName+"&sDate ="+data.sdDate+"&eDate ="+data.edDate,
+
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                dispatch(orderInitDo(json));
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+//增加菜品
+export function addFood(data) {
+    console.log(data);
+    return dispatch=>{
+        fetch("http://localhost:8080/dish/add",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "dCn="+data.dCn+"&dCount="+data.dCount+"&dMaterial="+data.dMaterial+"&dName="+data.dName+"&dPrice="+data.dPrice
+            +"&dRemark="+data.dRemark+"&dcId="+data.dcId,
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+               // foodInit();
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+//修改菜品
+export function uploadFood(data) {
+    console.log(data);
+    return dispatch=>{
+        fetch("http://localhost:8080/dish/update",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "dMaterial ="+data.dMaterial+"&dPrice="+data.dPrice
+            +"&dRemark ="+data.dRemark+"&dCount="+data.dCount,
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+                // foodInit();
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+//删除菜品
+export function deleteFood(data) {
+    return dispatch=>{
+        fetch("http://localhost:8080/dish/delete",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "id=8",
+
         }).then((response)=>{
             if(response.status!==200){
                 console.log("存入数据时出错，状态码为"+response.status);
@@ -165,4 +271,62 @@ export function orderSearch(data) {
         })
     }
 }
+//查询桌子
+export function deskSearch() {
+    return dispatch=>{
+        fetch("http://localhost:8080/desk/list",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default'
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+               console.log(json);
+                dispatch(deskAllToStore(json));
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+export const deskAllToStore=(data)=>{
+    return {type: type.REQUEST_DESK,data:data}
+}
 
+//提交订单
+export function pushOrder(data) {
+    console.log(data);
+    return dispatch=>{
+        fetch("http://localhost:8080/orders/add",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "dCn="+data.dCn+"&dCount="+data.dCount+"&dMaterial="+data.dMaterial+"&dName="+data.dName+"&dPrice="+data.dPrice
+            +"&dRemark="+data.dRemark+"&dcId="+data.dcId,
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+                // foodInit();
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}

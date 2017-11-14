@@ -17,10 +17,13 @@ const httpData = (state = initialList, action) => {
             return Object.assign({}, state, { theNumber: state.theNumber - 1 });
             break;
         case type.REQUEST_ORDER:
-            return Object.assign({}, state, action.data);
+            return Object.assign({},state, {orderTable:action.data.data,success:action.data.success});
             break;
         case type.REQUEST_FOOD:
-            return Object.assign({},state, action.data);
+            return Object.assign({},state, {foodTable:action.data.data,success:action.data.success,foodSuccess:true});
+            break;
+        case type.REQUEST_DESK:
+            return Object.assign({},state, {deskInfo:action.data.data,success:action.data.success});
             break;
         case type.POINT_DESK:
             return Object.assign({}, state, {deskNumber:action.deskNumber});
@@ -63,21 +66,23 @@ const httpData = (state = initialList, action) => {
 };
 //实现深复制
 function deepCopy(o,c){
-    var c = c || {}
-    for(var i in o){
+    if(o!=null){
+     c = c || {}
+    for(let i in o){
         if(typeof o[i] === 'object'){
             //要考虑深复制问题了
-            if(o[i].constructor === Array){
+        /*    if(o[i].constructor === Array){*/
                 //这是数组
                 c[i] =[]
-            }else{
+      /*      }else{
                 //这是对象
                 c[i] = {}
-            }
+            }*/
             deepCopy(o[i],c[i])
         }else{
             c[i] = o[i]
         }
+    }
     }
     return c
 }

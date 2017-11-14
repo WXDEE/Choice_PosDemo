@@ -8,7 +8,8 @@ import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
 let g_date;
 let g_date1;
-
+//表格状态
+let loading=true;
 class OrderInfo extends React.Component{
 
     constructor(props) {
@@ -49,7 +50,10 @@ class OrderInfo extends React.Component{
     }
     handleSearch(e){
         e.preventDefault();
-        let data=[this.state.value,g_date,g_date1];
+        let data={
+            dName:this.state.value,
+            sdDate:g_date,
+            edDate:g_date1};
         const {orderSearch}=this.props;
         orderSearch(data);
     }
@@ -57,8 +61,7 @@ class OrderInfo extends React.Component{
 
         const theNumber = this.props.dataA;
 
-        //表格状态
-        let loading=true;
+
         if(this.props.loading)loading=false;
 
         function onChange(date, dateString) {
@@ -70,28 +73,28 @@ class OrderInfo extends React.Component{
 
         const columns = [{
             title: '订单编号',
-            dataIndex: 'ID',
+            dataIndex: 'oNum',
             key: 'id',
         }, {
             title: '下单时间',
-            dataIndex: 'Time',
+            dataIndex: 'oDate',
             key: 'time',
         }, {
             title: '菜品数量',
-            dataIndex: 'FoodNum',
+            dataIndex: 'odCount',
             key: 'foodnum',
         },  {
             title: '桌号',
-            dataIndex: 'DeskID',
+            dataIndex: 'deId',
             key: 'deskID',
         }, {
             title: '消费金额',
-            dataIndex: 'Money',
+            dataIndex: 'oTotal',
             key: 'money',
             render: text => <span>{text}¥</span>,
         }, {
             title: '订单状态',
-            dataIndex: 'State',
+            dataIndex: 'oStatus',
             key: 'state',
         }, {
             title: '操作',
@@ -151,19 +154,22 @@ class OrderInfo extends React.Component{
                         <DatePicker onChange={onChange} className="datePicker" />
                         至<DatePicker onChange={onChange1} className="datePicker" />
                     </div>
-                    <div className="normalInput"><Button type="primary" onClick={this.handleSearch}>查询</Button><Button type="primary" >清空</Button></div>
+                    <div className="normalInput">
+                        <Button type="primary" onClick={this.handleSearch}>查询</Button>
+                    </div>
 
                 </section>
                 <div className="tableMain">
-                    <span className="tableDate">营业额：<span className="tableMoney">250,000.00¥</span></span>
+                    <span className="tableDate">营业额：<span className="tableMoney">{this.props.OrderPriceSum}¥</span></span>
                     <span className="tableDate">| </span>
-                    <span className="tableDate">订单量：<span className="tableMoney">50,000.00笔</span></span>
+                    <span className="tableDate">订单量：<span className="tableMoney">{this.props.OrderSum}笔</span></span>
                     <Table
                         columns={columns}
                         dataSource={this.props.mainTable}
                         className=""
                         size="small"
                         loading={loading}
+                        pagination={{pageSize:5}}
                     />
                     <Modal
                         title="订单明细"
@@ -209,9 +215,18 @@ class OrderInfo extends React.Component{
 
 }
 const mapStateToProps  = (state) => {
+  //获取订单总数
+    let count=0;
+    let sumPrice=0;
+    for(let i in state.httpData.orderTable){
+               count ++;
+        sumPrice+=Number(state.httpData.orderTable[i].oTotal);
+            }
     return { dataA: state.httpData.theNumber,
         mainTable:state.httpData.orderTable,//表格数据
-        loading:state.httpData.ok, //表格是否加载完毕
+        loading:state.httpData.success, //表格是否加载完毕
+        OrderSum:count,
+        OrderPriceSum:sumPrice,
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
