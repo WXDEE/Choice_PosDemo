@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -18,7 +19,8 @@ public class DishCatelogController {
     public DishCatelogService dishCatelogService;
     @RequestMapping("list")
     @ResponseBody
-    public ServerResponse queryAllDishCatelog(){
+    public ServerResponse queryAllDishCatelog(HttpServletResponse response){
+        response.setHeader("Access-Control-Allow-Origin", "*");
         return dishCatelogService.queryAllDishCatelog();
     }
 }
