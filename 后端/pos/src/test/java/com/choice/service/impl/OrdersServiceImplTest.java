@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
 import com.choice.entity.OrderItem;
+import com.choice.service.OrderItemService;
 import com.choice.service.OrdersService;
 import com.choice.util.JsonUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -22,11 +23,13 @@ import com.choice.util.JsonUtils;
 public class OrdersServiceImplTest {
 	@Resource
 	private OrdersService ordersService;
+	@Resource
+	private OrderItemService orderItemService;
 	@Test
 	public void testAddOrders() {
-		OrderItem item1=new OrderItem(null, "1", "1", "1", "1");
-		OrderItem item2=new OrderItem(null, "1", "2", "1", "1");
-		OrderItem item3=new OrderItem(null, "1", "3", "1", "1");
+		OrderItem item1=new OrderItem(null, null, "1", "1", "1");
+		OrderItem item2=new OrderItem(null, null, "2", "1", "1");
+		OrderItem item3=new OrderItem(null, null, "3", "1", "1");
 		List<OrderItem> items=new ArrayList<OrderItem>();
 		items.add(item1);
 		items.add(item2);
@@ -39,7 +42,8 @@ public class OrdersServiceImplTest {
 
 	@Test
 	public void testQueryOrders() {
-		fail("Not yet implemented");
+		ServerResponse<List<OrderItem>> list = orderItemService.queryOrderItemByOrdersId("2");
+		System.out.println(JsonUtils.objectToJson(list));
 	}
 
 }

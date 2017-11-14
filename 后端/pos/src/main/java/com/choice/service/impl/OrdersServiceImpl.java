@@ -3,7 +3,14 @@ package com.choice.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +31,8 @@ public class OrdersServiceImpl implements OrdersService {
 	private OrdersMapper ordersMapper;
 	@Autowired
 	private OrderItemMapper orderItemMapper;
+	@Resource(name = "jmsTemplate")
+	private JmsTemplate jmsTemplate;
 	
 	@Transactional
     public ServerResponse<OrdersDTO> addOrders(OrdersDTO ordersDTO) {
@@ -34,6 +43,9 @@ public class OrdersServiceImpl implements OrdersService {
 					ordersDTO.getDeId(),ordersDTO.getoTotal(), ordersDTO.getOdCount());
 			List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
 			Integer flag1 = ordersMapper.save(orders);
+			for (OrderItem orderItem : orderItemList) {
+				orderItem.setoId(orders.getId()+"");
+			}
 			Integer flag2 = orderItemMapper.save(orderItemList);
 			if (flag1 != 0 && flag2 !=0){
 				OrdersDTO resultDate = new OrdersDTO();
@@ -46,6 +58,13 @@ public class OrdersServiceImpl implements OrdersService {
 				resultDate.setoTotal(orders.getoTotal());
 				resultDate.setOrderItemList(orderItemList);
 				ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(resultDate);
+				String destination = jmsTemplate.getDefaultDestinationName();
+		        System.out.println("订单生成");
+		        jmsTemplate.send(new MessageCreator() {
+		            public Message createMessage(Session session) throws JMSException {
+		                return session.createTextMessage("订单生成");
+		            }
+		        });
 				return result;
 			}
 			throw new Exception();
