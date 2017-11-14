@@ -20,18 +20,28 @@ export function orderInit(){
 
     }
 }
-export const orderInitDo=(date)=>{
-    return {type: type.REQUEST_ORDER,date:date}
+export const orderInitDo=(data)=>{
+    return {type: type.REQUEST_ORDER,data:data}
 }
 
 export function foodInit(){
     return (dispatch)=>{
-        dispatch(foodInitDo());
-        //你可以在此处向服务器请求数据
+        fetch("http://localhost:3000/data_food.json")
+            .then(response=>{
+                if(response.status!==200){
+                    console.log("和后台交互时候出现问题，状态码为："+response.status);
+                    return;
+                }
+                response.json().then(data=>{
+                    dispatch(foodInitDo(data));
+                });
+            }).catch(function (err) {
+                console.log("fetch错误："+err);
+        });
     }
 }
-export const foodInitDo=()=>{
-    return {type: type.REQUEST_FOOD}
+export const foodInitDo=(data)=>{
+    return {type: type.REQUEST_FOOD,data:data};
 }
 
 export function addNum(){

@@ -46,7 +46,7 @@ const InfoForm = Form.create()(
                             rules:[{required:true, message:"所属类别不能为空"}]
                         })(<Input/>)}
                     </FormItem>
-                    <FormItem label={"原料"}>
+                    <FormItem label={"原料"}  >
                         {getFieldDecorator("material")(<TextArea/>)}
                     </FormItem>
                     <FormItem label={"备注"}>
@@ -124,6 +124,9 @@ class FoodInfo extends React.Component {
     }
 
     render() {
+        let loading=true;
+        if(this.props.loading)
+            loading=false;
         function onChange(date, dateString) {
             console.log(date, dateString);
         }
@@ -193,7 +196,7 @@ class FoodInfo extends React.Component {
                        <div><span className="redLine"></span>已售空菜品</div>
                        <div><span className="yellowLine"></span>余量不足菜品</div>
                     </span>
-                    <Table dataSource={this.props.foodMain} columns={columns} size={"small"}/>
+                    <Table dataSource={this.props.foodMain} columns={columns} size={"small"} loading={loading}/>
                     <InfoForm
                         ref={this.saveFormRef}
                         visible={this.state.visible}
@@ -230,7 +233,7 @@ class FoodInfo extends React.Component {
     }
 }
 const mapStateToProps = (state) =>{
-    return {foodMain:state.httpData.foodTable};
+    return {foodMain:state.httpData.foodTable,loading:state.httpData.ok};
 }
 FoodInfo=connect(mapStateToProps,{foodInit})(FoodInfo);
 export default FoodInfo;
