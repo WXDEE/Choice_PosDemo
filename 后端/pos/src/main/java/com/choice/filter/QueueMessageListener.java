@@ -12,9 +12,10 @@ public class QueueMessageListener implements MessageListener{
 		// TODO Auto-generated method stub
 		TextMessage tm = (TextMessage) message;
         try {
-            System.out.println("QueueMessageListener监听到了文本消息：\t"
+            System.out.println("QueueMessageListener监听到了应用消息："
                     + tm.getText());
             //do something ...
+            System.out.println("打印订单");
         } catch (JMSException e) {
             e.printStackTrace();
         }
