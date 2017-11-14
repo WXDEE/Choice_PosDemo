@@ -28,6 +28,14 @@ public class DishServiceImpl implements DishService {
 	public ServerResponse<List<Dish>> queryDishByCatelog(String catelog) {
 		try {
 			List<Dish> dishList = dishMapper.selectDishByCatelog(catelog);
+			List<DishCatelog> dishCatelogList = dishCatelogMapper.selectList();
+			Map<String,String> map = new HashMap();
+			for(DishCatelog dishCatelog : dishCatelogList){
+				map.put(dishCatelog.getId().toString(),dishCatelog.getDcName());
+			}
+			for(Dish dish : dishList){
+				dish.setDcId(map.get(dish.getDcId()));
+			}
 			return ServerResponse.createBySuccess(dishList);
 		} catch (Exception e) {
 			return ServerResponse.createByError();
@@ -76,6 +84,14 @@ public class DishServiceImpl implements DishService {
 	public ServerResponse<List<Dish>> queryDishByCn(String cn) {
 		try {
 			List<Dish> dishList = dishMapper.selectDishByCn(cn);
+			List<DishCatelog> dishCatelogList = dishCatelogMapper.selectList();
+			Map<String,String> map = new HashMap();
+			for(DishCatelog dishCatelog : dishCatelogList){
+				map.put(dishCatelog.getId().toString(),dishCatelog.getDcName());
+			}
+			for(Dish dish : dishList){
+				dish.setDcId(map.get(dish.getDcId()));
+			}
 			return ServerResponse.createBySuccess(dishList);
 		} catch (Exception e) {
 			return ServerResponse.createByError();
