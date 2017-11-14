@@ -13,7 +13,6 @@ import com.github.pagehelper.PageInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,7 +101,8 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) {
 		try {
-			if(sdDate==null||edDate==null){
+
+			if(sdDate==null|| StringUtils.isBlank(sdDate)||edDate==null||StringUtils.isBlank(edDate)){
 				sdDate = null;
 				edDate = null;
 			}
