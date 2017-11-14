@@ -23,6 +23,7 @@ import com.choice.mapper.OrdersMapper;
 import com.choice.service.OrdersService;
 import com.choice.util.DateTimeUtil;
 import com.choice.util.IDUtils;
+import com.choice.util.JsonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
@@ -39,12 +40,13 @@ public class OrdersServiceImpl implements OrdersService {
     	try {
     		String num = IDUtils.genItemId() + "";
     		String date = DateTimeUtil.dateToStr(new Date());
-			Orders orders = new Orders(null, num, date, ordersDTO.getoStatus(),
+			Orders orders = new Orders(null, num, date, "0",
 					ordersDTO.getDeId(),ordersDTO.getoTotal(), ordersDTO.getOdCount());
 			List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
 			Integer flag1 = ordersMapper.save(orders);
 			for (OrderItem orderItem : orderItemList) {
 				orderItem.setoId(orders.getId()+"");
+				orderItem.setOiStatus("0");
 			}
 			Integer flag2 = orderItemMapper.save(orderItemList);
 			if (flag1 != 0 && flag2 !=0){
@@ -62,7 +64,7 @@ public class OrdersServiceImpl implements OrdersService {
 		        System.out.println("订单生成");
 		        jmsTemplate.send(new MessageCreator() {
 		            public Message createMessage(Session session) throws JMSException {
-		                return session.createTextMessage("订单生成");
+		                return session.createTextMessage("订单生成:"+JsonUtils.objectToJson(resultDate));
 		            }
 		        });
 				return result;
