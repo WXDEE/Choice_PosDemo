@@ -34,7 +34,7 @@ public class OrdersServiceImplTest {
 		items.add(item1);
 		items.add(item2);
 		items.add(item3);
-		OrdersDTO dto=new OrdersDTO(null, null, null, "1", "1", "143", "3", items);
+		OrdersDTO dto=new OrdersDTO(null, null, null, null, "1", "143", "3", items);
 		ServerResponse<OrdersDTO> result = ordersService.addOrders(dto);
 		String json = JsonUtils.objectToJson(result);
 		System.out.println(json);
