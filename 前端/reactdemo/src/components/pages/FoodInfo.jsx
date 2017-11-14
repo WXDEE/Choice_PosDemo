@@ -236,4 +236,5 @@ const mapStateToProps = (state) =>{
     return {foodMain:state.httpData.foodTable,loading:state.httpData.ok};
 }
 FoodInfo=connect(mapStateToProps,{foodInit})(FoodInfo);
+//后面的FoodInfo是UI组件，前面的FoodInfo是通过connect生成的容器组件
 export default FoodInfo;
