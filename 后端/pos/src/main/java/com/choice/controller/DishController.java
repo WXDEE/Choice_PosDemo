@@ -3,14 +3,11 @@ package com.choice.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.choice.common.ServerResponse;
 import com.choice.entity.Dish;
-import com.choice.mapper.DishMapper;
 import com.choice.service.DishService;
 
 @Controller
@@ -19,6 +16,7 @@ public class DishController {
 	@Autowired
 	private DishService dishService;
 
+	
 	@RequestMapping(value = "catelog")
 	@ResponseBody
 	public ServerResponse queryDishByCatelog(String catelog) {
@@ -37,7 +35,7 @@ public class DishController {
 
 	@RequestMapping("delete")
 	@ResponseBody
-	public ServerResponse deleteDish(@PathVariable Integer id){
+	public ServerResponse deleteDish(Integer id){
 		return dishService.deleteDish(id);
 	}
 

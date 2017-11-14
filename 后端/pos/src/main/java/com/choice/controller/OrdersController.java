@@ -2,7 +2,6 @@ package com.choice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -53,7 +52,7 @@ public class OrdersController {
 	//根据订单id结账
 	@RequestMapping("settleAccount")
 	@ResponseBody
-	public  ServerResponse settleAccount(@PathVariable String id){
+	public  ServerResponse settleAccount(String id){
 		return ordersService.settleAccount(id);
 	}
 }

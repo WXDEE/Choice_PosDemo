@@ -5,7 +5,6 @@ import com.choice.entity.Desk;
 import com.choice.service.DeskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,9 +23,9 @@ public class DeskController {
     	return deskService.queryAllDesk();
     }
     //根据桌子编号查询桌子
-	@RequestMapping("/num")
+	@RequestMapping("num")
 	@ResponseBody
-   public ServerResponse<Desk> queryDeskByNum(@PathVariable("num") String num){
+   public ServerResponse<Desk> queryDeskByNum(String num){
     	return deskService.queryDeskByNum(num);
     }
 }
