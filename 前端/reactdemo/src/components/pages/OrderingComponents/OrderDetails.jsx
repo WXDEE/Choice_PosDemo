@@ -4,10 +4,17 @@
  */
 import React from 'react';
 import { Card,Table,Button } from 'antd';
-class SelectFood extends React.Component{
+import { connect } from 'react-redux'; // 引入connect
 
+
+class SelectFood extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
+    }
     render(){
-        let ScreenHeight=document.body.clientHeight-115; //获取 全屏幕减去title的高度
+        let ScreenHeight=document.body.clientHeight-104; //获取 全屏幕减去title的高度
         const listColumns = [{
             title: '菜品名',
             dataIndex: 'FoodName',
@@ -50,15 +57,15 @@ class SelectFood extends React.Component{
                         <tbody>
                         <tr className="listTableImportant">
                             <td >桌号</td>
-                            <td>022</td>
+                            <td>{this.props.nowDeskNumber}</td>
                         </tr>
                         <tr>
                             <td>订单号</td>
-                            <td>099287</td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>下单时间</td>
-                            <td>2017-11-11 10:00</td>
+                            <td></td>
                         </tr>
                         </tbody>
                     </table>
@@ -87,4 +94,13 @@ class SelectFood extends React.Component{
         )
     }
 }
+const mapStateToProps  = (state) => {
+    return { nowDeskNumber: state.httpData.deskNumber,
+
+    };
+}
+//connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
+SelectFood = connect(mapStateToProps)(SelectFood);
+
+
 export default SelectFood;

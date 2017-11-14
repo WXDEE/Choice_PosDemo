@@ -62,6 +62,9 @@ const httpData = (state = initialList, action) => {
                 remark: '对辣椒过敏者慎食'
             }]});
             break;
+        case type.POINT_DESK:
+            return Object.assign({}, state, {deskNumber:action.deskNumber});
+            break;
         default:
             return state;
     }
