@@ -4,7 +4,9 @@ import com.choice.common.Const;
 import com.choice.common.ServerResponse;
 import com.choice.entity.Dish;
 import com.choice.mapper.DishMapper;
+import com.choice.mapper.JedisClient;
 import com.choice.service.DishService;
+import com.choice.util.JsonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -18,10 +20,30 @@ import org.springframework.stereotype.Service;
 public class DishServiceImpl implements DishService {
 	@Autowired
 	private DishMapper dishMapper;
+	@Autowired
+	private JedisClient jedisClient;
+	private String dishCache = Const.DISH_CACHE;
 	
     public ServerResponse<List<Dish>> queryDishByCatelog(String catelog) {
 		try {
+			try {
+				String json = jedisClient.hget(dishCache, catelog);
+				if(!StringUtils.isBlank(json)){
+					jedisClient.expire(dishCache, 1000);
+					List<Dish> dishList = JsonUtils.jsonToList(json, Dish.class);
+					return ServerResponse.createBySuccess(dishList);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 			List<Dish> dishList = dishMapper.selectDishByCatelog(catelog);
+			try {
+				String json = JsonUtils.objectToJson(dishList);
+				jedisClient.hset(dishCache, catelog, json);
+				jedisClient.expire(dishCache, 1000);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 			return ServerResponse.createBySuccess(dishList);
 		} catch (Exception e) {
 			return ServerResponse.createByError();
