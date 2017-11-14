@@ -13,7 +13,8 @@ const gridStyle = {
     margin:5,
     color:'#fbfbfb',
     lineHeight:'5px',
-    textAlign:'center'
+    textAlign:'center',
+    cursor:'pointer'
 
 };
 
@@ -28,7 +29,6 @@ class DeskFactory extends React.Component{
      nowDeskNumber(number){
          const { pointNowDesk } = this.props;
          pointNowDesk(number);
-
         console.log("现在指定的桌号为："+number);
     }
     render(){

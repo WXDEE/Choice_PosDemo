@@ -9,7 +9,6 @@ import FoodFactory from "./FoodFactory";
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 class TypeFactory extends React.Component{
-
     render(){
         const foodList=[
             {name: "特价菜品"},
@@ -23,7 +22,7 @@ class TypeFactory extends React.Component{
         ];
        let factory =foodList.map(function (item,index) {
 
-           return  <TabPane tab={item.name} key={index}> <FoodFactory/> </TabPane>
+           return  <TabPane tab={item.name} key={index}> <FoodFactory /> </TabPane>
        })
         return(
             <Tabs tabPosition="left" className="foodTab" size="small ">
