@@ -8,8 +8,7 @@ import LackFood from './OrderingComponents/LackFood';
 import OrderDetails from './OrderingComponents/OrderDetails';
 import { connect } from 'react-redux'; // 引入connect
 import { initOrdering} from '../../action/action';
-class UserOrdering extends React.Component{
-    constructor(props) {
+class UserOrdering extends React.Component{    constructor(props) {
         super(props);
         this.state = {
         }
