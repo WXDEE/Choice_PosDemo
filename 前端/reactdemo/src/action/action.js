@@ -53,3 +53,12 @@ export function addNum(){
 export const addNumWithStore=()=>{
     return {type: type.RECEIVE_DATA}
 }
+export function pointNowDesk(number){
+    return (dispatch)=>{
+        dispatch(pointNowDesktoStore(number));
+    }
+}
+export const pointNowDesktoStore=(number)=>{
+    return {type: type.POINT_DESK,deskNumber:number}
+}
+

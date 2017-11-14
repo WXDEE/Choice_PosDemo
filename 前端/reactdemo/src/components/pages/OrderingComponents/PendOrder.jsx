@@ -12,7 +12,7 @@ class PendOrder extends React.Component{
 
     render(){
         const Search = Input.Search;
-        let ScreenHeight=document.body.clientHeight-115; //获取 全屏幕减去title的高度
+        let ScreenHeight=document.body.clientHeight-104; //获取 全屏幕减去title的高度
 
 
         return(

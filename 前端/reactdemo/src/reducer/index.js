@@ -22,6 +22,9 @@ const httpData = (state = initialList, action) => {
         case type.REQUEST_FOOD:
             return Object.assign({},state, action.data);
             break;
+        case type.POINT_DESK:
+            return Object.assign({}, state, {deskNumber:action.deskNumber});
+            break;
         default:
             return state;
     }
