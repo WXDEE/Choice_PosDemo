@@ -26,6 +26,7 @@ public class OrderItemController {
 	}
 
 	@RequestMapping("updish")
+	@ResponseBody
 	public ServerResponse upDish(String ordersItemId) {
 		return orderItemService.upDish(ordersItemId);
 	}
