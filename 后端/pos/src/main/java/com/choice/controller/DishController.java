@@ -19,12 +19,12 @@ public class DishController {
 	@Autowired
 	private DishService dishService;
 
-	@RequestMapping(value = "{catelog}")
+	@RequestMapping(value = "catelog")
 	@ResponseBody
-	public ServerResponse queryDishByCatelog(@PathVariable String catelog) {
+	public ServerResponse queryDishByCatelog(String catelog) {
 		return dishService.queryDishByCatelog(catelog);
 	}
-	@RequestMapping("add")
+	@RequestMapping(value = "add")
 	@ResponseBody
 	public ServerResponse addDish(Dish dish){
 		return dishService.addDish(dish);
@@ -35,15 +35,15 @@ public class DishController {
 		return dishService.updateDish(dish);
 	}
 
-	@RequestMapping("{id}/delete")
+	@RequestMapping("delete")
 	@ResponseBody
 	public ServerResponse deleteDish(@PathVariable Integer id){
 		return dishService.deleteDish(id);
 	}
 
-	@RequestMapping("{cn}")
+	@RequestMapping("cn")
 	@ResponseBody
-	public ServerResponse<List<Dish>> queryDishByCn(@PathVariable String cn){
+	public ServerResponse<List<Dish>> queryDishByCn(String cn){
 		return dishService.queryDishByCn(cn);
 	}
 	@RequestMapping("list")

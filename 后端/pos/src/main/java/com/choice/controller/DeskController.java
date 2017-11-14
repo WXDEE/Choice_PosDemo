@@ -24,7 +24,7 @@ public class DeskController {
     	return deskService.queryAllDesk();
     }
     //根据桌子编号查询桌子
-	@RequestMapping("{num}")
+	@RequestMapping("/num")
 	@ResponseBody
    public ServerResponse<Desk> queryDeskByNum(@PathVariable("num") String num){
     	return deskService.queryDeskByNum(num);

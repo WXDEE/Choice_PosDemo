@@ -51,7 +51,7 @@ public class OrdersController {
 		return ordersService.querySumTotal();
 	}
 	//根据订单id结账
-	@RequestMapping("{id}/settleAccount")
+	@RequestMapping("settleAccount")
 	@ResponseBody
 	public  ServerResponse settleAccount(@PathVariable String id){
 		return ordersService.settleAccount(id);

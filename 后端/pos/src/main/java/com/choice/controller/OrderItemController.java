@@ -18,14 +18,14 @@ public class OrderItemController {
 	@Autowired
 	private OrderItemService orderItemService;
 	
-	@RequestMapping("{ordersId}")
+	@RequestMapping("ordersId")
 	@ResponseBody
 	public ServerResponse<List<OrderItem>> queryOrderItemByOrdersId(@PathVariable String ordersId){
 		ServerResponse<List<OrderItem>> result = orderItemService.queryOrderItemByOrdersId(ordersId);
 		return result;
 	}
 
-	@RequestMapping("{ordersItemId}/updish")
+	@RequestMapping("updish")
 	public ServerResponse upDish(@PathVariable String ordersItemId) {
 		return orderItemService.upDish(ordersItemId);
 	}
