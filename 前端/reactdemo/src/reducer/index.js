@@ -19,6 +19,8 @@ const httpData = (state = initialList, action) => {
         case type.REQUEST_ORDER:
             return Object.assign({},state, {orderTable:action.data.data,success:action.data.success});
             break;
+        case type.ORDER_DETAILS:
+            return Object.assign({}, state, {orderDetailsTable:action.data.data,success1:action.data.success});
         case type.REQUEST_FOOD:
             return Object.assign({},state, {foodTable:action.data.data,success:action.data.success,foodSuccess:true});
             break;
@@ -60,6 +62,7 @@ const httpData = (state = initialList, action) => {
             }
             return subEach2;
             break;
+
         default:
             return state;
     }
