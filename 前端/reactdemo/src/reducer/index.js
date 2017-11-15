@@ -33,6 +33,7 @@ const httpData = (state = initialList, action) => {
             break;
         case type.PUSH_ORDER:
             let subEach0=deepCopy(state,{});
+            if(action.data.data!=null)
             subEach0.orderState.push({"deskNum":action.data.data.deId, deskInfo:action.data});
             return subEach0;
             break;
