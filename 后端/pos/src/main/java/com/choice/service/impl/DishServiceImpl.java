@@ -68,7 +68,6 @@ public class DishServiceImpl implements DishService {
 	public ServerResponse addDish(Dish dish) {
 		try {
 			String date = DateTimeUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
-			System.out.println(date);
 			dish.setdDate(date);
 			Integer result = dishMapper.insertDish(dish);
 			if(result.equals(1)){
@@ -133,11 +132,9 @@ public class DishServiceImpl implements DishService {
 				sdDate = null;
 				edDate = null;
 			}
-			if(sdDate!=null){
+			else {
 				sdDate = sdDate+" 00:00:00";
 				edDate = edDate+" 23:59:59";
-				System.out.println(sdDate);
-				System.out.println(edDate);
 			}
 			List<Dish> dishList = dishMapper.selectDishByDNameAndDDate(dName, sdDate,edDate);
 			List<DishCatelog> dishCatelogList = dishCatelogMapper.selectList();
