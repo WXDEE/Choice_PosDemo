@@ -8,10 +8,13 @@ import com.choice.mapper.DishCatelogMapper;
 import com.choice.mapper.DishMapper;
 import com.choice.mapper.JedisClient;
 import com.choice.service.DishService;
+import com.choice.util.DateTimeUtil;
 import com.choice.util.JsonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +67,9 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse addDish(Dish dish) {
 		try {
+			String date = DateTimeUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
+			System.out.println(date);
+			dish.setdDate(date);
 			Integer result = dishMapper.insertDish(dish);
 			if(result.equals(1)){
 				return ServerResponse.createBySuccess();
@@ -126,6 +132,12 @@ public class DishServiceImpl implements DishService {
 			if(sdDate==null|| StringUtils.isBlank(sdDate)||edDate==null||StringUtils.isBlank(edDate)){
 				sdDate = null;
 				edDate = null;
+			}
+			if(sdDate!=null){
+				sdDate = sdDate+" 00:00:00";
+				edDate = edDate+" 23:59:59";
+				System.out.println(sdDate);
+				System.out.println(edDate);
 			}
 			List<Dish> dishList = dishMapper.selectDishByDNameAndDDate(dName, sdDate,edDate);
 			List<DishCatelog> dishCatelogList = dishCatelogMapper.selectList();

@@ -126,7 +126,10 @@
         <if test="dName != null">
             AND  d_name like '%${dName}%'
         </if>
-        ORDER by d_date desc
+        <if test="sdDate != null">
+            and d_date between #{sdDate} and #{edDate}
+        </if>
+        ORDER by d_count desc
     </select>
     <select id="selectEmptyDish" resultType="Dish">
         select id,d_name from dish where d_count = '0' and d_status = '1';
