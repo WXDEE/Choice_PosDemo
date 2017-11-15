@@ -118,11 +118,12 @@ public class OrdersServiceImpl implements OrdersService {
 			return ServerResponse.createByError();
 		}
 	}
-
-	public ServerResponse settleAccount(String id) {
+	@Transactional
+	public ServerResponse settleAccount(String id,String deNum) {
 		try {
 			Integer sta=ordersMapper.updateOrdersStatus(id);
-			if(sta==1){
+			Integer stb=deskMapper.updateDeskStatusByNum(deNum, "0");
+			if(sta==1&&stb==1){
 				return ServerResponse.createBySuccess();
 			}
 		} catch (Exception e) {
@@ -135,8 +136,7 @@ public class OrdersServiceImpl implements OrdersService {
 	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) {
 		// TODO Auto-generated method stub
 		try {
-			if(sDate==null||StringUtils.isBlank(sDate)||
-					eDate==null||StringUtils.isBlank(sDate)){
+			if(StringUtils.isBlank(sDate)||StringUtils.isBlank(sDate)){
 				sDate=null;
 				eDate=null;
 			}

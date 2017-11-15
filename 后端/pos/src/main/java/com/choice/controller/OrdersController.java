@@ -60,8 +60,8 @@ public class OrdersController {
 	//根据订单id结账
 	@RequestMapping("settleAccount")
 	@ResponseBody
-	public  ServerResponse settleAccount(HttpServletResponse response,String id){
+	public  ServerResponse settleAccount(HttpServletResponse response,String id,String deNum){
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		return ordersService.settleAccount(id);
+		return ordersService.settleAccount(id,deNum);
 	}
 }

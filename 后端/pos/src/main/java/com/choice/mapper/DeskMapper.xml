@@ -10,4 +10,7 @@
     select id,de_num,de_status from desk where de_num=#{_parament}
     </select>
     
+    <update id="updateDeskStatusByNum">
+    update desk set de_status=#{status} where de_num=#{deNum}
+    </update>
 </mapper>

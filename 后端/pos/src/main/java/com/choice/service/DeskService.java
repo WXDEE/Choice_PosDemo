@@ -10,4 +10,6 @@ public interface DeskService {
     ServerResponse<List<Desk>> queryAllDesk();
     //根据桌子编号查询桌子
     ServerResponse<Desk> queryDeskByNum(String num);
+    //根据桌子ID修改桌子状态
+    ServerResponse updateDeskStatusByNum(String deNum,String status);
 }

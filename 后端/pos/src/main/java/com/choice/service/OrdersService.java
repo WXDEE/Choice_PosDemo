@@ -20,5 +20,5 @@ public interface OrdersService {
     //查询总营业额
     ServerResponse<String> querySumTotal();
     //根据订单id结账
-    ServerResponse settleAccount(String id);
+    ServerResponse settleAccount(String id,String deNum);
 }
