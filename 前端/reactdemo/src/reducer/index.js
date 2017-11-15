@@ -19,6 +19,8 @@ const httpData = (state = initialList, action) => {
         case type.REQUEST_DATA:
             return Object.assign({}, state, { theNumber: state.theNumber - 1 });
             break;
+        case type.ORDER_DETAILS:
+            return Object.assign({}, state, {orderDetailsTable:action.data.data,success1:action.data.success});
         case type.REQUEST_ORDER:
             return Object.assign({},state, {orderTable:action.data.data,success:action.data.success});
             break;
