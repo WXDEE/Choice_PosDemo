@@ -385,7 +385,7 @@ export function seeOrderDetails(id) {
             mode: 'cors',
             credentials: 'credentials',
             cache: 'default',
-            body:'id='+id,
+            body:'ordersId='+id,
         }).then((response)=>{
             if(response.status!==200){
                 console.log("查看订单明细时出错，状态码为"+response.status);

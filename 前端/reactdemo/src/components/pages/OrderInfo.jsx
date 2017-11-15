@@ -33,12 +33,12 @@ class OrderInfo extends React.Component{
         addNum();
     }
 
-    showModal (){
+    showModal (id){
         this.setState({
             visible: true,
         });
         const {seeOrderDetails}=this.props;
-        seeOrderDetails('id');
+        seeOrderDetails(id);
     }
     handleCancel (e) {
         console.log(e);
@@ -105,7 +105,7 @@ class OrderInfo extends React.Component{
             title: '操作',
             dataIndex: 'Func',
             key: 'func',
-            render: text => <a  onClick={this.showModal}>查看明细</a>,
+            render: (text,record,index) => <a onClick={()=>this.showModal(record.id)}>查看明细</a>,
         }
     ];
 
@@ -186,15 +186,15 @@ class OrderInfo extends React.Component{
                            <tbody>
                            <tr>
                                <td>订单号</td>
-                               <td>099287</td>
+                               <td>this.props.orderDetail.oNum</td>
                            </tr>
                            <tr>
                                <td>桌号</td>
-                               <td>022</td>
+                               <td>this.props.orderDetail.deId</td>
                            </tr>
                            <tr>
                                <td>下单时间</td>
-                               <td>2017-11-11 10:00</td>
+                               <td>this.props.orderDetail.oDate</td>
                            </tr>
                            </tbody>
                        </table>
@@ -210,7 +210,7 @@ class OrderInfo extends React.Component{
                             />
                         </section>
                         <hr  className="doLine" />
-                        <div style={{marginLeft:'10%'}}>共计金额：¥570</div>
+                        <div style={{marginLeft:'10%'}}>共计金额：¥this.props.orderDetail.oTotal</div>
                     </Modal>
                 </div>
 
