@@ -16,6 +16,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
@@ -82,7 +83,8 @@ public class OrdersServiceImpl implements OrdersService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
-			return ServerResponse.createByError();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); 
+			return ServerResponse.createByErrorMessage("请选择菜品！！！");
 		}
     }
 
