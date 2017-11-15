@@ -128,11 +128,11 @@ public class DishServiceImpl implements DishService {
 	public ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) {
 
 		try {
-			if(sdDate==null|| StringUtils.isBlank(sdDate)||edDate==null||StringUtils.isBlank(edDate)){
+			if(sdDate.equals("undefined")||edDate.equals("undefined")){
 				sdDate = null;
 				edDate = null;
 			}
-			else {
+			if(sdDate != null){
 				sdDate = sdDate+" 00:00:00";
 				edDate = edDate+" 23:59:59";
 			}
