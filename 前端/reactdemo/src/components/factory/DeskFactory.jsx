@@ -46,8 +46,8 @@ class DeskFactory extends React.Component{
         let factory=null;
          if(this.props.nowDeskInfo!=null){
           let array=this.props.nowDeskInfo;
-
         console.log(array);
+
         factory =array.map( (item,index)=> {
            let number=index+1;
            if(item.deStatus!=0){
@@ -70,6 +70,7 @@ const mapStateToProps  = (state) => {
     return { nowDeskNumber: state.httpData.deskNumber,
               nowDeskInfo:state.httpData.deskInfo,
               nowAllDeskNumber:count,
+              orderState:state.httpData.orderState,
 
     };
 }

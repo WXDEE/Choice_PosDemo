@@ -156,7 +156,8 @@ class FoodInfo extends React.Component {
         const {dataSearch}=this.props;
         dataSearch(data);
     }
-  handleDelete(id){
+  handleDelete(text){
+        console.log(text);
       const {deleteFood}=this.props;
      deleteFood(12);
 
@@ -202,7 +203,7 @@ class FoodInfo extends React.Component {
                 <span>
                     <a onClick={this.showModal1}>编辑</a>
                     <span className="ant-divider"/>
-                    <a onClick={this.handleDelete} >删除</a>
+                    <a onClick={()=>this.handleDelete(text)} >删除</a>
                 </span>
         }];
 

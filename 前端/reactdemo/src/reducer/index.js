@@ -7,6 +7,9 @@ import * as type from '../action/type';
 const initialList = {
     theNumber: 0,
     theString:"initial string!",
+    orderState:{
+
+    }
 }
 const httpData = (state = initialList, action) => {
     switch (action.type) {
@@ -27,6 +30,11 @@ const httpData = (state = initialList, action) => {
             break;
         case type.POINT_DESK:
             return Object.assign({}, state, {deskNumber:action.deskNumber});
+            break;
+        case type.PUSH_ORDER:
+            let subEach0=deepCopy(state,{});
+            subEach0.orderState.push({"deskNum":action.data.data.deId, deskInfo:action.data});
+            return subEach0;
             break;
         case type.INIT_ORDER:
             return Object.assign({}, state, {deskTable:action.deskArray});

@@ -332,10 +332,44 @@ export function pushOrder(data) {
             }
             response.json().then(json=>{
                 console.log(json);
-                // foodInit();
+                dispatch(orderStateToStore(json));
+                deskSearch()(dispatch);
             })
         }).catch(err=>{
             console.log("fetch错误"+err);
         })
     }
+}
+export const orderStateToStore=(data)=>{
+    return {type: type.PUSH_ORDER,data}
+}
+//结账
+export function endOrder(orderNumber,nowDesk) {
+    return dispatch=>{
+        fetch("http://localhost:8080/orders/settleAccount",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "id="+orderNumber+"&deNum="+nowDesk
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+                deskSearch()(dispatch);
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+export const endOrderToStore=(data)=>{
+    return {type: type.PUSH_ORDER,data}
 }
