@@ -158,7 +158,7 @@ class FoodInfo extends React.Component {
     }
   handleDelete(id){
       const {deleteFood}=this.props;
-     deleteFood();
+     deleteFood(12);
 
   }
     render() {
@@ -205,6 +205,8 @@ class FoodInfo extends React.Component {
                     <a onClick={this.handleDelete} >删除</a>
                 </span>
         }];
+
+
         return (
             <div>
                 <InfoTab infoNum="2"/>

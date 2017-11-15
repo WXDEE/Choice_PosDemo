@@ -32,9 +32,15 @@ export const orderInitDo=(data)=>{
 export function foodInit(){
     return (dispatch)=>{
         fetch("http://localhost:8080/dish/list",{
-            method: 'POST',
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
             mode: 'cors',
-            cache: 'default'
+            credentials: 'credentials',
+            cache: 'default',
+            body: "sdDate=undefined",
         })
             .then(response=>{
                 if(response.status!==200){
@@ -135,6 +141,7 @@ export function dataSearch(data) {
     /*
     解决跨域问题
     */
+    console.log(data);
     return dispatch=>{
         fetch("http://localhost:8080/dish/list",{
             method:'POST',
@@ -153,6 +160,7 @@ export function dataSearch(data) {
             }
             response.json().then(json=>{
                 dispatch(foodInitDo(json));
+                console.log(json);
             })
         }).catch(err=>{
             console.log("fetch错误"+err);
@@ -161,6 +169,7 @@ export function dataSearch(data) {
 }
 //查询订单
 export function orderSearch(data) {
+    console.log(data);
     return dispatch=>{
         fetch("http://localhost:8080/orders/list",{
             method:'POST',
@@ -171,7 +180,7 @@ export function orderSearch(data) {
             mode: 'cors',
             credentials: 'credentials',
             cache: 'default',
-            body: "oNum="+data.dName+"&sDate ="+data.sdDate+"&eDate ="+data.edDate,
+            body: "oNum="+data.dName+"&sDate="+data.sdDate+"&eDate="+data.edDate,
 
         }).then((response)=>{
             if(response.status!==200){
@@ -208,7 +217,7 @@ export function addFood(data) {
             }
             response.json().then(json=>{
                 console.log(json);
-               // foodInit();
+                foodInit()(dispatch);
             })
         }).catch(err=>{
             console.log("fetch错误"+err);
@@ -237,7 +246,7 @@ export function uploadFood(data) {
             }
             response.json().then(json=>{
                 console.log(json);
-                // foodInit();
+                foodInit()(dispatch);
             })
         }).catch(err=>{
             console.log("fetch错误"+err);
@@ -245,7 +254,7 @@ export function uploadFood(data) {
     }
 }
 //删除菜品
-export function deleteFood(data) {
+export function deleteFood(id) {
     return dispatch=>{
         fetch("http://localhost:8080/dish/delete",{
             method:'POST',
@@ -256,15 +265,16 @@ export function deleteFood(data) {
             mode: 'cors',
             credentials: 'credentials',
             cache: 'default',
-            body: "id=8",
+            body: "id="+id ,
 
         }).then((response)=>{
             if(response.status!==200){
-                console.log("存入数据时出错，状态码为"+response.status);
+                console.log("删除数据出错，状态码为"+response.status);
                 return ;
             }
             response.json().then(json=>{
                 console.log(json);
+                foodInit()(dispatch);
             })
         }).catch(err=>{
             console.log("fetch错误"+err);
@@ -303,7 +313,7 @@ export const deskAllToStore=(data)=>{
 
 //提交订单
 export function pushOrder(data) {
-    console.log(data);
+    console.log(JSON.stringify(data));
     return dispatch=>{
         fetch("http://localhost:8080/orders/add",{
             method:'POST',
@@ -314,8 +324,7 @@ export function pushOrder(data) {
             mode: 'cors',
             credentials: 'credentials',
             cache: 'default',
-            body: "dCn="+data.dCn+"&dCount="+data.dCount+"&dMaterial="+data.dMaterial+"&dName="+data.dName+"&dPrice="+data.dPrice
-            +"&dRemark="+data.dRemark+"&dcId="+data.dcId,
+            body: "data="+JSON.stringify(data)
         }).then((response)=>{
             if(response.status!==200){
                 console.log("存入数据时出错，状态码为"+response.status);

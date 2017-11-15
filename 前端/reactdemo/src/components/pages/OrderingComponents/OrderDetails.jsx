@@ -5,9 +5,11 @@
 import React from 'react';
 import { Card,Table,Button,InputNumber } from 'antd';
 import { connect } from 'react-redux'; // 引入connect
-import { deleteFoodDetails,numberFoodDetails} from '../../../action/action';
+import { deleteFoodDetails,numberFoodDetails,pushOrder} from '../../../action/action';
 
 let g_key=1;
+let foodNum=0;
+let sumPrice=0;
 class SelectFood extends React.Component{
     constructor(props) {
         super(props);
@@ -15,6 +17,8 @@ class SelectFood extends React.Component{
         }
         this.doDelete=this.doDelete.bind(this);
         this.onChange=this.onChange.bind(this);
+        this.summitOrder=this.summitOrder.bind(this);
+
     }
     doDelete(record,index,event){
         if(null!=event)g_key=record.key;
@@ -31,11 +35,27 @@ class SelectFood extends React.Component{
         console.log('菜品改变数量了：', value);
         this.doDelete(value,"change");
     }
+    summitOrder(){
+       let data ={
+           deId:this.props.nowDeskNumber,
+           oTotal:sumPrice,
+           odCount:foodNum,
+           orderItemList:[
+           ],
+       }
+       for(let i=0;i<this.props.getDeskFoodArray.length;i++){
+           data.orderItemList.push({
+               dId:this.props.getDeskFoodArray[i].FoodID,
+               oiCount:this.props.getDeskFoodArray[i].nowNum,
+           });
+       }
+        const { pushOrder } = this.props;
+        pushOrder(data);
+    }
     render(){
         let ScreenHeight=document.body.clientHeight-104; //获取 全屏幕减去title的高度
         let deskNumber=this.props.nowDeskNumber;
-       let foodNum=0;
-        let sumPrice=0;
+
        for(let i=0,index=this.props.getDeskFoodArray.length;i<index;i++){
            if(null!=this.props.getDeskFoodArray[i]){
            sumPrice+=Number(this.props.getDeskFoodArray[i].Price*this.props.getDeskFoodArray[i].nowNum);
@@ -122,7 +142,7 @@ class SelectFood extends React.Component{
 
                 </section>
                     <section className="detailsButton">
-                        <Button type="primary" size="large" >提交订单</Button>
+                        <Button type="primary" size="large" onClick={this.summitOrder} >提交订单</Button>
                         <Button type="primary"size="large">取消订单</Button>
                     </section>
                 </Card>
@@ -140,7 +160,7 @@ const mapStateToProps  = (state) => {
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
-SelectFood = connect(mapStateToProps,{deleteFoodDetails,numberFoodDetails})(SelectFood);
+SelectFood = connect(mapStateToProps,{deleteFoodDetails,numberFoodDetails,pushOrder})(SelectFood);
 
 
 export default SelectFood;
