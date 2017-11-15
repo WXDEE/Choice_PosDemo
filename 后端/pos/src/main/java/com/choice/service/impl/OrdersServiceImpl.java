@@ -137,7 +137,7 @@ public class OrdersServiceImpl implements OrdersService {
 	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) {
 		// TODO Auto-generated method stub
 		try {
-			if(sDate==null||StringUtils.isBlank(sDate)||eDate==null||StringUtils.isBlank(eDate)){
+			if("undefined".equals(sDate)||"undefined".equals(eDate)){
 				sDate=null;
 				eDate=null;
 			}else{
