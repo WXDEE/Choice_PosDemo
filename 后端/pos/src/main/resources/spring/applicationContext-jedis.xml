@@ -37,7 +37,7 @@
 		<constructor-arg name="host" value="${redis.host}"></constructor-arg>
 		<constructor-arg name="port" value="${redis.port}"></constructor-arg>
 		<constructor-arg name="poolConfig" ref="jedisPoolConfig"></constructor-arg>
-		<!-- <constructor-arg name="password" value=""> </constructor-arg> -->
+		<!-- <constructor-arg name="password" value="${redis.password}"> </constructor-arg> -->
 		<constructor-arg name="timeout" value="${redis.timeout}"> </constructor-arg>
 	</bean>
 	<bean id="jedisClient" class="com.choice.mapper.impl.JedisClientSingle" />

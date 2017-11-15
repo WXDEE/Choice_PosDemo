@@ -74,6 +74,7 @@ public class OrdersServiceImpl implements OrdersService {
 		                return session.createTextMessage("订单生成:"+JsonUtils.objectToJson(resultDate));
 		            }
 		        });
+		        deskMapper.updateDeskStatusByNum(resultDate.getDeId(), "1");
 				return result;
 			}
 			throw new Exception();
