@@ -203,7 +203,7 @@ class OrderInfo extends React.Component{
                         <section className="">
                             <Table
                                 columns={listColumns}
-                                dataSource={listData}
+                                dataSource={this.props.orderDetail}
                                 pagination={false}
                                 className="listInfo"
                                 size="small"
