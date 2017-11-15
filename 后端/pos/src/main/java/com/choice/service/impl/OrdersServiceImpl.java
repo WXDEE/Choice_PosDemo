@@ -137,9 +137,12 @@ public class OrdersServiceImpl implements OrdersService {
 	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) {
 		// TODO Auto-generated method stub
 		try {
-			if(StringUtils.isBlank(sDate)||StringUtils.isBlank(sDate)){
+			if(sDate==null||StringUtils.isBlank(sDate)||eDate==null||StringUtils.isBlank(eDate)){
 				sDate=null;
 				eDate=null;
+			}else{
+				sDate = sDate + " 00:00:00";
+				eDate = eDate + " 23:59:59";
 			}
 			List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
 			List<Desk> desks=deskMapper.selectAllDesk();
