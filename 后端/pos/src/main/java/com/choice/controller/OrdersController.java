@@ -2,6 +2,7 @@ package com.choice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,7 +24,7 @@ public class OrdersController {
 	
 	@RequestMapping("add")
 	@ResponseBody
-	public ServerResponse<OrdersDTO> addOrders(HttpServletResponse response,OrdersDTO ordersDTO){
+	public ServerResponse<OrdersDTO> addOrders(HttpServletResponse response,@RequestBody OrdersDTO ordersDTO){
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<OrdersDTO> result = ordersService.addOrders(ordersDTO);
 		return result;
