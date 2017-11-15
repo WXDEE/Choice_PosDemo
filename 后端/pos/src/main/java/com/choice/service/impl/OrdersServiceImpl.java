@@ -141,7 +141,8 @@ public class OrdersServiceImpl implements OrdersService {
 			if("undefined".equals(sDate)||"undefined".equals(eDate)){
 				sDate=null;
 				eDate=null;
-			}else{
+			}
+			if(sDate!=null){
 				sDate = sDate + " 00:00:00";
 				eDate = eDate + " 23:59:59";
 			}
