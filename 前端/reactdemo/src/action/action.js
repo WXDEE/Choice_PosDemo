@@ -332,40 +332,14 @@ export function pushOrder(data) {
             }
             response.json().then(json=>{
                 console.log(json);
-                // foodInit();
+                dispatch(orderStateToStore(json));
+                deskSearch()(dispatch);
             })
         }).catch(err=>{
             console.log("fetch错误"+err);
         })
     }
 }
-//查看订单明细
-export function seeOrderDetails(id) {
-    return dispatch=>{
-        fetch("http://localhost:8080/orderitem/ordersId",{
-            method:'POST',
-            headers: {
-                'Accept': 'application/json, text/javascript, */*; q=0.01',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            },
-            mode: 'cors',
-            credentials: 'credentials',
-            cache: 'default',
-            body:'id'+id,
-        }).then((response)=>{
-            if(response.status!==200){
-                console.log("查看订单明细时出错，状态码为"+response.status);
-                return ;
-            }
-            response.json().then(json=>{
-                console.log(json);
-                dispatch(orderDetails(json));
-            })
-        }).catch(err=>{
-            console.log("fetch错误"+err);
-        })
-    }
-}
-export const orderDetails=(data)=>{
-    return {type: type.ORDER_DETAILS,data:data}
+export const orderStateToStore=(data)=>{
+    return {type: type.PUSH_ORDER,data}
 }

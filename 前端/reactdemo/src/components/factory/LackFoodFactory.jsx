@@ -3,9 +3,26 @@
  *  描述：制造余量不足菜品的工厂
  */
 import React from 'react';
-import { Card ,Spin  } from 'antd';
+import { Card ,Spin,Modal  } from 'antd';
 import { connect } from 'react-redux'; // 引入connect
-
+function info() {
+    Modal.info({
+        title: 'This is a notification message',
+        content: (
+            <div>
+                <p>some messages...some messages...</p>
+                <p>some messages...some messages...</p>
+            </div>
+        ),
+        onOk() {},
+    });
+}
+function error() {
+    Modal.error({
+        title: '抱歉',
+        content: '本菜品已经售空！',
+    });
+}
 let loading=true;
 class LackFoodFactory extends React.Component{
 
@@ -14,7 +31,7 @@ class LackFoodFactory extends React.Component{
         let factory=null;
         if(this.props.foodMain!=null){
           factory =this.props.foodMain.map(function (item) {
-          if(item.dCount==0) return  <Card.Grid className="foodButton lackFood">{item.dName} {item.dPrice}¥</Card.Grid>
+          if(item.dCount==0) return  <Card.Grid className="foodButton lackFood" onClick={error}>{item.dName} {item.dPrice}¥</Card.Grid>
        })}
         return(
             <Spin size="large" spinning={loading} >
