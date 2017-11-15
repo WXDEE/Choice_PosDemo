@@ -7,9 +7,11 @@
     </insert>
     
     <select id="selectAll" resultType="Orders">
-        select * from orders
+        select id,o_num,o_date,od_count,de_id,o_total,o_status from orders
     </select>
-    
+    <select id="selectToItem" resultType="java.util.Map">
+        select o_num,o_date,de_id,o_total from orders where id = #{id}
+    </select>
     <select id="selectAllSearch" resultType="Orders">
         select id,o_num,o_date,od_count,de_id,o_total,o_status from orders
         <where>

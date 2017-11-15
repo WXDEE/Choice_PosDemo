@@ -1,8 +1,10 @@
 package com.choice.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.choice.entity.Orders;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OrdersMapper {
@@ -20,5 +22,6 @@ public interface OrdersMapper {
 	String selectOrdersToatal();
 	//点击结账，修改订单状态为已付款
 	Integer updateOrdersStatus(String id);
+	Map<String, String> selectToItem(String id);
 
 }

@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.mysql.fabric.Server;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrdersService {
     //新增订单
@@ -21,4 +22,6 @@ public interface OrdersService {
     ServerResponse<String> querySumTotal();
     //根据订单id结账
     ServerResponse settleAccount(String id,String deNum);
+    //查询订单详情加入订单明细
+    Map<String, String> selectToItem(String id);
 }

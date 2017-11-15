@@ -2,6 +2,7 @@ package com.choice.service.impl;
 
 import com.choice.common.Const;
 import com.choice.common.ServerResponse;
+import com.choice.dto.OrdersDTO;
 import com.choice.entity.Desk;
 import com.choice.entity.Dish;
 import com.choice.entity.OrderItem;
@@ -10,6 +11,7 @@ import com.choice.mapper.OrderItemMapper;
 import com.choice.service.DeskService;
 import com.choice.service.DishService;
 import com.choice.service.OrderItemService;
+import com.choice.service.OrdersService;
 import com.choice.util.JsonUtils;
 
 import java.util.HashMap;
@@ -23,15 +25,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
 	@Autowired
+	private OrdersService ordersService;
+	@Autowired
 	private OrderItemMapper orderItemMapper;
 	@Autowired
 	private DishService dishService;
 	@Autowired
 	private JedisClient jedisClient;
 	@Transactional
-    public ServerResponse<List<OrderItem>> queryOrderItemByOrdersId(String ordersId) {
+    public ServerResponse<OrdersDTO> queryOrderItemByOrdersId(String ordersId) {
     	try {
     		List<Dish> dishList = null;
+    		OrdersDTO ordersDTO = new OrdersDTO();
     		//取dish列表
     		try {
 				String json = jedisClient.hget(Const.DISH_CACHE, "alldish");
@@ -57,8 +62,17 @@ public class OrderItemServiceImpl implements OrderItemService {
 			for (OrderItem orderItem : orderItemList) {
 				orderItem.setdId(map.get(orderItem.getdId()));
 			}
-			ServerResponse<List<OrderItem>> result = ServerResponse.createBySuccess(orderItemList);
-			return result;
+			Map<String, String> orderMap = ordersService.selectToItem(ordersId);
+			while(orderMap != null && orderMap.size() > 0){
+				ordersDTO.setoNum(orderMap.get("o_num"));
+				ordersDTO.setDeId(orderMap.get("de_id"));
+				ordersDTO.setoDate(orderMap.get("o_date"));
+				ordersDTO.setoTotal(orderMap.get("o_total"));
+				ordersDTO.setOrderItemList(orderItemList);
+				ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
+				return result;
+			}
+			throw new Exception();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
