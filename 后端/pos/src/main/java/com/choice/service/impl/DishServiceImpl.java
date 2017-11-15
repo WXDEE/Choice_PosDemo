@@ -13,7 +13,6 @@ import com.choice.util.JsonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -128,7 +127,11 @@ public class DishServiceImpl implements DishService {
 	public ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) {
 
 		try {
-			if(sdDate.equals("undefined")||edDate.equals("undefined")){
+			if(sdDate == null || edDate == null ||
+					StringUtils.isBlank(sdDate) ||
+					StringUtils.isBlank(edDate) ||
+					sdDate.equals("undefined") ||
+					edDate.equals("undefined")){
 				sdDate = null;
 				edDate = null;
 			}
