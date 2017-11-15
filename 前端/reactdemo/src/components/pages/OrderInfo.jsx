@@ -160,7 +160,7 @@ class OrderInfo extends React.Component{
 
                 </section>
                 <div className="tableMain">
-                    <span className="tableDate">营业额：<span className="tableMoney">{this.props.OrderPriceSum}¥</span></span>
+                    <span className="tableDate">营业额：<span className="tableMoney">¥{this.props.OrderPriceSum}</span></span>
                     <span className="tableDate">| </span>
                     <span className="tableDate">订单量：<span className="tableMoney">{this.props.OrderSum}笔</span></span>
                     <Table
@@ -204,7 +204,7 @@ class OrderInfo extends React.Component{
                             />
                         </section>
                         <hr  className="doLine" />
-                        <div style={{marginLeft:'10%'}}>共计金额：570¥</div>
+                        <div style={{marginLeft:'10%'}}>共计金额：¥570</div>
                     </Modal>
                 </div>
 
