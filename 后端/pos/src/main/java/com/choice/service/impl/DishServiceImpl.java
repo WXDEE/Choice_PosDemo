@@ -8,10 +8,13 @@ import com.choice.mapper.DishCatelogMapper;
 import com.choice.mapper.DishMapper;
 import com.choice.mapper.JedisClient;
 import com.choice.service.DishService;
+import com.choice.util.DateTimeUtil;
 import com.choice.util.JsonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +67,8 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse addDish(Dish dish) {
 		try {
-			jedisClient.expire(Const.DISH_CACHE,0);
+			String date = DateTimeUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss");
+			dish.setdDate(date);
 			Integer result = dishMapper.insertDish(dish);
 			if(result.equals(1)){
 				return ServerResponse.createBySuccess();
@@ -78,7 +82,6 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse updateDish(Dish dish) {
 		try {
-			jedisClient.expire(Const.DISH_CACHE,0);
 			Integer result = dishMapper.updateDish(dish);
 			if(result.equals(1)){
 				return ServerResponse.createBySuccess();
@@ -92,7 +95,6 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse deleteDish(Integer id) {
 		try {
-			jedisClient.expire(Const.DISH_CACHE,0);
 			Integer result = dishMapper.deleteDishById(id);
 			if(result.equals(1)){
 				return ServerResponse.createBySuccess();
@@ -124,20 +126,15 @@ public class DishServiceImpl implements DishService {
 	}
 
 	public ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) {
+
 		try {
-			try {
-				String json = jedisClient.hget(Const.DISH_CACHE, "DISH_ALL");
-				if(!StringUtils.isBlank(json)){
-					jedisClient.expire(Const.DISH_CACHE, 1000);
-					List<Dish> dishList = JsonUtils.jsonToList(json, Dish.class);
-					return ServerResponse.createBySuccess(dishList);
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
 			if(sdDate==null|| StringUtils.isBlank(sdDate)||edDate==null||StringUtils.isBlank(edDate)){
 				sdDate = null;
 				edDate = null;
+			}
+			else {
+				sdDate = sdDate+" 00:00:00";
+				edDate = edDate+" 23:59:59";
 			}
 			List<Dish> dishList = dishMapper.selectDishByDNameAndDDate(dName, sdDate,edDate);
 			List<DishCatelog> dishCatelogList = dishCatelogMapper.selectList();
@@ -148,17 +145,11 @@ public class DishServiceImpl implements DishService {
 			for(Dish dish : dishList){
 				dish.setDcId(map.get(dish.getDcId()));
 			}
-			try {
-				String json = JsonUtils.objectToJson(dishList);
-				jedisClient.hset(Const.DISH_CACHE, "DISH_ALL", json);
-				jedisClient.expire(Const.DISH_CACHE, 1000);
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
 			return ServerResponse.createBySuccess(dishList);
 		} catch (Exception e) {
 			return ServerResponse.createByError();
 		}
+
 	}
 
 	public ServerResponse<PageInfo> queryDish(Integer pageNum, Integer pageSize) {
@@ -186,7 +177,6 @@ public class DishServiceImpl implements DishService {
 	public ServerResponse<String> queryDishCountWithNone() {
 		try {
 			Integer count = dishMapper.selectEmptyCount();
-			System.out.println(count);
 			ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
 			return result;
 		} catch (Exception e) {

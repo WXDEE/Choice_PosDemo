@@ -16,7 +16,7 @@ public interface DishMapper {
     Integer deleteDishById(Integer id);
     //根据菜品汉字首字母模糊查询
     List<Dish> selectDishByCn(String dCn);
-    //查询全部菜品(根据上架时间降序排序)
+    //查询全部菜品(根据余量升序降序排序)
     List<Dish> selectDish();
 
     List<Dish> selectDishByDNameAndDDate(@Param("dName") String dName,
