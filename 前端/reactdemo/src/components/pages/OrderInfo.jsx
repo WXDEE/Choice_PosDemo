@@ -3,14 +3,13 @@
  */
 import React from 'react';
 import { Button,Input,DatePicker ,Table,Icon,Modal} from 'antd';
-import { addNum ,orderInit,orderSearch,seeOrderDetails} from '../../action/action';
+import { addNum ,orderInit,orderSearch} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
 let g_date;
 let g_date1;
 //表格状态
 let loading=true;
-let loading1=true;
 class OrderInfo extends React.Component{
 
     constructor(props) {
@@ -36,10 +35,6 @@ class OrderInfo extends React.Component{
         this.setState({
             visible: true,
         });
-
-        const {seeOrderDetails}=this.props;
-        seeOrderDetails('id');
-        console.log('id');
     }
     handleCancel (e) {
         console.log(e);
@@ -68,7 +63,6 @@ class OrderInfo extends React.Component{
 
 
         if(this.props.loading)loading=false;
-        if(this.props.loading1)loading1=false;
 
         function onChange(date, dateString) {
             g_date=dateString;
@@ -112,15 +106,15 @@ class OrderInfo extends React.Component{
 
         const listColumns = [{
             title: '菜品名',
-            dataIndex: 'dld',
+            dataIndex: 'FoodName',
             key: 'name',
         }, {
             title: '数量(份)',
-            dataIndex: 'oiCount',
+            dataIndex: 'Num',
             key: 'num',
         }, {
             title: '单价',
-            dataIndex: 'oiStatus',
+            dataIndex: 'Price',
             key: 'price',
         }
         ];
@@ -207,7 +201,6 @@ class OrderInfo extends React.Component{
                                 pagination={false}
                                 className="listInfo"
                                 size="small"
-                                loading={loading1}
                             />
                         </section>
                         <hr  className="doLine" />
@@ -234,12 +227,10 @@ const mapStateToProps  = (state) => {
         loading:state.httpData.success, //表格是否加载完毕
         OrderSum:count,
         OrderPriceSum:sumPrice,
-        orderDetail:state.httpData.orderDetailsTable, //订单详情表格
-        loading1:state.httpData.success1,
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
-OrderInfo = connect(mapStateToProps , {addNum,orderInit,orderSearch,seeOrderDetails})(OrderInfo);
+OrderInfo = connect(mapStateToProps , {addNum,orderInit,orderSearch})(OrderInfo);
 export default OrderInfo;
 
 
