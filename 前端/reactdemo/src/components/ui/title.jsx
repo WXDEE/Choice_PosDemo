@@ -25,7 +25,7 @@ class Title extends React.Component{
         return(
             <div >
                 <div className="titleAll">
-                    <img src={require("../../img/logo.jpg")} />
+                    <img src={require("../../img/logo.png")} />
                     <span className="titleFont">欢迎使用雄鹰订餐系统</span>
                     <Dropdown overlay={rightMenu} trigger={['click']} className="icon">
                         <a className="ant-dropdown-link icon" href="#" >

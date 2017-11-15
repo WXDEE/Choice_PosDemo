@@ -11,6 +11,10 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+//导入proxy
+var proxy = require('http-proxy-middleware')
+//context可以是单个字符串，也可以是多个字符串数组，分别对应你需要代理的api,星号（*）表示匹配当前路径下面的所有api
+const context = [`*`]
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -26,6 +30,17 @@ const env = getClientEnvironment(publicUrl);
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
 module.exports = {
+    devServer: {
+        host: 'localhost',
+        port: '3000',
+        proxy: [
+            {
+                context: context,
+                target: 'https://localhost:8080/',
+                secure: false
+            }
+        ]
+    },
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
   devtool: 'cheap-module-source-map',
@@ -157,7 +172,7 @@ module.exports = {
           // In production, we use a plugin to extract that CSS to a file, but
           // in development "style" loader enables hot editing of CSS.
           {
-            test: /\.css$/,
+              test: /\.css$/,
             use: [
               require.resolve('style-loader'),
               {
@@ -185,7 +200,7 @@ module.exports = {
                     }),
                   ],
                 },
-              },
+              }
             ],
           },
             {

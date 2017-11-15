@@ -14,7 +14,7 @@ export default class CRouter extends Component {
             <Router history={hashHistory}>
 
                     <Route path={'/'} components={App} >
-                        <IndexRedirect to="/main/OrderInfo"/>     指定初始页面
+                        <IndexRedirect to="/main/UserOrdering"/>
                         <Route path={'main'} components={Title}>
                             <Route path={'FoodInfo'} components={FoodInfo} />
                             <Route path={'UserOrdering'} components={UserOrdering} />
