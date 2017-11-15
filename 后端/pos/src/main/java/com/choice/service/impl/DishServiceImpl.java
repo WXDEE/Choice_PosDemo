@@ -177,7 +177,6 @@ public class DishServiceImpl implements DishService {
 	public ServerResponse<String> queryDishCountWithNone() {
 		try {
 			Integer count = dishMapper.selectEmptyCount();
-			System.out.println(count);
 			ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
 			return result;
 		} catch (Exception e) {
