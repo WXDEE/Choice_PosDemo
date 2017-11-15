@@ -43,8 +43,9 @@ public class OrdersServiceImpl implements OrdersService {
 	private JmsTemplate jmsTemplate;
 	
 	@Transactional
-    public ServerResponse<OrdersDTO> addOrders(OrdersDTO ordersDTO) {
+    public ServerResponse<OrdersDTO> addOrders(String data) {
     	try {
+    		OrdersDTO ordersDTO = JsonUtils.jsonToPojo(data, OrdersDTO.class);
     		String num = IDUtils.genItemId() + "";
     		String date = DateTimeUtil.dateToStr(new Date());
 			Orders orders = new Orders(null, num, date, "0",
