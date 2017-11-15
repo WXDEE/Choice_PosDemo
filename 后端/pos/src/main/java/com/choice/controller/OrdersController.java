@@ -24,9 +24,9 @@ public class OrdersController {
 	
 	@RequestMapping("add")
 	@ResponseBody
-	public ServerResponse<OrdersDTO> addOrders(HttpServletResponse response,@RequestBody OrdersDTO ordersDTO){
+	public ServerResponse<OrdersDTO> addOrders(HttpServletResponse response, String data){
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		ServerResponse<OrdersDTO> result = ordersService.addOrders(ordersDTO);
+		ServerResponse<OrdersDTO> result = ordersService.addOrders(data);
 		return result;
 	}
 	
