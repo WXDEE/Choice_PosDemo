@@ -64,7 +64,6 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse addDish(Dish dish) {
 		try {
-			jedisClient.expire(Const.DISH_CACHE,0);
 			Integer result = dishMapper.insertDish(dish);
 			if(result.equals(1)){
 				return ServerResponse.createBySuccess();
@@ -78,7 +77,6 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse updateDish(Dish dish) {
 		try {
-			jedisClient.expire(Const.DISH_CACHE,0);
 			Integer result = dishMapper.updateDish(dish);
 			if(result.equals(1)){
 				return ServerResponse.createBySuccess();
@@ -92,7 +90,6 @@ public class DishServiceImpl implements DishService {
 
 	public ServerResponse deleteDish(Integer id) {
 		try {
-			jedisClient.expire(Const.DISH_CACHE,0);
 			Integer result = dishMapper.deleteDishById(id);
 			if(result.equals(1)){
 				return ServerResponse.createBySuccess();
@@ -124,17 +121,8 @@ public class DishServiceImpl implements DishService {
 	}
 
 	public ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) {
+
 		try {
-			try {
-				String json = jedisClient.hget(Const.DISH_CACHE, "DISH_ALL");
-				if(!StringUtils.isBlank(json)){
-					jedisClient.expire(Const.DISH_CACHE, 1000);
-					List<Dish> dishList = JsonUtils.jsonToList(json, Dish.class);
-					return ServerResponse.createBySuccess(dishList);
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
 			if(sdDate==null|| StringUtils.isBlank(sdDate)||edDate==null||StringUtils.isBlank(edDate)){
 				sdDate = null;
 				edDate = null;
@@ -148,17 +136,11 @@ public class DishServiceImpl implements DishService {
 			for(Dish dish : dishList){
 				dish.setDcId(map.get(dish.getDcId()));
 			}
-			try {
-				String json = JsonUtils.objectToJson(dishList);
-				jedisClient.hset(Const.DISH_CACHE, "DISH_ALL", json);
-				jedisClient.expire(Const.DISH_CACHE, 1000);
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
 			return ServerResponse.createBySuccess(dishList);
 		} catch (Exception e) {
 			return ServerResponse.createByError();
 		}
+
 	}
 
 	public ServerResponse<PageInfo> queryDish(Integer pageNum, Integer pageSize) {
