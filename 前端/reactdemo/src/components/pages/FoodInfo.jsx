@@ -17,6 +17,9 @@ const InfoForm = Form.create()(
     props => {
         const {visible, onCancel, onOk, form} = props;
         const {getFieldDecorator,getFieldProps } = form;
+        function handleChange1(value){
+            console.log(`selected ${value}`);
+        }
         return (
             <Modal
                 onOk={onOk}
@@ -33,13 +36,7 @@ const InfoForm = Form.create()(
                     <FormItem label={"菜品单价"}>
                         {getFieldDecorator("dPrice", {
                             rules:[{required:true, message:"菜品单价不能为空"}]
-                        })(<Select style={{width:120}} onChange={this.handleChange1}>
-                            <Option value={"荤菜"}>荤菜</Option>
-                            <Option value={"素菜"}>素菜</Option>
-                            <Option value={"荤菜"}>荤菜</Option>
-                            <Option value={"荤菜"}>荤菜</Option>
-                            </Select>
-                        )}
+                        })(<Input/>)}
                     </FormItem>
                     <FormItem label={"菜品余量"}>
                         {getFieldDecorator("dCount", {
@@ -54,7 +51,15 @@ const InfoForm = Form.create()(
                     <FormItem label={"所属类别"}>
                         {getFieldDecorator("dcId", {
                             rules:[{required:true, message:"所属类别不能为空"}]
-                        })(<Input/>)}
+                        })(<Select style={{width:260,marginLeft:12}} onChange={handleChange1}>
+                            <Option value={"特价菜品"}>特价菜品</Option>
+                            <Option value={"热销菜品"}>热销菜品</Option>
+                            <Option value={"饮料"}>饮料</Option>
+                            <Option value={"荤菜"}>荤菜</Option>
+                            <Option value={"素菜"}>素菜</Option>
+                            <Option value={"汤类"}>汤类</Option>
+                            <Option value={"面食"}>面食</Option>
+                            </Select>)}
                     </FormItem>
                     <FormItem label={"原料"}  >
                         {getFieldDecorator("dMaterial")(<TextArea/>)}
