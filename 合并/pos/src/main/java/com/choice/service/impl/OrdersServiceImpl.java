@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -26,6 +28,7 @@ import com.choice.entity.Orders;
 import com.choice.mapper.DeskMapper;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
+import com.choice.service.MQService;
 import com.choice.service.OrdersService;
 import com.choice.util.DateTimeUtil;
 import com.choice.util.IDUtils;
@@ -34,6 +37,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
 public class OrdersServiceImpl implements OrdersService {
+	@Autowired
+	private ThreadPoolTaskExecutor taskExecutor;
+	@Autowired
+	private MQService mQService;
 	@Autowired
 	private OrdersMapper ordersMapper;
 	@Autowired
@@ -47,39 +54,19 @@ public class OrdersServiceImpl implements OrdersService {
     public ServerResponse<OrdersDTO> addOrders(String data) {
     	try {
     		OrdersDTO ordersDTO = JsonUtils.jsonToPojo(data, OrdersDTO.class);
-    		String num = IDUtils.genItemId() + "";
-    		String date = DateTimeUtil.dateToStr(new Date());
-			Orders orders = new Orders(null, num, date, "0",
-					ordersDTO.getDeId(),ordersDTO.getoTotal(), ordersDTO.getOdCount());
+    		Orders orders = insertOrders(ordersDTO);
 			List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
-			Integer flag1 = ordersMapper.save(orders);
-			for (OrderItem orderItem : orderItemList) {
-				orderItem.setoId(orders.getId()+"");
-				orderItem.setOiStatus("0");
-			}
-			Integer flag2 = orderItemMapper.save(orderItemList);
-			if (flag1 != 0 && flag2 !=0){
-				OrdersDTO resultDate = new OrdersDTO();
-				resultDate.setId(orders.getId());
-				resultDate.setDeId(orders.getDeId());
-				resultDate.setoDate(orders.getoDate());
-				resultDate.setOdCount(orders.getOdCount());
-				resultDate.setoNum(orders.getoNum());
-				resultDate.setoStatus("已下单");
-				resultDate.setoTotal(orders.getoTotal());
-				resultDate.setOrderItemList(orderItemList);
-				ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(resultDate);
-				String destination = jmsTemplate.getDefaultDestinationName();
-		        System.out.println("订单生成");
-		        jmsTemplate.send(new MessageCreator() {
-		            public Message createMessage(Session session) throws JMSException {
-		                return session.createTextMessage("订单生成:"+JsonUtils.objectToJson(resultDate));
-		            }
-		        });
-		        deskMapper.updateDeskStatusByNum(resultDate.getDeId(), "1");
-				return result;
-			}
-			throw new Exception();
+			orderItemList = insertOrderItem(orderItemList,orders);
+			ordersDTO.setId(orders.getId());
+			ordersDTO.setoDate(orders.getoDate());
+			ordersDTO.setoNum(orders.getoNum());
+			ordersDTO.setoStatus("已下单");
+			ordersDTO.setOrderItemList(orderItemList);
+			ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
+	        System.out.println("订单生成");
+	        printOrder(ordersDTO);
+	        deskMapper.updateDeskStatusByNum(ordersDTO.getDeId(), "1");
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -183,5 +170,40 @@ public class OrdersServiceImpl implements OrdersService {
 			return null;
 		}
 	}
+	//插入订单表
+	@Transactional
+	public Orders insertOrders(OrdersDTO ordersDTO) throws Exception{
+		String num = IDUtils.genItemId() + "";
+		String date = DateTimeUtil.dateToStr(new Date());
+		Orders orders = new Orders(null, num, date, "0",
+				ordersDTO.getDeId(),ordersDTO.getoTotal(), ordersDTO.getOdCount());
+		Integer flag = ordersMapper.save(orders);
+		if(flag != 0){
+			return orders;
+		}
+		throw new Exception();
+	}
+	//插入订单明细表
+	@Transactional
+	public List<OrderItem> insertOrderItem(List<OrderItem> orderItemList,Orders orders) throws Exception{
+		for (OrderItem orderItem : orderItemList) {
+			orderItem.setoId(orders.getId()+"");
+			orderItem.setOiStatus("0");
+		}
+		Integer flag = orderItemMapper.save(orderItemList);
+		if(flag != 0){
+			return orderItemList;
+		}
+		throw new Exception();
 	
+	}
+	//异步打印订单
+	public void printOrder(OrdersDTO ordersDTO){
+		taskExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+				mQService.sendMessage(JsonUtils.objectToJson(ordersDTO));
+			}
+		});
+	}
 }
