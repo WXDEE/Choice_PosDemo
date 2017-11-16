@@ -272,7 +272,7 @@ class FoodInfo extends React.Component {
                         <Button type="primary" icon="search" onClick={this.handleSearch}>查询</Button>
                     </div>
                     <div>
-                        <Button type="primary" onClick={this.showModal}>添加菜品</Button>
+                        <Button type="primary" onClick={this.showModal}><Icon type="plus" />添加菜品</Button>
                     </div>
                 </div>
                 <div className="tableMain clearFix">

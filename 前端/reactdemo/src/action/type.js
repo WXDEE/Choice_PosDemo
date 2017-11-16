@@ -14,3 +14,5 @@ export const NUMBER_FOOD='NUMBER_FOOD';    //调整菜品数量
 export const PUSH_ORDER='PUSH_ORDER';    //提交订单
 export const ORDER_DETAILS='ORDER_DETAILS' //查看订单明细
 export const ORDER_DETAILS_ID='ORDER_DETAILS_ID' //根据ID查询订单里的菜品明细
+
+export const CLEAR_ORDER_STORE='CLEAR_ORDER_STORE' //清除在Store中已经结账的信息

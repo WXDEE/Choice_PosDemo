@@ -136,6 +136,10 @@ export const numberFoodDetailstoStore=(nowDeskNum,nowFoodNum,newFoodNumber)=>{
     return {type: type.NUMBER_FOOD,nowDeskNum:nowDeskNum,nowFoodNum:nowFoodNum,newFoodNumber:newFoodNumber}
 }
 
+//清除在Store中已经结账的信息
+
+
+
 //查询菜品
 export function dataSearch(data) {
     /*
