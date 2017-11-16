@@ -53,37 +53,33 @@ public class OrdersServiceImpl implements OrdersService {
 	@Resource(name = "jmsTemplate")
 	private JmsTemplate jmsTemplate;
 	
-	//增加订单
+	/***
+	 * 增加订单
+	 */
+
 	@Transactional
-    public ServerResponse<OrdersDTO> addOrders(String data) {
-    	try {
-    		//将json数据转换为orderdto
-    		OrdersDTO ordersDTO = JsonUtils.jsonToPojo(data, OrdersDTO.class);
-    		//插入订单表
-    		Orders orders = insertOrders(ordersDTO);
-    		//获取订单明细，插入订单明细表
-			List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
-			orderItemList = insertOrderItem(orderItemList,orders);
-			//将orderdto补全
-			ordersDTO.setId(orders.getId());
-			ordersDTO.setoDate(orders.getoDate());
-			ordersDTO.setoNum(orders.getoNum());
-			ordersDTO.setoStatus("已下单");
-			ordersDTO.setOrderItemList(orderItemList);
-			//封装为响应对象
-			ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
-	        System.out.println("订单生成");
-	        //异步向mq发送订单消息
-	        printOrder(ordersDTO);
-	        //根据桌子号将桌子改为已使用状态
-	        deskMapper.updateDeskStatusByNum(ordersDTO.getDeId(), "1");
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			// 回滚
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); 
-			return ServerResponse.createByErrorMessage("请选择菜品！！！");
-		}
+    public ServerResponse<OrdersDTO> addOrders(String data) throws Exception{
+		//将json数据转换为orderdto
+		OrdersDTO ordersDTO = JsonUtils.jsonToPojo(data, OrdersDTO.class);
+		//插入订单表
+		Orders orders = insertOrders(ordersDTO);
+		//获取订单明细，插入订单明细表
+		List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
+		orderItemList = insertOrderItem(orderItemList,orders);
+		//将orderdto补全
+		ordersDTO.setId(orders.getId());
+		ordersDTO.setoDate(orders.getoDate());
+		ordersDTO.setoNum(orders.getoNum());
+		ordersDTO.setoStatus("已下单");
+		ordersDTO.setOrderItemList(orderItemList);
+		//封装为响应对象
+		ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
+        System.out.println("订单生成");
+        //异步向mq发送订单消息
+        printOrder(ordersDTO);
+        //根据桌子号将桌子改为已使用状态
+        deskMapper.updateDeskStatusByNum(ordersDTO.getDeId(), "1");
+		return result;
     }
 
     public ServerResponse<PageInfo<Orders>> queryOrders(Integer pageNum, Integer pageSize) {
@@ -169,7 +165,9 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 
 	}
-
+	/**
+	 * 从订单中获取订单号，桌号，总金额，下单时间
+	 */
 	@Override
 	public Map<String, String> selectToItem(String id) {
 		// TODO Auto-generated method stub
@@ -181,8 +179,13 @@ public class OrdersServiceImpl implements OrdersService {
 			return null;
 		}
 	}
-	//插入订单表
-	@Transactional
+	/***
+	 * 插入订单表
+	 * @param ordersDTO
+	 * @return
+	 * @throws Exception
+	 */
+	
 	public Orders insertOrders(OrdersDTO ordersDTO) throws Exception{
 		//将订单表补全
 		String num = IDUtils.genItemId() + "";
@@ -196,8 +199,10 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 		throw new Exception();
 	}
-	//插入订单明细表
-	@Transactional
+	/***
+	 * 插入订单明细表
+	 * @param ordersDTO
+	 */
 	public List<OrderItem> insertOrderItem(List<OrderItem> orderItemList,Orders orders) throws Exception{
 		//将订单明细表补全
 		for (OrderItem orderItem : orderItemList) {
@@ -212,7 +217,10 @@ public class OrdersServiceImpl implements OrdersService {
 		throw new Exception();
 	
 	}
-	//异步向mq发送消息
+	/***
+	 * 异步向mq发送消息
+	 * @param ordersDTO
+	 */
 	public void printOrder(OrdersDTO ordersDTO){
 		//从线程池中取出一个线程向mq发送订单消息
 		taskExecutor.execute(new Runnable() {
@@ -223,7 +231,10 @@ public class OrdersServiceImpl implements OrdersService {
 		});
 	}
 
-	//通过桌子id查询订单
+ 	/***
+	 * 通过桌子id查询订单
+	 * @param deId
+	 */
 	@Override
 	public ServerResponse<OrdersDTO> selectOrdersByDeid(String deId) throws Exception{
 		// TODO Auto-generated method stub

@@ -20,10 +20,16 @@ public class OrderItemController {
 	@Autowired
 	private OrderItemService orderItemService;
 	
+	/***
+	 * 根据订单id查询订单明细
+	 * @param response
+	 * @param ordersId
+	 * @return
+	 */
 	@RequestMapping("ordersId")
 	@ResponseBody
-	
-	public ServerResponse<OrdersDTO> queryOrderItemByOrdersId(HttpServletResponse response,String ordersId){
+	public ServerResponse<OrdersDTO> queryOrderItemByOrdersId(HttpServletResponse response,
+			String ordersId)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<OrdersDTO> result = orderItemService.queryOrderItemByOrdersId(ordersId);
 		return result;

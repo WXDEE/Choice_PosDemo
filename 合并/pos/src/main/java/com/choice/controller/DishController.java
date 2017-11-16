@@ -64,6 +64,11 @@ public class DishController {
 	public ServerResponse<PageInfo> queryDish(Integer pageNum,Integer pageSize){
 		return dishService.queryDish(pageNum,pageSize);
 	}*/
+	/***
+	 * 查询售空菜品数量
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("none/count")
 	@ResponseBody
 	public ServerResponse<String> queryDishCountWithNone(HttpServletResponse response){
@@ -71,6 +76,11 @@ public class DishController {
 		ServerResponse<String> result = dishService.queryDishCountWithNone();
 		return result;
 	}
+	/**
+	 * 查询菜品不足的数量
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("notEnough/count")
 	@ResponseBody
 	public ServerResponse<String> queryDishCountithNotEnough(HttpServletResponse response){
@@ -78,6 +88,11 @@ public class DishController {
 		ServerResponse<String> result = dishService.queryDishCountithNotEnough();
 		return result;
 	}
+	/***
+	 * 查询菜品总数量
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("count")
 	@ResponseBody
 	public ServerResponse<String> queryDishCount(HttpServletResponse response){
@@ -85,6 +100,11 @@ public class DishController {
 		ServerResponse<String> result = dishService.queryDishCount();
 		return result;
 	}
+	/***
+	 * 查询售空菜品列表
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("none/list")
 	@ResponseBody
 	public ServerResponse<List<Dish>> queryDishWithNone(HttpServletResponse response){

@@ -165,51 +165,36 @@ public class DishServiceImpl implements DishService {
 			return ServerResponse.createByError();
 		}
 	}
-
+	/***
+	 * 查询售空菜品列表
+	 */
 	public ServerResponse<List<Dish>> queryDishWithNone() {
-		try{
-			List<Dish> emptyDishList = dishMapper.selectEmptyDish();
-			ServerResponse<List<Dish>> result = ServerResponse.createBySuccess(emptyDishList);
-			return result;
-		} catch (Exception e){
-			e.printStackTrace();
-			return ServerResponse.createByError();
-		}
+		List<Dish> emptyDishList = dishMapper.selectEmptyDish();
+		ServerResponse<List<Dish>> result = ServerResponse.createBySuccess(emptyDishList);
+		return result;
 	}
-
+	/***
+	 * 查询售空菜品数量
+	 */
 	public ServerResponse<String> queryDishCountWithNone() {
-		try {
-			Integer count = dishMapper.selectEmptyCount();
-			ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
-			return result;
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return ServerResponse.createByError();
-		}
+		Integer count = dishMapper.selectEmptyCount();
+		ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
+		return result;
 	}
-
+	/***
+	 * 查询余量不足菜品数量
+	 */
 	public ServerResponse<String> queryDishCountithNotEnough() {
-		try {
-			Integer count = dishMapper.selectNotEnoughCount(Const.DHSI_NUM);
-			ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
-			return result;
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return ServerResponse.createByError();
-		}
+		Integer count = dishMapper.selectNotEnoughCount(Const.DHSI_NUM);
+		ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
+		return result;
 	}
-
+	/***
+	 * 查询菜品所有数量
+	 */
 	public ServerResponse<String> queryDishCount() {
-		try {
-			Integer count = dishMapper.selectDishCount();
-			ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
-			return result;
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return ServerResponse.createByError();
-		}
+		Integer count = dishMapper.selectDishCount();
+		ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
+		return result;
 	}
 }

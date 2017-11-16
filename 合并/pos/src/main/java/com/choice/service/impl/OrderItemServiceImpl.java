@@ -32,42 +32,38 @@ public class OrderItemServiceImpl implements OrderItemService {
 	private DishService dishService;
 	@Autowired
 	private JedisClient jedisClient;
-	//通过订单id查询订单明细
+	/***
+	 * 通过订单id查询订单明细
+	 */
 	@Transactional
-    public ServerResponse<OrdersDTO> queryOrderItemByOrdersId(String ordersId) {
-    	try {
-    		OrdersDTO ordersDTO = new OrdersDTO();
-    		//取dish列表
-    		List<Dish> dishList = queryAllDish();
-    		Map<String, String> map = new HashMap<String, String>();
-    		//将菜品id，菜品名称封装进map
-			List<OrderItem> orderItemList = orderItemMapper.selectByOid(ordersId);
-			for (Dish dish : dishList) {
-				map.put(dish.getId().toString(), dish.getdName());
-			}
-			//将订单明细中菜品id替换为名称，将状态改为文字
-			for (OrderItem orderItem : orderItemList) {
-				orderItem.setdId(map.get(orderItem.getdId()));
-				orderItem.setOiStatus(orderItem.getOiStatus().equals("0")?"未上菜":"已上菜");
-			}
-			//取订单表中的订单号，桌子号，下单时间，总金额
-			Map<String, String> orderMap = ordersService.selectToItem(ordersId);
-			//封装进ordersdto
-			while(orderMap != null && orderMap.size() > 0){
-				ordersDTO.setoNum(orderMap.get("o_num"));
-				ordersDTO.setDeId(orderMap.get("de_id"));
-				ordersDTO.setoDate(orderMap.get("o_date"));
-				ordersDTO.setoTotal(orderMap.get("o_total"));
-				ordersDTO.setOrderItemList(orderItemList);
-				ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
-				return result;
-			}
-			throw new Exception();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return ServerResponse.createByError();
+    public ServerResponse<OrdersDTO> queryOrderItemByOrdersId(String ordersId) throws Exception{
+		OrdersDTO ordersDTO = new OrdersDTO();
+		//取dish列表
+		List<Dish> dishList = queryAllDish();
+		Map<String, String> map = new HashMap<String, String>();
+		//将菜品id，菜品名称封装进map
+		List<OrderItem> orderItemList = orderItemMapper.selectByOid(ordersId);
+		for (Dish dish : dishList) {
+			map.put(dish.getId().toString(), dish.getdName());
 		}
+		//将订单明细中菜品id替换为名称，将状态改为文字
+		for (OrderItem orderItem : orderItemList) {
+			orderItem.setdId(map.get(orderItem.getdId()));
+			orderItem.setOiStatus(orderItem.getOiStatus().equals("0")?"未上菜":"已上菜");
+		}
+		//取订单表中的订单号，桌子号，下单时间，总金额
+		Map<String, String> orderMap = ordersService.selectToItem(ordersId);
+		//封装进ordersdto
+		while(orderMap != null && orderMap.size() > 0){
+			ordersDTO.setoNum(orderMap.get("o_num"));
+			ordersDTO.setDeId(orderMap.get("de_id"));
+			ordersDTO.setoDate(orderMap.get("o_date"));
+			ordersDTO.setoTotal(orderMap.get("o_total"));
+			ordersDTO.setOrderItemList(orderItemList);
+			ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
+			return result;
+		}
+		throw new Exception();
     }
 
 	@Override
@@ -84,7 +80,11 @@ public class OrderItemServiceImpl implements OrderItemService {
 		}
 		return ServerResponse.createByError();
 	}
-	//取dish列表
+	/***
+	 * 取出所有菜品
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Dish> queryAllDish() throws Exception{
 		List<Dish> dishList = null;
 		//先从redis中获取全部菜品
