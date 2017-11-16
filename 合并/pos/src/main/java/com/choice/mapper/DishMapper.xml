@@ -112,13 +112,13 @@
         from dish
         where d_status = '1'
         and d_cn like concat('%',#{_parameter},'%')
-        ORDER by d_date
+        ORDER by d_date desc
     </select>
     <select id="selectDish" resultType="Dish">
         select  <include refid="Base_Column_List" />
         from dish
         where d_status = '1'
-        ORDER by d_date
+        ORDER by d_date desc
     </select>
     <select id="selectDishByDNameAndDDate" resultType="Dish">
         select  <include refid="Base_Column_List" />
@@ -130,7 +130,7 @@
         <if test="sdDate != null">
             and d_date between #{sdDate} and #{edDate}
         </if>
-        ORDER by d_date
+        ORDER by d_date desc
     </select>
     <select id="selectEmptyDish" resultType="Dish">
         select id,d_name from dish where d_count = '0' and d_status = '1';
