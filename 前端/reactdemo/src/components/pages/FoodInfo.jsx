@@ -63,10 +63,10 @@ const InfoForm = Form.create()(
                             </Select>)}
                     </FormItem>
                     <FormItem label={"原料"}  >
-                        {getFieldDecorator("dMaterial",{ initialValue:"无"})(<TextArea/>)}
+                        {getFieldDecorator("dMaterial")(<TextArea/>)}
                     </FormItem>
                     <FormItem label={"备注"}>
-                        {getFieldDecorator("dRemark",{ initialValue:"无"})(<TextArea/>)}
+                        {getFieldDecorator("dRemark")(<TextArea/>)}
                     </FormItem>
                     <FormItem
                         wrapperCol={{ span: 12, offset: 6 }}
