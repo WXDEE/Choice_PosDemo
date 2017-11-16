@@ -5,7 +5,7 @@
 import React from 'react';
 import { Card,Table,Button,InputNumber,Modal } from 'antd';
 import { connect } from 'react-redux'; // 引入connect
-import { deleteFoodDetails,numberFoodDetails,pushOrder,endOrder,pointNowDesk,submitFood} from '../../../action/action';
+import { deleteFoodDetails,numberFoodDetails,pushOrder,endOrder,pointNowDesk,submitFood,ClearStoreBydeskNumber} from '../../../action/action';
 
 let orderNumber='';
 let orderTime='';
@@ -25,6 +25,12 @@ function info() {
 function success(text) {
     Modal.success({
         title: '成功！',
+        content:text ,
+    });
+}
+function error(text) {
+    Modal.error({
+        title: '请选择菜品！',
         content:text ,
     });
 }
@@ -101,15 +107,20 @@ class SelectFood extends React.Component{
        }
         const { pushOrder } = this.props;
         pushOrder(data);
-        success('您已成功提交订单！');
+        if(data.deId!==null&&data.odCount!=0) success('您已成功提交订单！');
+        else error();
     }
    endOrder(orderNumber){
-       const { endOrder } = this.props;
+       const { endOrder,ClearStoreBydeskNumber } = this.props;
        endOrder(orderNumber,this.props.nowDeskNumber);
        success('您已成功结账！');
+
+       //删除储存的信息
+       ClearStoreBydeskNumber(this.props.nowDeskNumber);
+
        //指定目前桌号为空
        this.nowDeskNumber(null);
-       //删除储存的信息
+
 
    }
     submitFood(record){
@@ -125,23 +136,40 @@ class SelectFood extends React.Component{
         let ScreenHeight=document.body.clientHeight-104; //获取 全屏幕减去title的高度
         let deskNumber=this.props.nowDeskNumber;
 
-       for(let i=0,index=this.props.getDeskFoodArray.length;i<index;i++){
-           if(null!=this.props.getDeskFoodArray[i]){
-           sumPrice+=Number(this.props.getDeskFoodArray[i].Price*this.props.getDeskFoodArray[i].nowNum);
-               foodNum+=Number(this.props.getDeskFoodArray[i].nowNum);
-              console.log(this.props.getDeskFoodArray[i].Price);
-           }
-       }
+        if(this.props.getDeskFoodArray!=null){
+            for(let i=0,index=this.props.getDeskFoodArray.length;i<index;i++){
+                if(null!=this.props.getDeskFoodArray[i]){
+                    sumPrice+=Number(this.props.getDeskFoodArray[i].Price*this.props.getDeskFoodArray[i].nowNum);
+                    foodNum+=Number(this.props.getDeskFoodArray[i].nowNum);
+                    console.log(this.props.getDeskFoodArray[i].Price);
+                }
+            }
+        }
+
        if(this.props.orderState!=null){
                   g_stats=0;  //初始化状态为购物车
            for(let i=0,index=this.props.orderState.length;i<index;i++){
-               if(deskNumber==this.props.orderState[i].deskNum){
-                   g_stats=1;   //状态为订单明细
-                   orderId=this.props.orderState[i].deskInfo.data.id;
-                   orderNumber=this.props.orderState[i].deskInfo.data.oNum;
-                   orderTime=this.props.orderState[i].deskInfo.data.oDate;
-
+               if(this.props.orderState[i]!=null){
+                   if(deskNumber==this.props.orderState[i].deskNum){
+                       if(this.props.orderState[i].deskInfo!=null){
+                           g_stats=1;   //状态为订单明细
+                           orderId=this.props.orderState[i].deskInfo.data.id;
+                           orderNumber=this.props.orderState[i].deskInfo.data.oNum;
+                           orderTime=this.props.orderState[i].deskInfo.data.oDate;
+                       }else{
+                           g_stats=0;
+                           orderId='';
+                           orderNumber='';
+                           orderTime='';
+                       }
+                   }
+               }else{
+                   g_stats=0;
+                   orderId='';
+                   orderNumber='';
+                   orderTime='';
                }
+
            }
        }
 
@@ -153,7 +181,7 @@ class SelectFood extends React.Component{
             title: '数量(份)',
             dataIndex: 'nowNum',
             key: 'nownum',
-            render:text=><InputNumber min={1} max={100} defaultValue={text} onChange={this.onChange} />
+            render:text=><InputNumber min={1} max={100} value={text} onChange={this.onChange} />
         }, {
             title: '单价',
             dataIndex: 'Price',
@@ -202,15 +230,20 @@ class SelectFood extends React.Component{
            endOrderButton=null;
            let fromStoredataArray= this.props.afterEndFoodArray.orderItemList;
            console.log(fromStoredataArray);
+           if(fromStoredataArray!=null){
                for(let i=0,index=dataArray.length;i<index;i++){
-                   dataArray[i].orderID=fromStoredataArray[i].id;
-                   dataArray[i].foodStats=fromStoredataArray[i].oiStatus;
-                    console.log(dataArray[i].foodStats);
-                   if(dataArray[i].foodStats=="未上菜"||dataArray[i].foodStats==0) dataArray[i].func="上菜";
-                   else dataArray[i].func= "√";
+                   if(fromStoredataArray[i]!=null){
+                       dataArray[i].orderID=fromStoredataArray[i].id;
+                       dataArray[i].foodStats=fromStoredataArray[i].oiStatus;
+                       console.log(dataArray[i].orderID);
+                       if(dataArray[i].foodStats=="未上菜"||dataArray[i].foodStats==0) dataArray[i].func="上菜";
+                       else dataArray[i].func= "√";
+                   }
+
 
                }
-           console.log("从后台将订餐编号："+dataArray[0].orderID+"。。等 - 注入到可见表格");
+           }
+
        }
         return(
             <div >
@@ -267,10 +300,16 @@ const mapStateToProps  = (state) => {
     if(nowDeskNumber==null)nowDeskNumber=0;
     if(state.httpData.orderState!=null){
         for(let i=0,index=state.httpData.orderState.length;i<index;i++){
-            if(state.httpData.deskNumber==state.httpData.orderState[i].deskNum){
-                afterEndFoodArray=state.httpData.orderState[i].deskInfo.data;
-                console.log(state.httpData.orderState);
+            if(state.httpData.orderState[i]!=null){
+                if(state.httpData.deskNumber==state.httpData.orderState[i].deskNum){
+                    if(state.httpData.orderState[i].deskInfo!=null){
+                        afterEndFoodArray=state.httpData.orderState[i].deskInfo.data;
+                        console.log(state.httpData.orderState);
+                    }
+
+                }
             }
+
         }
     }
     console.log(state.httpData.orderState);
@@ -281,7 +320,7 @@ const mapStateToProps  = (state) => {
     };
     }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
-SelectFood = connect(mapStateToProps,{deleteFoodDetails,numberFoodDetails,pushOrder,endOrder,pointNowDesk,submitFood})(SelectFood);
+SelectFood = connect(mapStateToProps,{deleteFoodDetails,numberFoodDetails,pushOrder,endOrder,pointNowDesk,submitFood,ClearStoreBydeskNumber})(SelectFood);
 
 
 export default SelectFood;
