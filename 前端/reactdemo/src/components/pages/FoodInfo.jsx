@@ -53,20 +53,20 @@ const InfoForm = Form.create()(
                         {getFieldDecorator("dcId", {
                             rules:[{required:true, message:"所属类别不能为空"}]
                         })(<Select style={{width:260,marginLeft:12}} onChange={handleChange1}>
-                            <Option value="特价菜品">特价菜品</Option>
-                            <Option value="热销菜品">热销菜品</Option>
-                            <Option value="饮料">饮料</Option>
-                            <Option value="荤菜">荤菜</Option>
-                            <Option value="素菜">素菜</Option>
-                            <Option value="汤类">汤类</Option>
-                            <Option value="面食">面食</Option>
+                            <Option value="1">特价菜品</Option>
+                            <Option value="2">热销菜品</Option>
+                            <Option value="3">饮料</Option>
+                            <Option value="4">荤菜</Option>
+                            <Option value="5">素菜</Option>
+                            <Option value="6">汤类</Option>
+                            <Option value="7">面食</Option>
                             </Select>)}
                     </FormItem>
                     <FormItem label={"原料"}  >
-                        {getFieldDecorator("dMaterial")(<TextArea/>)}
+                        {getFieldDecorator("dMaterial",{ initialValue:"无"})(<TextArea/>)}
                     </FormItem>
                     <FormItem label={"备注"}>
-                        {getFieldDecorator("dRemark")(<TextArea/>)}
+                        {getFieldDecorator("dRemark",{ initialValue:"无"})(<TextArea/>)}
                     </FormItem>
                     <FormItem
                         wrapperCol={{ span: 12, offset: 6 }}
