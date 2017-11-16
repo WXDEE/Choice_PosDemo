@@ -6,9 +6,10 @@ import moment from 'moment';
 import InfoTab from './InfoComponents/InfoTab';
 import {dataSearch, foodInit, addFood, deleteFood} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
-import {Table, Icon, DatePicker, Input, Button, Modal, Form} from 'antd';
+import {Table, Icon, DatePicker, Input, Button, Modal, Form,Select} from 'antd';
 const { TextArea } = Input;
 const FormItem = Form.Item;
+const Option = Select.Option;
 let g_date;
 let g_date1;
 
@@ -32,7 +33,13 @@ const InfoForm = Form.create()(
                     <FormItem label={"菜品单价"}>
                         {getFieldDecorator("dPrice", {
                             rules:[{required:true, message:"菜品单价不能为空"}]
-                        })(<Input/>)}
+                        })(<Select style={{width:120}} onChange={this.handleChange1}>
+                            <Option value={"荤菜"}>荤菜</Option>
+                            <Option value={"素菜"}>素菜</Option>
+                            <Option value={"荤菜"}>荤菜</Option>
+                            <Option value={"荤菜"}>荤菜</Option>
+                            </Select>
+                        )}
                     </FormItem>
                     <FormItem label={"菜品余量"}>
                         {getFieldDecorator("dCount", {
@@ -85,6 +92,7 @@ class FoodInfo extends React.Component {
         this.handleChange=this.handleChange.bind(this);
         this.handleSearch=this.handleSearch.bind(this);
         this.handleDelete=this.handleDelete.bind(this);
+        this.handleChange1=this.handleChange1.bind(this);
         const {foodInit}=this.props;
         foodInit();
 
@@ -162,6 +170,10 @@ class FoodInfo extends React.Component {
      deleteFood(12);
 
   }
+    //修改value值
+    handleChange1(value){
+        console.log(`selected ${value}`);
+    }
     render() {
         let loading=true;
         if(this.props.loading)

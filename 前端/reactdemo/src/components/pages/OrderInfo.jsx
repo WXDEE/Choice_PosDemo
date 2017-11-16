@@ -118,8 +118,8 @@ class OrderInfo extends React.Component{
             dataIndex: 'oiCount',
             key: 'num',
         }, {
-            title: '单价',
-            dataIndex: 'Price',
+            title: '上菜状态',
+            dataIndex: 'oiStatus',
             key: 'price',
         }
         ];
