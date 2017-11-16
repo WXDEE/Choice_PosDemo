@@ -93,9 +93,11 @@ class FoodFactory extends React.Component{
 }
 const mapStateToProps  = (state) => {
     let nowDeskNumber= state.httpData.deskNumber;
+    let foodSum='';
     if(nowDeskNumber==null)nowDeskNumber=0;
+    if(state.httpData.deskTable[nowDeskNumber].foodArray!=null)foodSum=state.httpData.deskTable[nowDeskNumber].foodArray.length;
     return { nowDeskNumber: state.httpData.deskNumber,
-        getDeskFoodArraynum:state.httpData.deskTable[nowDeskNumber].foodArray.length,
+        getDeskFoodArraynum:foodSum,
         foodMain:state.httpData.foodTable,
         loading:state.httpData.foodSuccess,
 

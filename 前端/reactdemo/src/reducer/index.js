@@ -42,6 +42,20 @@ const httpData = (state = initialList, action) => {
         case type.POINT_DESK:
             return Object.assign({}, state, {deskNumber:action.deskNumber});
             break;
+        case type.CLEAR_ORDER_STORE:
+            let subEach12=deepCopy(state,{});
+
+            for(let i=subEach12.orderState.length-1;i>=0;i--){
+                if(subEach12.orderState[i]!=null){
+                    if(subEach12.orderState[i].deskNum==action.deskNumber){
+                        subEach12.orderState[action.deskNumber]=[];
+                        subEach12.deskTable[action.deskNumber].foodArray=[];
+                    }
+                }
+
+            }
+            return subEach12;
+            break;
 
         case type.PUSH_ORDER:
             let subEach0=deepCopy(state,{});
@@ -53,8 +67,21 @@ const httpData = (state = initialList, action) => {
             return Object.assign({}, state, {deskTable:action.deskArray});
             break;
         case type.ADD_FOOD:
+            let flag=true;
+            let exid=-1;
             let subEach=deepCopy(state,{});
-            subEach.deskTable[action.deskNum].foodArray.push(action.foodDetails)
+          for(let i=0;i<subEach.deskTable[action.deskNum].foodArray.length;i++){
+              if(subEach.deskTable[action.deskNum].foodArray[i].FoodName==action.foodDetails.FoodName){
+                  flag=false;
+                  exid=i;
+              }
+          }
+        if(flag) subEach.deskTable[action.deskNum].foodArray.push(action.foodDetails);
+            else if(exid!=-1&&!flag) {
+                subEach.deskTable[action.deskNum].foodArray[exid].nowNum++;
+            console.log(subEach.deskTable[action.deskNum].foodArray[exid].FoodName+ ":"+subEach.deskTable[action.deskNum].foodArray[exid].nowNum);
+        }
+
             return subEach;
             break;
         case type.DELETE_FOOD:

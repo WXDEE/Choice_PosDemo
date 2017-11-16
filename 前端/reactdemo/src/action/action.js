@@ -137,7 +137,14 @@ export const numberFoodDetailstoStore=(nowDeskNum,nowFoodNum,newFoodNumber)=>{
 }
 
 //清除在Store中已经结账的信息
-
+export function ClearStoreBydeskNumber(deskNumber){
+    return (dispatch)=>{
+        dispatch(ClearStoreBydeskNumbertoStore(deskNumber));
+    }
+}
+export const ClearStoreBydeskNumbertoStore=(deskNumber)=>{
+    return {type: type.CLEAR_ORDER_STORE,deskNumber:deskNumber}
+}
 
 
 //查询菜品
