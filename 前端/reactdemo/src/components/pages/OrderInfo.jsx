@@ -111,38 +111,18 @@ class OrderInfo extends React.Component{
 
         const listColumns = [{
             title: '菜品名',
-            dataIndex: 'dld',
+            dataIndex: 'dId',
             key: 'name',
         }, {
             title: '数量(份)',
             dataIndex: 'oiCount',
             key: 'num',
         }, {
-            title: '单价',
-            dataIndex: 'Price',
+            title: '上菜状态',
+            dataIndex: 'oiStatus',
             key: 'price',
         }
         ];
-
-        const listData = [{
-            key: '1',
-            FoodName: '糖醋里脊',
-            Num: '1',
-            Price: '200',
-            render:text=><spam>text¥</spam>
-        },{
-            key: '2',
-            FoodName: '油炸冰淇淋',
-            Num: '2',
-            Price: '170',
-            render:text=><spam>text¥</spam>
-        },{
-            key: '3',
-            FoodName: '糖醋里脊',
-            Num: '1',
-            Price: '200',
-            render:text=><spam>text¥</spam>
-        }];
 
         return(
             <div>
@@ -160,7 +140,7 @@ class OrderInfo extends React.Component{
                         至<DatePicker onChange={onChange1} className="datePicker" />
                     </div>
                     <div className="normalInput">
-                        <Button type="primary" onClick={this.handleSearch}>查询</Button>
+                        <Button type="primary" icon="search" onClick={this.handleSearch}>查询</Button>
                     </div>
 
                 </section>
