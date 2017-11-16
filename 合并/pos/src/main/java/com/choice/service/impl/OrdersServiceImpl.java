@@ -29,6 +29,7 @@ import com.choice.mapper.DeskMapper;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
 import com.choice.service.MQService;
+import com.choice.service.OrderItemService;
 import com.choice.service.OrdersService;
 import com.choice.util.DateTimeUtil;
 import com.choice.util.IDUtils;
@@ -37,6 +38,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
 public class OrdersServiceImpl implements OrdersService {
+	@Autowired
+	private OrderItemService orderItemService;
 	@Autowired
 	private ThreadPoolTaskExecutor taskExecutor;
 	@Autowired
@@ -218,5 +221,16 @@ public class OrdersServiceImpl implements OrdersService {
 				mQService.sendMessage(JsonUtils.objectToJson(ordersDTO));
 			}
 		});
+	}
+
+	//通过桌子id查询订单
+	@Override
+	public ServerResponse<OrdersDTO> selectOrdersByDeid(String deId) throws Exception{
+		// TODO Auto-generated method stub
+		//根据桌子id查询订单表
+		Orders orders = ordersMapper.selectOrdersByDeid(deId);
+		//根据订单id查询订单明细
+		ServerResponse<OrdersDTO> result = orderItemService.queryOrderItemByOrdersId(orders.getId().toString());
+		return result;
 	}
 }

@@ -22,11 +22,20 @@ public class OrdersController {
 	@Autowired
 	private OrdersService ordersService;
 	
+	//增加订单
 	@RequestMapping("add")
 	@ResponseBody
 	public ServerResponse<OrdersDTO> addOrders(HttpServletResponse response, String data){
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<OrdersDTO> result = ordersService.addOrders(data);
+		return result;
+	}
+	//根据桌号查询订单明细
+	@RequestMapping("deId")
+	@ResponseBody
+	public ServerResponse<OrdersDTO> selectOrdersByDeid(HttpServletResponse response, String deId) throws Exception{
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		ServerResponse<OrdersDTO> result = ordersService.selectOrdersByDeid(deId);
 		return result;
 	}
 	

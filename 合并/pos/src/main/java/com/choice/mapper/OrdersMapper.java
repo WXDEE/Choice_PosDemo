@@ -22,6 +22,9 @@ public interface OrdersMapper {
 	String selectOrdersToatal();
 	//点击结账，修改订单状态为已付款
 	Integer updateOrdersStatus(String id);
+	//通过订单id查询订单号，桌子号，下单时间，总金额
 	Map<String, String> selectToItem(String id);
+	//通过桌子id查询订单
+	Orders selectOrdersByDeid(String deId);
 
 }

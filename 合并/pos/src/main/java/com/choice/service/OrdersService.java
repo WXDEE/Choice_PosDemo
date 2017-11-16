@@ -24,4 +24,6 @@ public interface OrdersService {
     ServerResponse settleAccount(String id,String deNum);
     //查询订单详情加入订单明细
     Map<String, String> selectToItem(String id);
+    //通过桌子id查询订单
+    ServerResponse<OrdersDTO> selectOrdersByDeid(String deId) throws Exception;
 }
