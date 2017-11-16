@@ -237,7 +237,7 @@ export function uploadFood(data) {
             mode: 'cors',
             credentials: 'credentials',
             cache: 'default',
-            body: "dMaterial ="+data.dMaterial+"&dPrice="+data.dPrice
+            body: "id="+data.id+"&dMaterial ="+data.dMaterial+"&dPrice="+data.dPrice
             +"&dRemark ="+data.dRemark+"&dCount="+data.dCount,
         }).then((response)=>{
             if(response.status!==200){

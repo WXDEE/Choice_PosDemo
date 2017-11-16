@@ -149,13 +149,21 @@ class FoodInfo extends React.Component {
         this.state.value_price=g_index.dPrice;
         this.state.value_count=g_index.dCount;
         this.state.value_material=g_index.dMaterial;
-        this.state.value_remark=g_index.dRemark
+        this.state.value_remark=g_index.dRemark;
     }
     handleOk1(e) {
+        // e.preventDefault();
+        g_index.dPrice=this.state.value_price;
+        g_index.dCount=this.state.value_count;
+        g_index.dMaterial=this.state.value_material;
+        g_index.dRemark=this.state.value_remark;
+        const {uploadFood}=this.props;
+        uploadFood(g_index);
+        console.log(g_index);
         this.setState({
             visible1: false,
         })
-        
+
     }
     handleCancel1(e) {
         this.setState({
