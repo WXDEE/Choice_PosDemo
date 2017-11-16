@@ -5,7 +5,7 @@ import * as type from '../action/type';
 //订单页面的初始化
 export function orderInit(){
     return (dispatch)=>{
-        fetch("http://localhost:8080/orders/list",{
+        fetch("http://30.87.246.189:8080/orders/list",{
             method: 'POST',
             mode: 'cors',
             cache: 'default'
@@ -31,7 +31,7 @@ export const orderInitDo=(data)=>{
 //菜品页面的初始化
 export function foodInit(){
     return (dispatch)=>{
-        fetch("http://localhost:8080/dish/list",{
+        fetch("http://30.87.246.189:8080/dish/list",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -143,7 +143,7 @@ export function dataSearch(data) {
     */
     console.log(data);
     return dispatch=>{
-        fetch("http://localhost:8080/dish/list",{
+        fetch("http://30.87.246.189:8080/dish/list",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -171,7 +171,7 @@ export function dataSearch(data) {
 export function orderSearch(data) {
     console.log(data);
     return dispatch=>{
-        fetch("http://localhost:8080/orders/list",{
+        fetch("http://30.87.246.189:8080/orders/list",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -199,7 +199,7 @@ export function orderSearch(data) {
 export function addFood(data) {
     console.log(data);
     return dispatch=>{
-        fetch("http://localhost:8080/dish/add",{
+        fetch("http://30.87.246.189:8080/dish/add",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -228,7 +228,7 @@ export function addFood(data) {
 export function uploadFood(data) {
     console.log(data);
     return dispatch=>{
-        fetch("http://localhost:8080/dish/update",{
+        fetch("http://30.87.246.189:8080/dish/update",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -256,7 +256,7 @@ export function uploadFood(data) {
 //删除菜品
 export function deleteFood(id) {
     return dispatch=>{
-        fetch("http://localhost:8080/dish/delete",{
+        fetch("http://30.87.246.189:8080/dish/delete",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -284,7 +284,7 @@ export function deleteFood(id) {
 //查询桌子
 export function deskSearch() {
     return dispatch=>{
-        fetch("http://localhost:8080/desk/list",{
+        fetch("http://30.87.246.189:8080/desk/list",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -315,7 +315,7 @@ export const deskAllToStore=(data)=>{
 export function pushOrder(data) {
     console.log(JSON.stringify(data));
     return dispatch=>{
-        fetch("http://localhost:8080/orders/add",{
+        fetch("http://30.87.246.189:8080/orders/add",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -346,7 +346,7 @@ export const orderStateToStore=(data)=>{
 //结账
 export function endOrder(orderNumber,nowDesk) {
     return dispatch=>{
-        fetch("http://localhost:8080/orders/settleAccount",{
+        fetch("http://30.87.246.189:8080/orders/settleAccount",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -376,7 +376,7 @@ export const endOrderToStore=(data)=>{
 //查看订单明细
 export function seeOrderDetails(id) {
     return dispatch=>{
-        fetch("http://localhost:8080/orderitem/ordersId",{
+        fetch("http://30.87.246.189:8080/orderitem/ordersId",{
             method:'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
