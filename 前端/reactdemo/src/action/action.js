@@ -392,7 +392,7 @@ export function seeOrderDetails(id) {
                 return ;
             }
             response.json().then(json=>{
-                console.log(json);
+                console.log("查看订单明细得到的："+json);
                 dispatch(orderDetails(json));
             })
         }).catch(err=>{
@@ -402,4 +402,64 @@ export function seeOrderDetails(id) {
 }
 export const orderDetails=(data)=>{
     return {type: type.ORDER_DETAILS,data:data}
+}
+
+//上菜
+export function submitFood(orderID,orderIdMain) {
+    console.log("提交上菜的ID："+orderID,"订单id"+orderIdMain)
+    return dispatch=>{
+        fetch("http://30.87.246.189:8080/orderitem/updish",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body: "ordersItemId="+orderID
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("存入数据时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+                getOrderInfoById(orderIdMain)(dispatch);//获取现在订单情况
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+
+//根据订单id查询订单明细
+export function getOrderInfoById(id) {
+    return dispatch=>{
+        fetch("http://30.87.246.189:8080/orderitem/ordersId",{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body:'ordersId='+id,
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("查看订单明细时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+                dispatch(getOrderInfoByIdToStore(json));
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+export const getOrderInfoByIdToStore=(data)=>{
+    return {type: type.ORDER_DETAILS_ID,data:data}
 }

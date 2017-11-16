@@ -21,6 +21,15 @@ const httpData = (state = initialList, action) => {
             break;
         case type.ORDER_DETAILS:
             return Object.assign({}, state, {orderDetailsTable:action.data.data,success1:action.data.success});
+            break;
+
+
+        case type.ORDER_DETAILS_ID:
+            let subEach11=deepCopy(state,{});
+            if(action.data.data!=null)
+                subEach11.orderState.push({"deskNum":action.data.data.deId, deskInfo:action.data});
+            return subEach11;
+            break;
         case type.REQUEST_ORDER:
             return Object.assign({},state, {orderTable:action.data.data,success:action.data.success});
             break;
@@ -33,6 +42,7 @@ const httpData = (state = initialList, action) => {
         case type.POINT_DESK:
             return Object.assign({}, state, {deskNumber:action.deskNumber});
             break;
+
         case type.PUSH_ORDER:
             let subEach0=deepCopy(state,{});
             if(action.data.data!=null)
