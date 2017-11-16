@@ -55,12 +55,10 @@ class SelectFood extends React.Component{
             numberFoodDetails(this.props.nowDeskNumber,g_key,record);
         }
         else if(null!=record&&event.target.tagName=="A"){
-
-
             if(event.target.innerHTML=="删除")
               deleteFoodDetails(this.props.nowDeskNumber,record.key);
             else if(event.target.innerHTML=="上菜"){
-
+                console.log(record);
             }
         }
     }
@@ -100,6 +98,7 @@ class SelectFood extends React.Component{
         let deskNumber=this.props.nowDeskNumber;
         let orderNumber='';
         let orderTime='';
+        let orderId=''
        for(let i=0,index=this.props.getDeskFoodArray.length;i<index;i++){
            if(null!=this.props.getDeskFoodArray[i]){
            sumPrice+=Number(this.props.getDeskFoodArray[i].Price*this.props.getDeskFoodArray[i].nowNum);
@@ -112,6 +111,7 @@ class SelectFood extends React.Component{
            for(let i=0,index=this.props.orderState.length;i<index;i++){
                if(deskNumber==this.props.orderState[i].deskNum){
                    g_stats=1;   //状态为订单明细
+                   orderId=this.props.orderState[i].deskInfo.data.id;
                    orderNumber=this.props.orderState[i].deskInfo.data.oNum;
                    orderTime=this.props.orderState[i].deskInfo.data.oDate;
                }
@@ -162,6 +162,11 @@ class SelectFood extends React.Component{
            }
            ];
        }
+       let dataArray=this.props.getDeskFoodArray;
+       if(g_stats==1) {
+           dataArray= this.props.afterEndFoodArray;
+           console.log(dataArray);
+       }
         return(
             <div >
                 <Card title="订单明细"   bodyStyle={{ width: '100%',height:ScreenHeight }} className="orderDetails">
@@ -185,7 +190,7 @@ class SelectFood extends React.Component{
                     <div className="heightDo">
                         <Table
                             columns={listColumns}
-                            dataSource={this.props.getDeskFoodArray}
+                            dataSource={dataArray}
                             pagination={false}
                             className="listInfoOrdering infoTable"
                             size="small"
@@ -201,7 +206,7 @@ class SelectFood extends React.Component{
                 </section>
                     <section className="detailsButton">
                         <Button type="primary" size="large" onClick={this.summitOrder} >提交订单</Button>
-                        <Button type="primary"size="large" onClick={()=>this.endOrder(orderNumber)}>结账</Button>
+                        <Button type="primary"size="large" onClick={()=>this.endOrder(orderId)}>结账</Button>
                     </section>
                 </Card>
             </div>
@@ -213,11 +218,20 @@ const mapStateToProps  = (state) => {
      sumPrice=0;
     let nowDeskNumber= state.httpData.deskNumber;
 
+    let afterEndFoodArray={};
     if(nowDeskNumber==null)nowDeskNumber=0;
+    if(state.httpData.orderState!=null){
+        for(let i=0,index=state.httpData.orderState.length;i<index;i++){
+            if(state.httpData.deskNumber==state.httpData.orderState[i].deskNum){
+                afterEndFoodArray=state.httpData.orderState[i].data;
+            }
+        }
+    }
+    console.log(afterEndFoodArray);
     return { nowDeskNumber: state.httpData.deskNumber,
               getDeskFoodArray:state.httpData.deskTable[nowDeskNumber].foodArray,
               orderState:state.httpData.orderState,
-              /*afterEndFoodArray:state.httpData.orderState.deskTable[nowDeskNumber].foodArray*/
+              afterEndFoodArray:afterEndFoodArray
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
