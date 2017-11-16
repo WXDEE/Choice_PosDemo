@@ -28,6 +28,12 @@ function success(text) {
         content:text ,
     });
 }
+function error(text) {
+    Modal.error({
+        title: '请选择菜品！',
+        content:text ,
+    });
+}
 
 let g_key=1;
 let foodNum=0;
@@ -101,7 +107,8 @@ class SelectFood extends React.Component{
        }
         const { pushOrder } = this.props;
         pushOrder(data);
-        success('您已成功提交订单！');
+        if(data.deId!==null&&data.odCount!=0) success('您已成功提交订单！');
+        else error();
     }
    endOrder(orderNumber){
        const { endOrder,ClearStoreBydeskNumber } = this.props;
