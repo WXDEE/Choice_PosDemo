@@ -96,7 +96,7 @@ class OrderInfo extends React.Component{
             title: '消费金额',
             dataIndex: 'oTotal',
             key: 'money',
-            render: text => <span>{text}¥</span>,
+            render: text => <span>¥{text}</span>,
         }, {
             title: '订单状态',
             dataIndex: 'oStatus',
@@ -166,15 +166,15 @@ class OrderInfo extends React.Component{
                            <tbody>
                            <tr>
                                <td>订单号</td>
-                               <td>this.props.orderDetail.oNum</td>
+                               <td>{this.props.orderDetail.oNum}</td>
                            </tr>
                            <tr>
                                <td>桌号</td>
-                               <td>this.props.orderDetail.deId</td>
+                               <td>{this.props.orderDetail.deId}</td>
                            </tr>
                            <tr>
                                <td>下单时间</td>
-                               <td>this.props.orderDetail.oDate</td>
+                               <td>{this.props.orderDetail.oDate}</td>
                            </tr>
                            </tbody>
                        </table>
@@ -182,7 +182,7 @@ class OrderInfo extends React.Component{
                         <section className="">
                             <Table
                                 columns={listColumns}
-                                dataSource={this.props.orderDetail}
+                                dataSource={this.props.orderDetailTable}
                                 pagination={false}
                                 className="listInfo"
                                 size="small"
@@ -190,7 +190,7 @@ class OrderInfo extends React.Component{
                             />
                         </section>
                         <hr  className="doLine" />
-                        <div style={{marginLeft:'10%'}}>共计金额：¥this.props.orderDetail.oTotal</div>
+                        <div style={{marginLeft:'10%'}}>共计金额：¥{this.props.orderDetail.oTotal}</div>
                     </Modal>
                 </div>
 
@@ -204,16 +204,27 @@ const mapStateToProps  = (state) => {
   //获取订单总数
     let count=0;
     let sumPrice=0;
+    let array={};
+    let data={};
     for(let i in state.httpData.orderTable){
                count ++;
         sumPrice+=Number(state.httpData.orderTable[i].oTotal);
             }
+
+    if(state.httpData.orderDetailsTable!=null){
+        array=state.httpData.orderDetailsTable.orderItemList;
+        data=state.httpData.orderDetailsTable;
+    }
+
+
+
     return { dataA: state.httpData.theNumber,
         mainTable:state.httpData.orderTable,//表格数据
         loading:state.httpData.success, //表格是否加载完毕
         OrderSum:count,
         OrderPriceSum:sumPrice,
-        orderDetail:state.httpData.orderDetailsTable, //订单详情表格
+        orderDetail:data,
+        orderDetailTable:array, //订单详情表格
         loading1:state.httpData.success1,
     };
 }
