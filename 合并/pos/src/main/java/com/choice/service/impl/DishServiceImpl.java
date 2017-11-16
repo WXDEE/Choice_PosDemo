@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -168,7 +169,7 @@ public class DishServiceImpl implements DishService {
 	/***
 	 * 查询售空菜品列表
 	 */
-	public ServerResponse<List<Dish>> queryDishWithNone() {
+	public ServerResponse<List<Dish>> queryDishWithNone()throws Exception {
 		List<Dish> emptyDishList = dishMapper.selectEmptyDish();
 		ServerResponse<List<Dish>> result = ServerResponse.createBySuccess(emptyDishList);
 		return result;
@@ -176,7 +177,7 @@ public class DishServiceImpl implements DishService {
 	/***
 	 * 查询售空菜品数量
 	 */
-	public ServerResponse<String> queryDishCountWithNone() {
+	public ServerResponse<String> queryDishCountWithNone() throws Exception{
 		Integer count = dishMapper.selectEmptyCount();
 		ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
 		return result;
@@ -184,7 +185,7 @@ public class DishServiceImpl implements DishService {
 	/***
 	 * 查询余量不足菜品数量
 	 */
-	public ServerResponse<String> queryDishCountithNotEnough() {
+	public ServerResponse<String> queryDishCountithNotEnough() throws Exception{
 		Integer count = dishMapper.selectNotEnoughCount(Const.DHSI_NUM);
 		ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
 		return result;
@@ -192,7 +193,7 @@ public class DishServiceImpl implements DishService {
 	/***
 	 * 查询菜品所有数量
 	 */
-	public ServerResponse<String> queryDishCount() {
+	public ServerResponse<String> queryDishCount() throws Exception{
 		Integer count = dishMapper.selectDishCount();
 		ServerResponse<String> result = ServerResponse.createBySuccess(""+count);
 		return result;

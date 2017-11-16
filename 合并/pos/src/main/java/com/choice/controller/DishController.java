@@ -71,7 +71,7 @@ public class DishController {
 	 */
 	@RequestMapping("none/count")
 	@ResponseBody
-	public ServerResponse<String> queryDishCountWithNone(HttpServletResponse response){
+	public ServerResponse<String> queryDishCountWithNone(HttpServletResponse response) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<String> result = dishService.queryDishCountWithNone();
 		return result;
@@ -83,7 +83,7 @@ public class DishController {
 	 */
 	@RequestMapping("notEnough/count")
 	@ResponseBody
-	public ServerResponse<String> queryDishCountithNotEnough(HttpServletResponse response){
+	public ServerResponse<String> queryDishCountithNotEnough(HttpServletResponse response) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<String> result = dishService.queryDishCountithNotEnough();
 		return result;
@@ -95,7 +95,7 @@ public class DishController {
 	 */
 	@RequestMapping("count")
 	@ResponseBody
-	public ServerResponse<String> queryDishCount(HttpServletResponse response){
+	public ServerResponse<String> queryDishCount(HttpServletResponse response) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<String> result = dishService.queryDishCount();
 		return result;
@@ -107,7 +107,7 @@ public class DishController {
 	 */
 	@RequestMapping("none/list")
 	@ResponseBody
-	public ServerResponse<List<Dish>> queryDishWithNone(HttpServletResponse response){
+	public ServerResponse<List<Dish>> queryDishWithNone(HttpServletResponse response) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		ServerResponse<List<Dish>> result = dishService.queryDishWithNone();
 		return result;

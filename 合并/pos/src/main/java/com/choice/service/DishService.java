@@ -22,11 +22,11 @@ public interface DishService {
     //查询菜品（分页）
     ServerResponse<PageInfo> queryDish(Integer pageNum,Integer pageSize);
     //查询售空菜品
-    ServerResponse<List<Dish>> queryDishWithNone();
+    ServerResponse<List<Dish>> queryDishWithNone() throws Exception;
     //查询售空菜品数量
-    ServerResponse<String> queryDishCountWithNone();
+    ServerResponse<String> queryDishCountWithNone()throws Exception;
     //查询余量不足菜品数
-    ServerResponse<String> queryDishCountithNotEnough();
+    ServerResponse<String> queryDishCountithNotEnough() throws Exception;
     //查询菜品种类数
-    ServerResponse<String> queryDishCount();
+    ServerResponse<String> queryDishCount()throws Exception;
 }
