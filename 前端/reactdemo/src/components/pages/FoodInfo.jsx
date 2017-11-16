@@ -4,7 +4,7 @@
 import React from 'react';
 import moment from 'moment';
 import InfoTab from './InfoComponents/InfoTab';
-import {dataSearch, foodInit, addFood, deleteFood} from '../../action/action';
+import {dataSearch, foodInit, addFood, deleteFood,uploadFood} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import {Table, Icon, DatePicker, Input, Button, Modal, Form,Select} from 'antd';
 const { TextArea } = Input;
@@ -12,6 +12,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 let g_date;
 let g_date1;
+let g_index={};
 
 const InfoForm = Form.create()(
     props => {
@@ -52,13 +53,13 @@ const InfoForm = Form.create()(
                         {getFieldDecorator("dcId", {
                             rules:[{required:true, message:"所属类别不能为空"}]
                         })(<Select style={{width:260,marginLeft:12}} onChange={handleChange1}>
-                            <Option value={"特价菜品"}>特价菜品</Option>
-                            <Option value={"热销菜品"}>热销菜品</Option>
-                            <Option value={"饮料"}>饮料</Option>
-                            <Option value={"荤菜"}>荤菜</Option>
-                            <Option value={"素菜"}>素菜</Option>
-                            <Option value={"汤类"}>汤类</Option>
-                            <Option value={"面食"}>面食</Option>
+                            <Option value="特价菜品">特价菜品</Option>
+                            <Option value="热销菜品">热销菜品</Option>
+                            <Option value="饮料">饮料</Option>
+                            <Option value="荤菜">荤菜</Option>
+                            <Option value="素菜">素菜</Option>
+                            <Option value="汤类">汤类</Option>
+                            <Option value="面食">面食</Option>
                             </Select>)}
                     </FormItem>
                     <FormItem label={"原料"}  >
@@ -85,6 +86,10 @@ class FoodInfo extends React.Component {
             visible: false,
             visible1:false,
             value:"",
+            value_price:"",
+            value_count:"",
+            value_material:"",
+            value_remark:"",
         };
         this.showModal = this.showModal.bind(this);
         this.handleOk = this.handleOk.bind(this);
@@ -95,9 +100,12 @@ class FoodInfo extends React.Component {
         this.handleOk1 = this.handleOk1.bind(this);
         this.handleCancel1 = this.handleCancel1.bind(this);
         this.handleChange=this.handleChange.bind(this);
+        this.handleChange1=this.handleChange1.bind(this);
+        this.handleChange2=this.handleChange2.bind(this);
+        this.handleChange3=this.handleChange3.bind(this);
+        this.handleChange4=this.handleChange4.bind(this);
         this.handleSearch=this.handleSearch.bind(this);
         this.handleDelete=this.handleDelete.bind(this);
-        this.handleChange1=this.handleChange1.bind(this);
         const {foodInit}=this.props;
         foodInit();
 
@@ -113,11 +121,9 @@ class FoodInfo extends React.Component {
     }
 
     handleOk(e) {
-
         const form=this.form;
         const {addFood}=this.props;
         addFood(form.getFieldsValue());
-
 
         form.validateFields((err,value)=>{
             if(err)
@@ -127,8 +133,6 @@ class FoodInfo extends React.Component {
                 visible: false,
             })
         });
-
-
     }
     handleCancel(e) {
         console.log(e);
@@ -137,19 +141,23 @@ class FoodInfo extends React.Component {
         })
     }
     //修改菜品信息
-    showModal1() {
+    showModal1(record) {
         this.setState({
             visible1: true,
         })
+        g_index=record;
+        this.state.value_price=g_index.dPrice;
+        this.state.value_count=g_index.dCount;
+        this.state.value_material=g_index.dMaterial;
+        this.state.value_remark=g_index.dRemark
     }
     handleOk1(e) {
-        console.log(e);
         this.setState({
             visible1: false,
         })
+        
     }
     handleCancel1(e) {
-        console.log(e);
         this.setState({
             visible1: false,
         })
@@ -160,6 +168,27 @@ class FoodInfo extends React.Component {
             value:e.target.value,
         })
     }
+    handleChange1(e){
+        this.setState({
+            value_price:e.target.value,
+        })
+    }
+    handleChange2(e){
+        this.setState({
+            value_count:e.target.value,
+        })
+    }
+   handleChange3(e){
+        this.setState({
+            value_material:e.target.value,
+        })
+    }
+    handleChange4(e){
+        this.setState({
+            value_remark:e.target.value,
+        })
+    }
+
     handleSearch(e){
         e.preventDefault();
         let data={
@@ -169,15 +198,11 @@ class FoodInfo extends React.Component {
         const {dataSearch}=this.props;
         dataSearch(data);
     }
-  handleDelete(id){
+    handleDelete(id){
         console.log(id);
         const {deleteFood}=this.props;
         deleteFood(id);
-  }
-    //修改value值
-    handleChange1(value){
-        console.log(`selected ${value}`);
-    }
+     }
     render() {
         let loading=true;
         if(this.props.loading)
@@ -215,11 +240,11 @@ class FoodInfo extends React.Component {
         }, {
             title: '操作',
             dataIndex: 'opera',
-            render: (text,record,render) =>
+            render: (text,record,index) =>
                 <span>
-                    <a onClick={this.showModal1}>编辑</a>
+                    <a onClick={()=>this.showModal1(record)}>编辑</a>
                     <span className="ant-divider"/>
-                    <a onClick={()=>this.handleDelete(record.id)} >删除</a>
+                    <a onClick={()=>this.handleDelete(record.id)}>删除</a>
                 </span>
         }];
 
@@ -270,16 +295,16 @@ class FoodInfo extends React.Component {
                         ]}
                     >
                         <div className="editInfo">
-                            <div>菜品名称： 麻婆豆腐</div>
-                            <div>菜品单价：<Input type="text" defaultValue="￥10"></Input></div>
-                            <div>菜品余量：<Input type="text" defaultValue="0"></Input></div>
+                            <div>菜品名称： {g_index.dName}</div>
+                            <div>菜品单价：<Input type="text" value={this.state.value_price} onChange={this.handleChange1}></Input></div>
+                            <div>菜品余量：<Input type="text" value={this.state.value_count} onChange={this.handleChange2}></Input></div>
                             <div className="clearFix">
                                 <span>菜品原料：</span>
-                                <TextArea defaultValue="麻婆、豆腐"></TextArea>
+                                <TextArea value={this.state.value_material} onChange={this.handleChange3}></TextArea>
                             </div>
                             <div className="clearFix">
                                 <span>菜品备注：</span>
-                                <TextArea defaultValue="对辣椒过敏者慎食"></TextArea>
+                                <TextArea value={this.state.value_remark} onChange={this.handleChange4}></TextArea>
                             </div>
                         </div>
                     </Modal>
@@ -295,6 +320,8 @@ const mapStateToProps = (state) =>{
     let nullCount=0;
     //获取余量不足菜品数
     let lowCount=0;
+    //获取菜品信息
+    let dish={};
 
     for(let i in state.httpData.foodTable){
         count ++;
@@ -312,6 +339,6 @@ const mapStateToProps = (state) =>{
         lowCount:lowCount,
     };
 }
-FoodInfo=connect(mapStateToProps,{foodInit,dataSearch,addFood,deleteFood})(FoodInfo);
+FoodInfo=connect(mapStateToProps,{foodInit,dataSearch,addFood,deleteFood,uploadFood})(FoodInfo);
 //后面的FoodInfo是UI组件，前面的FoodInfo是通过connect生成的容器组件
 export default FoodInfo;
