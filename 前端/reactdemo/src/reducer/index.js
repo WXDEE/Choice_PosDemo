@@ -91,11 +91,11 @@ function deepCopy(o,c){
      c = c || {}
     for(let i in o){
         if(typeof o[i] === 'object'){
-            //要考虑深复制问题了
-      /*      if(o[i].constructor === Array){
+  /*          //要考虑深复制问题了
+            if(o[i].constructor === Array){
                 //这是数组*/
                 c[i] =[]
-      /*      }else{
+       /*     }else{
                 //这是对象
                 c[i] = {}
             }*/

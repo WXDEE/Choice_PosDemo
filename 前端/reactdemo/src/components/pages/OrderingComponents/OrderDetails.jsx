@@ -184,7 +184,8 @@ class SelectFood extends React.Component{
                title: '操作',
                dataIndex: 'func',
                key: 'func',
-               render:(text,record,index)=> <a onClick={(record)=>this.submitFood(record)}>{text}</a>
+               render:(text,record,index)=>
+                   <a onClick={(record)=>this.submitFood(record)}>{text}</a>
 
            }
            ];
@@ -206,7 +207,7 @@ class SelectFood extends React.Component{
                    dataArray[i].foodStats=fromStoredataArray[i].oiStatus;
                     console.log(dataArray[i].foodStats);
                    if(dataArray[i].foodStats=="未上菜"||dataArray[i].foodStats==0) dataArray[i].func="上菜";
-                   else dataArray[i].func="√";
+                   else dataArray[i].func= "√";
 
                }
            console.log("从后台将订餐编号："+dataArray[0].orderID+"。。等 - 注入到可见表格");
