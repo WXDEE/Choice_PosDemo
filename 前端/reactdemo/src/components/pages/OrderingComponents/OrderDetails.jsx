@@ -7,6 +7,7 @@ import { Card,Table,Button,InputNumber,Modal } from 'antd';
 import { connect } from 'react-redux'; // 引入connect
 import { deleteFoodDetails,numberFoodDetails,pushOrder,endOrder,pointNowDesk} from '../../../action/action';
 
+
 function info() {
     Modal.info({
         title: 'This is a notification message',
@@ -29,6 +30,7 @@ function success(text) {
 let g_key=1;
 let foodNum=0;
 let sumPrice=0;
+let g_stats=0;  //状态   0为 购物车  1 为订单明细
 class SelectFood extends React.Component{
     constructor(props) {
         super(props);
@@ -52,9 +54,15 @@ class SelectFood extends React.Component{
         if(index=="change"){
             numberFoodDetails(this.props.nowDeskNumber,g_key,record);
         }
-        else if(null!=record&&event.target.tagName=="A")
-        deleteFoodDetails(this.props.nowDeskNumber,record.key);
+        else if(null!=record&&event.target.tagName=="A"){
 
+
+            if(event.target.innerHTML=="删除")
+              deleteFoodDetails(this.props.nowDeskNumber,record.key);
+            else if(event.target.innerHTML=="上菜"){
+
+            }
+        }
     }
     onChange(value) {
         console.log('菜品改变数量了：', value);
@@ -100,15 +108,17 @@ class SelectFood extends React.Component{
            }
        }
        if(this.props.orderState!=null){
+                  g_stats=0;  //初始化状态为购物车
            for(let i=0,index=this.props.orderState.length;i<index;i++){
                if(deskNumber==this.props.orderState[i].deskNum){
+                   g_stats=1;   //状态为订单明细
                    orderNumber=this.props.orderState[i].deskInfo.data.oNum;
                    orderTime=this.props.orderState[i].deskInfo.data.oDate;
                }
            }
        }
 
-        const listColumns = [{
+        let listColumns = [{
             title: '菜品名',
             dataIndex: 'FoodName',
             key: 'name',
@@ -121,6 +131,7 @@ class SelectFood extends React.Component{
             title: '单价',
             dataIndex: 'Price',
             key: 'price',
+            render:text=><span>{text}¥</span>
         }, {
                 title: '操作',
                 dataIndex: 'func',
@@ -128,26 +139,29 @@ class SelectFood extends React.Component{
             render:text=><a>删除</a>
             }
         ];
+       if( g_stats==1){
+           listColumns = [{
+               title: '菜品名',
+               dataIndex: 'FoodName',
+               key: 'name',
+           }, {
+               title: '数量(份)',
+               dataIndex: 'nowNum',
+               key: 'nownum',
+           }, {
+               title: '单价',
+               dataIndex: 'Price',
+               key: 'price',
+               render:text=><span>{text}¥</span>
+           }, {
+               title: '操作',
+               dataIndex: 'func',
+               key: 'func',
+               render:text=> <a>{text}</a>
 
-        const listData = [{
-            key: '1',
-            FoodName: '糖醋里脊',
-            Num: '1',
-            Price: '200',
-            render:text=><spam>text¥</spam>
-        },{
-            key: '2',
-            FoodName: '油炸冰淇淋',
-            Num: '2',
-            Price: '170',
-            render:text=><spam>text¥</spam>
-        },{
-            key: '3',
-            FoodName: '糖醋里脊',
-            Num: '1',
-            Price: '200',
-            render:text=><spam>text¥</spam>
-        }];
+           }
+           ];
+       }
         return(
             <div >
                 <Card title="订单明细"   bodyStyle={{ width: '100%',height:ScreenHeight }} className="orderDetails">
@@ -203,6 +217,7 @@ const mapStateToProps  = (state) => {
     return { nowDeskNumber: state.httpData.deskNumber,
               getDeskFoodArray:state.httpData.deskTable[nowDeskNumber].foodArray,
               orderState:state.httpData.orderState,
+              /*afterEndFoodArray:state.httpData.orderState.deskTable[nowDeskNumber].foodArray*/
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
