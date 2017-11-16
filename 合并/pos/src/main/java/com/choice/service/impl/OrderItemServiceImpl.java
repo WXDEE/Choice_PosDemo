@@ -61,6 +61,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 			}
 			for (OrderItem orderItem : orderItemList) {
 				orderItem.setdId(map.get(orderItem.getdId()));
+				orderItem.setOiStatus(orderItem.getOiStatus().equals("0")?"未上菜":"已上菜");
 			}
 			Map<String, String> orderMap = ordersService.selectToItem(ordersId);
 			while(orderMap != null && orderMap.size() > 0){

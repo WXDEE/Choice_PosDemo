@@ -9,7 +9,7 @@ public class OrdersDTO {
     private String oNum;//订单编号
     private String oDate;//下单时间
     private String oStatus;//订单状态 0：已下单 1：待付款 2：已结账
-    private String deId;//桌子id
+    private String deId;//桌子
     private String oTotal;//总计金额
     private String odCount;//订单菜品数量
     //订单的明细
