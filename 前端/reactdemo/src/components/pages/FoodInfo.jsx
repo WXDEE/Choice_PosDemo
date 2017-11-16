@@ -220,7 +220,7 @@ class FoodInfo extends React.Component {
                         至<DatePicker onChange={onChange1} className="datePicker"/>
                     </div>
                     <div className="smallInput">
-                        <Button type="primary" onClick={this.handleSearch}>查询</Button>
+                        <Button type="primary" icon="search" onClick={this.handleSearch}>查询</Button>
                     </div>
                     <div>
                         <Button type="primary" onClick={this.showModal}>添加菜品</Button>
