@@ -48,7 +48,7 @@ const httpData = (state = initialList, action) => {
             for(let i=subEach12.orderState.length-1;i>=0;i--){
                 if(subEach12.orderState[i]!=null){
                     if(subEach12.orderState[i].deskNum==action.deskNumber){
-                        subEach12.orderState[action.deskNumber]=[];
+                        subEach12.orderState[i]=[];
                         subEach12.deskTable[action.deskNumber].foodArray=[];
                     }
                 }
