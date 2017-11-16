@@ -8,19 +8,19 @@ import java.util.List;
 
 public interface DishService {
     //根据菜品种类id查询菜品
-    ServerResponse<List<Dish>> queryDishByCatelog(String catelog);
+    ServerResponse<List<Dish>> queryDishByCatelog(String catelog) throws Exception;
     //新增菜品
-    ServerResponse addDish(Dish dish);
+    ServerResponse addDish(Dish dish) throws Exception;
     //更新菜品
-    ServerResponse updateDish(Dish dish);
+    ServerResponse updateDish(Dish dish) throws Exception;
     //删除菜品
-    ServerResponse deleteDish(Integer id);
+    ServerResponse deleteDish(Integer id) throws Exception;
     //根据菜品汉拼首字母模糊查询菜品
-    ServerResponse<List<Dish>> queryDishByCn(String cn);
+    ServerResponse<List<Dish>> queryDishByCn(String cn) throws Exception;
     //根据菜品名称和上架日期查询菜品（分页）
-    ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate);
+    ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) throws Exception;
     //查询菜品（分页）
-    ServerResponse<PageInfo> queryDish(Integer pageNum,Integer pageSize);
+    ServerResponse<PageInfo> queryDish(Integer pageNum,Integer pageSize) throws Exception;
     //查询售空菜品
     ServerResponse<List<Dish>> queryDishWithNone() throws Exception;
     //查询售空菜品数量

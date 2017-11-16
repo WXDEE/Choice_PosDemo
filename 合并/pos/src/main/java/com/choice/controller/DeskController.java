@@ -18,19 +18,19 @@ import javax.servlet.http.HttpServletResponse;
 public class DeskController {
 	@Autowired
 	private DeskService deskService;
-	
-    //查询所有桌子
+
+	//查询所有桌子
 	@RequestMapping("list")
 	@ResponseBody
-    public ServerResponse<List<Desk>> queryAllDesk(HttpServletResponse response){
+	public ServerResponse<List<Desk>> queryAllDesk(HttpServletResponse response) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return deskService.queryAllDesk();
-    }
-    //根据桌子编号查询桌子
+	}
+	//根据桌子编号查询桌子
 	@RequestMapping("num")
 	@ResponseBody
-   public ServerResponse<Desk> queryDeskByNum(HttpServletResponse  response,String num){
+	public ServerResponse<Desk> queryDeskByNum(HttpServletResponse  response,String num) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
-    	return deskService.queryDeskByNum(num);
-    }
+		return deskService.queryDeskByNum(num);
+	}
 }

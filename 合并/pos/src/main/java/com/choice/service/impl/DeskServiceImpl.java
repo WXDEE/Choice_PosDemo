@@ -16,44 +16,29 @@ import java.util.List;
 public class DeskServiceImpl implements DeskService {
 	@Autowired
 	private DeskMapper deskMapper;
-	
+
 	@Autowired
 	JedisClient jedisClient;
-	
-    public ServerResponse<List<Desk>> queryAllDesk() {
-    	try {
-    		List<Desk> desks=deskMapper.selectAllDesk();
-    		 return ServerResponse.createBySuccess(desks);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return ServerResponse.createByError();
-		}      
-    }
 
-    public ServerResponse<Desk> queryDeskByNum(String num) {
-    	try {
-    		Desk desk=deskMapper.selectDeskById(num);
-    		 return ServerResponse.createBySuccess(desk);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return ServerResponse.createByError();
-		}    
-    }
+	//查询所有的桌子
+	public ServerResponse<List<Desk>> queryAllDesk() throws Exception{
+		List<Desk> desks=deskMapper.selectAllDesk();
+		return ServerResponse.createBySuccess(desks);
 
-	@Override
-	public ServerResponse updateDeskStatusByNum(String deNum,String status) {
-		// TODO Auto-generated method stub
-		try {
-			Integer success=deskMapper.updateDeskStatusByNum(deNum, status);
-			if(success==1){
-				return ServerResponse.createBySuccess();
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			return ServerResponse.createByError();
-		}
-		return null;
-		
 	}
-    }
+	//根据桌子编号查询桌子
+	public ServerResponse<Desk> queryDeskByNum(String num) throws Exception{
+		Desk desk=deskMapper.selectDeskById(num);
+		return ServerResponse.createBySuccess(desk);
 
+	}
+
+	//修改桌子状态
+	@Override
+	public ServerResponse updateDeskStatusByNum(String deNum,String status) throws Exception{
+		// TODO Auto-generated method stub
+		Integer success=deskMapper.updateDeskStatusByNum(deNum, status);
+		return ServerResponse.createBySuccess();
+
+	}
+}

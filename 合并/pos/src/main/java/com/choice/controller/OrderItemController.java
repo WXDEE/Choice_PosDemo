@@ -37,7 +37,7 @@ public class OrderItemController {
 
 	@RequestMapping("updish")
 	@ResponseBody
-	public ServerResponse upDish(HttpServletResponse response,String ordersItemId) {
+	public ServerResponse upDish(HttpServletResponse response,String ordersItemId) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return orderItemService.upDish(ordersItemId);
 	}

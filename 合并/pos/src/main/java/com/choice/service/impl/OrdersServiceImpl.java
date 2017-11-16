@@ -96,88 +96,67 @@ public class OrdersServiceImpl implements OrdersService {
 		}
     }
 
-	public ServerResponse<String> queryOrdersCount() {
-		try {
-			String OrdersCount=ordersMapper.selectOrdesCount();
-			return ServerResponse.createBySuccess(OrdersCount);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return ServerResponse.createByError();
-		}
+	//查询订单的总数
+	public ServerResponse<String> queryOrdersCount() throws Exception{
+		String OrdersCount=ordersMapper.selectOrdesCount();
+		return ServerResponse.createBySuccess(OrdersCount);
 
 	}
+	//查询订单的总金额
+	public ServerResponse<String> querySumTotal()throws Exception {
 
-	public ServerResponse<String> querySumTotal() {
-		try {
-			String SumTotal=ordersMapper.selectOrdersToatal();
-			return ServerResponse.createBySuccess(SumTotal);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return ServerResponse.createByError();
-		}
+		String SumTotal=ordersMapper.selectOrdersToatal();
+		return ServerResponse.createBySuccess(SumTotal);
 	}
+	//结账的功能
 	@Transactional
-	public ServerResponse settleAccount(String id,String deNum) {
-		try {
-			Integer sta=ordersMapper.updateOrdersStatus(id);
-			Integer stb=deskMapper.updateDeskStatusByNum(deNum, "0");
-			if(sta==1&&stb==1){
-				return ServerResponse.createBySuccess();
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		return ServerResponse.createByError();
+	public ServerResponse settleAccount(String id,String deNum) throws Exception{
+		//释放桌子
+		Integer sta=ordersMapper.updateOrdersStatus(id);
+		//修改付款状态
+		Integer stb=deskMapper.updateDeskStatusByNum(deNum, "0");
+		return ServerResponse.createBySuccess();
 	}
 
+	//订单的模糊查询
 	@Override
-	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) {
+	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) throws Exception{
 		// TODO Auto-generated method stub
-		try {
-			if("undefined".equals(sDate)||"undefined".equals(eDate)){
-				sDate=null;
-				eDate=null;
-			}
-			if(sDate!=null){
-				sDate = sDate + " 00:00:00";
-				eDate = eDate + " 23:59:59";
-			}
-			List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
-			List<Desk> desks=deskMapper.selectAllDesk();
-			Map<String, String> map=new HashMap<String, String>();
-			for (Desk desk : desks) {
-				map.put(desk.getId().toString(), desk.getDeNum());
-			}
-			for (Orders orders2 : orders) {
-				orders2.setDeId(map.get(orders2.getDeId()));
-				switch(orders2.getoStatus()){
-				 case "0":orders2.setoStatus("已下单 ");break;
-				 case "1":orders2.setoStatus("代付款 ");break;
-				 case "2":orders2.setoStatus("已结账 ");break;
-				 default :break;
-				}
-			}
-			
-			return ServerResponse.createBySuccess(orders);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return ServerResponse.createByError();
+		//前端未选择查询条件时  为全部查询
+		if("undefined".equals(sDate)||"undefined".equals(eDate)){
+			sDate=null;
+			eDate=null;
 		}
-
+		if(sDate!=null){
+			sDate = sDate + " 00:00:00";
+			eDate = eDate + " 23:59:59";
+		}
+		List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
+		//查询相应的桌号  封装到订单
+		List<Desk> desks=deskMapper.selectAllDesk();
+		Map<String, String> map=new HashMap<String, String>();
+		for (Desk desk : desks) {
+			map.put(desk.getId().toString(), desk.getDeNum());
+		}
+		//将付款的状态转化为字符串  封装到订单
+		for (Orders orders2 : orders) {
+			orders2.setDeId(map.get(orders2.getDeId()));
+			switch(orders2.getoStatus()){
+				case "0":orders2.setoStatus("已下单 ");break;
+				case "1":orders2.setoStatus("代付款 ");break;
+				case "2":orders2.setoStatus("已结账 ");break;
+				default :break;
+			}
+		}
+		return ServerResponse.createBySuccess(orders);
 	}
 	/**
 	 * 从订单中获取订单号，桌号，总金额，下单时间
 	 */
 	@Override
-	public Map<String, String> selectToItem(String id) {
-		// TODO Auto-generated method stub
-		try {
-			Map<String, String> map = ordersMapper.selectToItem(id);
-			return map;
-		} catch (Exception e) {
-			// TODO: handle exception
-			return null;
-		}
+	public Map<String, String> selectToItem(String id) throws Exception{
+		Map<String, String> map = ordersMapper.selectToItem(id);
+		return map;
 	}
 	/***
 	 * 插入订单表

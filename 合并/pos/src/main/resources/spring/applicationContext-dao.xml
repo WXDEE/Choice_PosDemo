@@ -50,6 +50,6 @@
 	 <property name="basePackage" value="com.choice.mapper"></property>
 	 <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	 </bean>
-	 
+	<bean class="com.choice.Exception.PosExceptionResolver"></bean>
 	
 </beans>

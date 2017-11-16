@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface DishCatelogService {
     //查询全部菜品种类
-    ServerResponse<List<DishCatelog>> queryAllDishCatelog();
+    ServerResponse<List<DishCatelog>> queryAllDishCatelog() throws Exception;
 
 }

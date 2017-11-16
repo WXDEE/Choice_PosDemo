@@ -66,19 +66,13 @@ public class OrderItemServiceImpl implements OrderItemService {
 		throw new Exception();
     }
 
+	/**
+	 * 上菜   根据订单详情的id  来修改菜的状态（是否上菜）
+	 */
 	@Override
 	public ServerResponse upDish(String ordersItemId) {
-		// TODO Auto-generated method stub
-
-		try {
-			Integer sta=orderItemMapper.updateDishStatus(ordersItemId);
-			if(sta==1){
-				return ServerResponse.createBySuccess();
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		return ServerResponse.createByError();
+		Integer sta=orderItemMapper.updateDishStatus(ordersItemId);
+		return ServerResponse.createBySuccess();
 	}
 	/***
 	 * 取出所有菜品

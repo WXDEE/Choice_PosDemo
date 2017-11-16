@@ -1,5 +1,7 @@
 package com.choice.entity;
 
+import org.hibernate.validator.constraints.Range;
+
 public class Dish {
 	private Integer id;
 	private String dcId;//菜品类目id
@@ -8,7 +10,9 @@ public class Dish {
 	private String dDate;//菜品上架日期
 	private String dMaterial;//菜品原料
 	private String dRemark;//菜品备注
+	@Range(min=0,message = "数量小于0")
 	private String dCount;//菜品库存数量
+	@Range(min=0,message = "价格小于0")
 	private String dPrice;//菜品价格
 	private String dStatus;//菜品状态 0：已删除 1：未删除
 

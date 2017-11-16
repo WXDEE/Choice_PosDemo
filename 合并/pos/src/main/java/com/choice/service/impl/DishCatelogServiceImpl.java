@@ -14,14 +14,9 @@ public class DishCatelogServiceImpl implements DishCatelogService {
 
     @Autowired
     private DishCatelogMapper dishCatelogMapper;
-    public ServerResponse<List<DishCatelog>> queryAllDishCatelog() {
+    public ServerResponse<List<DishCatelog>> queryAllDishCatelog() throws Exception{
         List<DishCatelog> dishCatelogList = null;
-        try {
-            dishCatelogList = dishCatelogMapper.selectList();
-            return ServerResponse.createBySuccess(dishCatelogList);
-        } catch (Exception e) {
-            return ServerResponse.createByError();
-        }
-
+        dishCatelogList = dishCatelogMapper.selectList();
+        return ServerResponse.createBySuccess(dishCatelogList);
     }
 }

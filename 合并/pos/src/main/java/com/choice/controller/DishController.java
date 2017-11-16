@@ -1,10 +1,10 @@
 package com.choice.controller;
 
 import java.util.List;
-
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,6 +13,7 @@ import com.choice.entity.Dish;
 import com.choice.service.DishService;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/dish")
@@ -21,41 +22,101 @@ public class DishController {
 	private DishService dishService;
 
 
+	/**
+	 * 根据菜品分类id查询该分类下所有菜品
+	 * @param catelog
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "catelog")
 	@ResponseBody
-	public ServerResponse queryDishByCatelog(String catelog,HttpServletResponse response) {
+	public ServerResponse queryDishByCatelog(String catelog, HttpServletResponse response) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return dishService.queryDishByCatelog(catelog);
 	}
+
+	/**
+	 * 新增菜品
+	 * @param dish
+	 * @param result
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "add")
 	@ResponseBody
-	public ServerResponse addDish(Dish dish,HttpServletResponse response){
+	public ServerResponse addDish(@Valid Dish dish, BindingResult result, HttpServletResponse response)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
+		if(result.hasErrors()){
+			StringBuffer sb = new StringBuffer();
+			List<FieldError> fieldErrorList = result.getFieldErrors();
+			for(FieldError fieldError:fieldErrorList){
+				sb.append(fieldError.getField()+":"+fieldError.getDefaultMessage()+";");
+			}
+			return ServerResponse.createByErrorMessage(sb.toString());
+		}
 		return dishService.addDish(dish);
 	}
+
+	/**
+	 * 更新菜品
+	 * @param dish
+	 * @param result
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("update")
 	@ResponseBody
-	public ServerResponse updateDish(Dish dish,HttpServletResponse response){
+	public ServerResponse updateDish(@Valid Dish dish, BindingResult result,HttpServletResponse response)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
+		if(result.hasErrors()){
+			StringBuffer sb = new StringBuffer();
+			List<FieldError> fieldErrorList = result.getFieldErrors();
+			for(FieldError fieldError:fieldErrorList){
+				sb.append(fieldError.getField()+":"+fieldError.getDefaultMessage()+";");
+			}
+			return ServerResponse.createByErrorMessage(sb.toString());
+		}
 		return dishService.updateDish(dish);
 	}
 
+	/**
+	 * 删除菜品
+	 * @param id
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("delete")
 	@ResponseBody
-	public ServerResponse deleteDish(Integer id,HttpServletResponse response){
+	public ServerResponse deleteDish(Integer id,HttpServletResponse response)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return dishService.deleteDish(id);
 	}
 
+	/**
+	 * 根据菜品汉拼首字母模糊查询菜品
+	 * @param cn
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("cn")
 	@ResponseBody
-	public ServerResponse<List<Dish>> queryDishByCn(String cn,HttpServletResponse response){
+	public ServerResponse<List<Dish>> queryDishByCn(String cn,HttpServletResponse response)throws Exception{
+
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return dishService.queryDishByCn(cn);
 	}
+
+	/**
+	 * 根据菜品名称和菜品上架时间查询菜品
+	 * @param dName
+	 * @param sdDate
+	 * @param edDate
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("list")
 	@ResponseBody
-	public ServerResponse queryDishByNameAndDate(String dName, String sdDate, String edDate,HttpServletResponse response){
+	public ServerResponse queryDishByNameAndDate(String dName, String sdDate, String edDate,HttpServletResponse response)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return dishService.queryDishByNameAndDate(dName,sdDate,edDate);
 	}
