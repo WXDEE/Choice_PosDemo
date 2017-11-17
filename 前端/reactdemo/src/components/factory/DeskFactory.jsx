@@ -7,9 +7,9 @@ import { Card  } from 'antd';
 import { connect } from 'react-redux'; // 引入connect
 import { pointNowDesk,deskSearch} from '../../action/action';
 const gridStyle = {
-    width: '30px',
+    width: '60px',
     background:'#919191',
-    padding:'10px 34px 10px 28px',
+    padding:'13px 47px 13px 39px',
     margin:5,
     color:'#fbfbfb',
     lineHeight:'5px',

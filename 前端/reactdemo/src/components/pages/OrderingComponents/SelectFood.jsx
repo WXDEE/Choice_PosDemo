@@ -17,7 +17,7 @@ class SelectFood extends React.Component{
         let ScreenHeight=document.body.clientHeight-145; //获取 全屏幕减去title的高度
         const Search = Input.Search;
         return(
-                <Card title="选餐区"  bodyStyle={{ width: '100%',height:0.75*ScreenHeight }}>
+                <Card title="选餐区"  bodyStyle={{ width: '100%',height:0.85*ScreenHeight }}>
                     <Search
                         ref="search"
                         placeholder="请输菜品汉拼首字母"
