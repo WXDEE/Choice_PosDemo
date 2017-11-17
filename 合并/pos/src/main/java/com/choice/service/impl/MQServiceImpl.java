@@ -14,14 +14,14 @@ import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import com.choice.service.MQService;
-@Service
+@Service("MQService")
 public class MQServiceImpl implements MQService{
 	@Resource(name = "jmsTemplate")
 	private JmsTemplate jmsTemplate;
 	
 	public void sendMessage(final String msg){
-        String destination = jmsTemplate.getDefaultDestinationName();
-        System.out.println(Thread.currentThread().getName()+" 向队列"+destination+"发送消息---------------------->"+msg);
+		Destination destination = jmsTemplate.getDefaultDestination();
+        System.out.println(Thread.currentThread().getName()+" 向队列"+destination.toString()+"发送消息---------------------->"+msg);
         jmsTemplate.send(new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
                 return session.createTextMessage(msg);

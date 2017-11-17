@@ -13,6 +13,7 @@ import javax.jms.Session;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -45,6 +46,7 @@ public class OrdersServiceImpl implements OrdersService {
 	@Autowired
 	private ThreadPoolTaskExecutor taskExecutor;
 	@Autowired
+	@Qualifier("MQService")
 	private MQService mQService;
 	@Autowired
 	private OrdersMapper ordersMapper;
@@ -52,8 +54,6 @@ public class OrdersServiceImpl implements OrdersService {
 	private DeskMapper deskMapper;
 	@Autowired
 	private OrderItemMapper orderItemMapper;
-	@Resource(name = "jmsTemplate")
-	private JmsTemplate jmsTemplate;
 	
 	/***
 	 * 增加订单

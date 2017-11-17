@@ -33,6 +33,7 @@ public class OrdersController {
 	@ResponseBody
 	public ServerResponse<OrdersDTO> addOrders(HttpServletResponse response, String data) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
+		System.out.println("新增订单");
 		ServerResponse<OrdersDTO> result = ordersService.addOrders(data);
 		return result;
 	}
