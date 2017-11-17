@@ -11,8 +11,24 @@ const Option = Select.Option;
 function changeTabPosition (tabPosition) {
     this.setState({ tabPosition });
 }
+let inputNumber=null;
 class SelectFood extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            inputNumber:'',
+        }
+        this.doSearch=this.doSearch.bind(this);
+    }
+    doSearch(value){
+        inputNumber = value.target.value;
+        this.setState({
+            inputNumber:inputNumber,
+        })
+        console.log("正在搜索菜品汉字母："+inputNumber+", Type="+typeof inputNumber);
 
+
+    }
     render(){
         let ScreenHeight=document.body.clientHeight-145; //获取 全屏幕减去title的高度
         const Search = Input.Search;
@@ -22,11 +38,11 @@ class SelectFood extends React.Component{
                         ref="search"
                         placeholder="请输菜品汉拼首字母"
                         style={{ width: '100%' }}
-                        onSearch={value=>this.doSearch(value)}
+                        onChange={value=>this.doSearch(value)}
                     />
 
 
-                      <TypeFactory />
+                      <TypeFactory foodShort={this.state.inputNumber} />
 
                 </Card>
         )

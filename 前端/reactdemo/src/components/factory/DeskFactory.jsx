@@ -3,7 +3,7 @@
  *  描述：制造桌子的工厂
  */
 import React from 'react';
-import { Card  } from 'antd';
+import { Card,Spin  } from 'antd';
 import { connect } from 'react-redux'; // 引入connect
 import { pointNowDesk,deskSearch} from '../../action/action';
 const gridStyle = {
@@ -17,7 +17,7 @@ const gridStyle = {
     cursor:'pointer'
 
 };
-
+let loading=true;
 class DeskFactory extends React.Component{
     constructor(props) {
         super(props);
@@ -43,7 +43,11 @@ class DeskFactory extends React.Component{
          })
     }
     render(){
+        if(this.props.loading)loading=false;
         const desk=new Array();
+        let searchDeskNumber=this.props.deskNumber;  //搜索得到的桌子号
+       console.log("【桌子工厂】搜索得到的桌子号="+(searchDeskNumber==''));
+
          for(let i=0,len=this.props.nowAllDeskNumber;i<len;i++){
              desk.push(i);
          }
@@ -54,18 +58,26 @@ class DeskFactory extends React.Component{
         console.log(array);
 
         factory =array.map( (item,index)=> {
-           let number=index+1;
-           if(item.deStatus!=0){
-               return  <Card.Grid style={gridStyle} className="deskError" onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>
-           }else if(this.state.nowClassName==number){
-               return  <Card.Grid style={gridStyle} className="deskSelect" onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>
-           }else
-           return  <Card.Grid style={gridStyle}  onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>
+            let number=index+1;
+            if((searchDeskNumber!=''&&!String(number).indexOf(searchDeskNumber))||searchDeskNumber==''){
+                if(item.deStatus!=0){
+                    return  <Card.Grid style={gridStyle} className="deskError" onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>;
+                }else if(this.state.nowClassName==number){
+                    return  <Card.Grid style={gridStyle} className="deskSelect" onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>;
+                }else
+                    return  <Card.Grid style={gridStyle}  onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>;
+            }
+
+
+
+
        }) }
         return(
-            <Card noHovering bordered={false}>
+            <Spin size="large" spinning={loading} >
+            <Card noHovering bordered={false} className="factoryFood largeFactory">
             {factory}
             </Card>
+            </Spin>
         )
     }
 }
@@ -78,6 +90,7 @@ const mapStateToProps  = (state) => {
               nowDeskInfo:state.httpData.deskInfo,
               nowAllDeskNumber:count,
               orderState:state.httpData.orderState,
+                loading:state.httpData.foodSuccess,
 
     };
 }

@@ -84,13 +84,14 @@ class FoodFactory extends React.Component{
         let nowDeskNum=this.props.nowDeskNumber;
         let nowFoodNum=this.props.getDeskFoodArraynum;
         let factory=null;
-
+        let foodArray=new Array();
         if(nowDeskNum!=null&&this.props.deskTable!=null){
             deskTable=this.props.deskTable[nowDeskNum].foodArray;
-            for(let i=0;i<deskTable.length;i++){
 
+            for(let i=0;i<deskTable.length;i++){
+                foodArray.push(deskTable[i].FoodName);
             }
-            console.log(deskTable);
+            console.log(foodArray);
         }
         if(this.props.loading)loading=false;
 
@@ -99,8 +100,9 @@ class FoodFactory extends React.Component{
 
         factory =this.props.foodMain.map( (item,index) =>{
 
-            if(item.dcId==this.props.fid){
-          if(deskTable.includes(item.dName)) return  <Card.Grid className="foodButton normalFood edFood">{item.dName} {item.dPrice}¥</Card.Grid>
+         if((item.dcId==this.props.fid&&this.props.searchFoodShort=='')||(this.props.searchFoodShort!=''&&!item.dCn.indexOf(this.props.searchFoodShort))){
+          if(foodArray.includes(item.dName))    //控制是否选了这个菜判断
+              return  <Card.Grid className="foodButton normalFood edFood"  onClick={index=>this.addFoods(item.id,nowDeskNum,nowFoodNum,item.dName,item.dPrice,item.dCount)}>{item.dName} {item.dPrice}¥</Card.Grid>
             else if(item.dCount==0) return  <Card.Grid className="foodButton normalFood lackFood">{item.dName} {item.dPrice}¥</Card.Grid>
             else return  <Card.Grid className="foodButton normalFood"
                                     onClick={index=>this.addFoods(item.id,nowDeskNum,nowFoodNum,item.dName,item.dPrice,item.dCount)}>

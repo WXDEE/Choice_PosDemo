@@ -361,6 +361,7 @@ export const orderStateToStore=(data)=>{
 }
 //结账
 export function endOrder(orderNumber,nowDesk) {
+    console.log("id="+orderNumber+"&deNum="+nowDesk);
     return dispatch=>{
         fetch(url.END_ORDER,{
             method:'POST',

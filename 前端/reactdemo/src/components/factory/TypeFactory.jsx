@@ -9,8 +9,14 @@ import FoodFactory from "./FoodFactory";
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 class TypeFactory extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            foodShort:''
+        }
+    }
     render(){
-        const foodList=[
+        let foodList=[
             {name: "特价菜品",id:1},
             {name: "热销菜品" ,id:2 },
             {name: "饮料" ,id:3},
@@ -20,9 +26,14 @@ class TypeFactory extends React.Component{
             {name: "面食",id:7 },
 
         ];
-       let factory =foodList.map(function (item,index) {
+        if(this.props.foodShort!=''&&this.props.foodShort!=null){
+            foodList=[ {name: "搜索",id:0}];
 
-           return  <TabPane tab={item.name} key={index}> <FoodFactory fid={item.name} /> </TabPane>
+        }
+
+       let factory =foodList.map( (item,index)=> {
+
+           return  <TabPane tab={item.name} key={index}> <FoodFactory fid={item.name} searchFoodShort={this.props.foodShort} /> </TabPane>
        })
         return(
             <Tabs tabPosition="left" className="foodTab" size="small ">

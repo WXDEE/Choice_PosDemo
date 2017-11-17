@@ -5,7 +5,8 @@
 
 //请求的远链接
     //部署本机 换为      http://localhost:8080/
-let url="http://30.87.246.189:8080/";
+    //远程   换为        http://30.87.246.189:8080/
+let url="http://localhost:8080/";
 
 //订单页面的初始化
 export const ORDER_INIT = url+'orders/list';
