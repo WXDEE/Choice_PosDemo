@@ -6,6 +6,7 @@ import com.choice.dto.OrdersDTO;
 import com.choice.entity.Desk;
 import com.choice.entity.Dish;
 import com.choice.entity.OrderItem;
+import com.choice.mapper.DishMapper;
 import com.choice.mapper.JedisClient;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.service.DeskService;
@@ -34,6 +35,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 	private DishService dishService;
 	@Autowired
 	private JedisClient jedisClient;
+	@Autowired
+	private DishMapper dishMapper;
 	/***
 	 * 通过订单id查询订单明细
 	 */
@@ -74,8 +77,25 @@ public class OrderItemServiceImpl implements OrderItemService {
 	 */
 	@Override
 	public ServerResponse upDish(String ordersItemId) {
-		Integer sta=orderItemMapper.updateDishStatus(ordersItemId);
-		return ServerResponse.createBySuccess();
+		/*获取该订单详情*/
+		OrderItem item=orderItemMapper.selectOrderItemByOrderInemId(ordersItemId);
+		/*	根据菜品的id获取菜品的库存*/
+		Dish dish=dishMapper.selectDishByIdCount(item.getdId());
+		Integer a=Integer.parseInt(dish.getdCount());
+		/*如果当前菜品需要上菜的数量小于等于库存   则上菜*/
+		//当前需要上菜的数量
+		Integer b=Integer.parseInt(item.getOiCount());
+		if(b<=a){
+			/*更新库存数量*/
+			dish.setdCount(a-b+"");
+			dishMapper.updateDish(dish);
+			/*修改上菜的状态*/
+			Integer sta=orderItemMapper.updateDishStatus(ordersItemId);
+			return ServerResponse.createBySuccess();
+		}else{
+			return  ServerResponse.createByErrorMessage(dish.getdName()+"仅剩下"+a+"份！");
+		}
+		
 	}
 	/***
 	 * 取出所有菜品
