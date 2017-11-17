@@ -13,7 +13,7 @@ class LackFood extends React.Component{
         let ScreenHeight=document.body.clientHeight-145; //获取 全屏幕减去title的高度
         return(
             <div >
-                <Card title="售空菜品"  bodyStyle={{ width: '100%',height:0.15*ScreenHeight }} >
+                <Card title="售空菜品区"  bodyStyle={{ width: '100%',height:0.15*ScreenHeight }} >
                     <LackFoodFactory/>
                 </Card>
             </div>

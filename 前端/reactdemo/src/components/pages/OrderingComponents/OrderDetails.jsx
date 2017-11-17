@@ -247,7 +247,7 @@ class SelectFood extends React.Component{
        }
         return(
             <div >
-                <Card title="订单明细"   bodyStyle={{ width: '100%',height:ScreenHeight }} className="orderDetails">
+                <Card title="订单明细区"   bodyStyle={{ width: '100%',height:ScreenHeight }} className="orderDetails">
                     <table className="listInfoOrdering titleTable">
                         <tbody>
                         <tr className="listTableImportant">

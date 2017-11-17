@@ -17,7 +17,7 @@ class PendOrder extends React.Component{
 
         return(
             <div>
-                <Card title="待处理订单"  bodyStyle={{ width: '100%',height:ScreenHeight }}>
+                <Card title="选桌区"  bodyStyle={{ width: '100%',height:ScreenHeight }}>
                     <Search
                         ref="search"
                         placeholder="输入桌号"
