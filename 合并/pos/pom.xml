@@ -113,6 +113,11 @@
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
@@ -237,8 +242,22 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
-
-
+        <dependency>
+	      <groupId>org.springframework</groupId>
+	      <artifactId>spring-messaging</artifactId>
+	      <version>4.1.6.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax</groupId>
+		    <artifactId>javaee-api</artifactId>
+		    <version>7.0</version>
+		    <scope>provided</scope>
+		</dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
