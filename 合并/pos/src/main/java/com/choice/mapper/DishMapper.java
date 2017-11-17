@@ -2,8 +2,6 @@ package com.choice.mapper;
 
 import com.choice.entity.Dish;
 import org.apache.ibatis.annotations.Param;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface DishMapper {
