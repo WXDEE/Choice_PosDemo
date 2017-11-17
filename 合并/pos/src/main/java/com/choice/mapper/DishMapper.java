@@ -3,6 +3,7 @@ package com.choice.mapper;
 import com.choice.entity.Dish;
 import org.apache.ibatis.annotations.Param;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface DishMapper {
@@ -31,5 +32,6 @@ public interface DishMapper {
     Integer selectEmptyCount();
     //查询所有菜品数量
     Integer selectDishCount();
-
+    //根据菜品id查询菜品库存
+    Integer selectDishByIdCount(String id);
 }

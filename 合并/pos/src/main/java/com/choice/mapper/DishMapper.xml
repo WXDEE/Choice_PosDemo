@@ -148,4 +148,7 @@
     <select id="selectDishCount" resultType="java.lang.Integer">
         select count(1) from dish where d_status = '1';
     </select>
+    <select id="selectDishByIdCount" resultType="java.lang.Integer">
+        select count(1) from dish where where id = #{id} d_status = '1';
+    </select>
 </mapper>
