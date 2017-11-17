@@ -49,6 +49,7 @@ export function foodInit(){
                 }
                 response.json().then(data=>{
                     dispatch(foodInitDo(data));
+                    console.log(data);
                 });
             }).catch(function (err) {
                 console.log("fetch错误："+err);
@@ -238,6 +239,8 @@ export function addFood(data) {
 //修改菜品
 export function uploadFood(data) {
     console.log(data);
+    console.log( "id="+data.id+"&dMaterial ="+data.dMaterial+"&dPrice="+data.dPrice
+        +"&dRemark ="+data.dRemark+"&dCount="+data.dCount);
     return dispatch=>{
         fetch("http://30.87.246.189:8080/dish/update",{
             method:'POST',
