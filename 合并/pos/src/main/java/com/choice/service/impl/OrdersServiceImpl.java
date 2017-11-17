@@ -98,19 +98,25 @@ public class OrdersServiceImpl implements OrdersService {
 		}
     }
 
-	//查询订单的总数
+	/**
+	 * 统计订单总数
+	 */
 	public ServerResponse<String> queryOrdersCount() throws Exception{
 		String OrdersCount=ordersMapper.selectOrdesCount();
 		return ServerResponse.createBySuccess(OrdersCount);
 
 	}
-	//查询订单的总金额
+	/**
+	 * 统计营业额
+	 */
 	public ServerResponse<String> querySumTotal()throws Exception {
 
 		String SumTotal=ordersMapper.selectOrdersToatal();
 		return ServerResponse.createBySuccess(SumTotal);
 	}
-	//结账的功能
+	/**
+	 * 结账功能
+	 */
 	@Transactional
 	public ServerResponse settleAccount(String id,String deNum) throws Exception{
 		//释放桌子
@@ -120,7 +126,9 @@ public class OrdersServiceImpl implements OrdersService {
 		return ServerResponse.createBySuccess();
 	}
 
-	//订单的模糊查询
+	/**
+	 * 订单的模糊查询
+	 */
 		@Override
 		public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) throws Exception{
 			// TODO Auto-generated method stub

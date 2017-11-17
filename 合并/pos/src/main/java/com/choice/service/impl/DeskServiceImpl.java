@@ -20,20 +20,26 @@ public class DeskServiceImpl implements DeskService {
 	@Autowired
 	JedisClient jedisClient;
 
-	//查询所有的桌子
+	/**
+	 * 查询所有桌子的方法
+	 */
 	public ServerResponse<List<Desk>> queryAllDesk() throws Exception{
 		List<Desk> desks=deskMapper.selectAllDesk();
 		return ServerResponse.createBySuccess(desks);
 
 	}
-	//根据桌子编号查询桌子
+	/**
+	 * 根据桌子编号查询桌子
+	 */
 	public ServerResponse<Desk> queryDeskByNum(String num) throws Exception{
 		Desk desk=deskMapper.selectDeskById(num);
 		return ServerResponse.createBySuccess(desk);
 
 	}
 
-	//修改桌子状态
+	/**
+	 * 修改桌子状态  
+	 */
 	@Override
 	public ServerResponse updateDeskStatusByNum(String deNum,String status) throws Exception{
 		// TODO Auto-generated method stub
