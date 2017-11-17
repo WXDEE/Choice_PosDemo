@@ -7,3 +7,4 @@
 /node_modules
 workspace.xml
 
+合并/pos/src/main/resources/spring/applicationContext-ActiveMQ.xml

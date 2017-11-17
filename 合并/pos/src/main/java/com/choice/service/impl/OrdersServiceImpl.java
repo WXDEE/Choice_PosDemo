@@ -25,6 +25,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
 import com.choice.entity.Desk;
+import com.choice.entity.Dish;
 import com.choice.entity.OrderItem;
 import com.choice.entity.Orders;
 import com.choice.mapper.DeskMapper;
@@ -48,6 +49,9 @@ public class OrdersServiceImpl implements OrdersService {
 	@Autowired
 	@Qualifier("MQService")
 	private MQService mQService;
+	@Autowired
+	@Qualifier("SetCountMQService")
+	private MQService mQService2;
 	@Autowired
 	private OrdersMapper ordersMapper;
 	@Autowired
@@ -123,7 +127,21 @@ public class OrdersServiceImpl implements OrdersService {
 		Integer sta=ordersMapper.updateOrdersStatus(id);
 		//修改付款状态
 		Integer stb=deskMapper.updateDeskStatusByNum(deNum, "0");
+		printCount(id+"号桌顾客结账！");
 		return ServerResponse.createBySuccess();
+	}
+	/**
+	 * 异步向mq发送消息
+	 * @param dish
+	 */
+	public void printCount(String str){
+		//从线程池中取出一个线程向mq发送订单消息
+		taskExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+				mQService2.sendMessage(str);
+			}
+		});
 	}
 
 	/**
