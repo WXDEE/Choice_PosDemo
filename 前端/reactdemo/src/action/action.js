@@ -251,8 +251,8 @@ export function uploadFood(data) {
             mode: 'cors',
             credentials: 'credentials',
             cache: 'default',
-            body: "id="+data.id+"&dMaterial ="+data.dMaterial+"&dPrice="+data.dPrice
-            +"&dRemark ="+data.dRemark+"&dCount="+data.dCount,
+            body: "id="+data.id+"&dMaterial="+data.dMaterial+"&dPrice="+data.dPrice
+            +"&dRemark="+data.dRemark+"&dCount="+data.dCount,
         }).then((response)=>{
             if(response.status!==200){
                 console.log("存入数据时出错，状态码为"+response.status);
