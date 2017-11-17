@@ -24,10 +24,10 @@ function warning() {
         content: '请选择桌号！',
     });
 }
-function error() {
+function error(msg) {
     Modal.error({
         title: '抱歉',
-        content: '本菜品已经售空！',
+        content: msg,
     });
 }
 let loading=true;
@@ -46,13 +46,31 @@ class FoodFactory extends React.Component{
     }
     addFoods(index,nowDeskNum,nowFoodNum,foodName,foodPrice,foodNum){
         const { addFoodDetails } = this.props;
-        console.log(nowDeskNum);
+
+        //获取当前桌子状态
+        let nowDeskInfo=this.props.deskInfo;
+        console.log(nowDeskInfo);
+        let deskStatus=0;
+        if(nowDeskInfo!=null){
+            for(let i=0,index=nowDeskInfo.length;i<index;i++ ){
+               if(nowDeskInfo[i].id==this.props.nowDeskNumber){
+                   deskStatus=nowDeskInfo[i].deStatus;
+               }
+            }
+        }
+
         if(nowDeskNum==null){
             console.log("请选择桌号");
             warning();
         }else{
-        addFoodDetails(index,nowDeskNum,nowFoodNum,foodName,foodPrice,foodNum);
-        console.log("给"+nowDeskNum+"桌添加菜品！"+foodName);
+
+            if(deskStatus==0){
+                addFoodDetails(index,nowDeskNum,nowFoodNum,foodName,foodPrice,foodNum);
+                console.log("给"+nowDeskNum+"桌添加菜品！"+foodName);
+            }else{
+                error("订单已经提交，不可以再增加菜品！");
+            }
+
         }
     }
 
@@ -100,7 +118,7 @@ const mapStateToProps  = (state) => {
         getDeskFoodArraynum:foodSum,
         foodMain:state.httpData.foodTable,
         loading:state.httpData.foodSuccess,
-
+        deskInfo:state.httpData.deskInfo,
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上

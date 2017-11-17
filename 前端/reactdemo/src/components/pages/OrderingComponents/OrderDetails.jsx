@@ -235,7 +235,6 @@ class SelectFood extends React.Component{
                    if(fromStoredataArray[i]!=null){
                        dataArray[i].orderID=fromStoredataArray[i].id;
                        dataArray[i].foodStats=fromStoredataArray[i].oiStatus;
-                       console.log(dataArray[i].orderID);
                        if(dataArray[i].foodStats=="未上菜"||dataArray[i].foodStats==0) dataArray[i].func="上菜";
                        else dataArray[i].func= "√";
                    }
