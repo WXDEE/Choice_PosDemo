@@ -3,6 +3,7 @@ package com.choice.service;
 import com.choice.common.ServerResponse;
 import com.choice.entity.Dish;
 import com.github.pagehelper.PageInfo;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface DishService {
     ServerResponse<String> queryDishCountithNotEnough() throws Exception;
     //查询菜品种类数
     ServerResponse<String> queryDishCount()throws Exception;
+    //参数验证
+    ServerResponse judgeAttribute(BindingResult result) throws Exception;
 }

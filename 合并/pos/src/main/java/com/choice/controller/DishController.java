@@ -47,12 +47,7 @@ public class DishController {
 	public ServerResponse addDish(@Valid Dish dish, BindingResult result, HttpServletResponse response)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		if(result.hasErrors()){
-			StringBuffer sb = new StringBuffer();
-			List<FieldError> fieldErrorList = result.getFieldErrors();
-			for(FieldError fieldError:fieldErrorList){
-				sb.append(fieldError.getField()+":"+fieldError.getDefaultMessage()+";");
-			}
-			return ServerResponse.createByErrorMessage(sb.toString());
+			return dishService.judgeAttribute(result);
 		}
 		return dishService.addDish(dish);
 	}
@@ -68,14 +63,8 @@ public class DishController {
 	@ResponseBody
 	public ServerResponse updateDish(@Valid Dish dish, BindingResult result,HttpServletResponse response)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		System.out.println(dish);
 		if(result.hasErrors()){
-			StringBuffer sb = new StringBuffer();
-			List<FieldError> fieldErrorList = result.getFieldErrors();
-			for(FieldError fieldError:fieldErrorList){
-				sb.append(fieldError.getField()+":"+fieldError.getDefaultMessage()+";");
-			}
-			return ServerResponse.createByErrorMessage(sb.toString());
+			return dishService.judgeAttribute(result);
 		}
 		return dishService.updateDish(dish);
 	}
@@ -174,5 +163,5 @@ public class DishController {
 		ServerResponse<List<Dish>> result = dishService.queryDishWithNone();
 		return result;
 	}
-	
+
 }
