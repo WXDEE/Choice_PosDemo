@@ -60,6 +60,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 		Map<String, String> orderMap = ordersService.selectToItem(ordersId);
 		//封装进ordersdto
 		while(orderMap != null && orderMap.size() > 0){
+			ordersDTO.setId(Integer.parseInt(ordersId));
 			ordersDTO.setoNum(orderMap.get("o_num"));
 			ordersDTO.setDeId(orderMap.get("de_id"));
 			ordersDTO.setoDate(orderMap.get("o_date"));
@@ -87,8 +88,10 @@ public class OrderItemServiceImpl implements OrderItemService {
 		Integer b=Integer.parseInt(item.getOiCount());
 		if(b<=a){
 			/*更新库存数量*/
+			dish.setId(Integer.parseInt(item.getdId()));
 			dish.setdCount(a-b+"");
 			dishMapper.updateDish(dish);
+			jedisClient.expire(Const.DISH_CACHE, 0);
 			/*修改上菜的状态*/
 			Integer sta=orderItemMapper.updateDishStatus(ordersItemId);
 			return ServerResponse.createBySuccess();

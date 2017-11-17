@@ -124,10 +124,10 @@ public class OrdersServiceImpl implements OrdersService {
 	@Transactional
 	public ServerResponse settleAccount(String id,String deNum) throws Exception{
 		//释放桌子
-		Integer sta=ordersMapper.updateOrdersStatus(id);
-		//修改付款状态
 		Integer stb=deskMapper.updateDeskStatusByNum(deNum, "0");
-		printCount(id+"号桌顾客结账！");
+		//修改付款状态
+		Integer sta=ordersMapper.updateOrdersStatus(id);
+		printCount(deNum+"号桌顾客结账！");
 		return ServerResponse.createBySuccess();
 	}
 	/**

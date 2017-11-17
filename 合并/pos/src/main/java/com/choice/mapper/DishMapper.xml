@@ -149,6 +149,6 @@
         select count(1) from dish where d_status = '1';
     </select>
     <select id="selectDishByIdCount" resultType="Dish">
-        select d_name,d_count from dish where id = #{id};
+        select d_name,d_count from dish where id = #{_parament};
     </select>
 </mapper>
