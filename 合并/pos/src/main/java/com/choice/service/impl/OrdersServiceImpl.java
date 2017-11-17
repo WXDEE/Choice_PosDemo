@@ -121,37 +121,56 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	//订单的模糊查询
-	@Override
-	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) throws Exception{
-		// TODO Auto-generated method stub
-		//前端未选择查询条件时  为全部查询
-		if("undefined".equals(sDate)||"undefined".equals(eDate)){
-			sDate=null;
-			eDate=null;
+		@Override
+		public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) throws Exception{
+			// TODO Auto-generated method stub
+				//前端未选择查询条件时  为全部查询  
+				if("undefined".equals(sDate)||"undefined".equals(eDate)
+						||StringUtils.isBlank(sDate)||StringUtils.isBlank(eDate)){
+					sDate=null;
+					eDate=null;
+				}
+				if(sDate!=null){
+					sDate = sDate + " 00:00:00";
+					eDate = eDate + " 23:59:59";
+				}
+				List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
+				List<Orders> orders1=setdeNumToOrders(orders);
+				List<Orders> orders2=setOrdersStatus(orders1);
+				return ServerResponse.createBySuccess(orders2);
 		}
-		if(sDate!=null){
-			sDate = sDate + " 00:00:00";
-			eDate = eDate + " 23:59:59";
-		}
-		List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
-		//查询相应的桌号  封装到订单
-		List<Desk> desks=deskMapper.selectAllDesk();
-		Map<String, String> map=new HashMap<String, String>();
-		for (Desk desk : desks) {
-			map.put(desk.getId().toString(), desk.getDeNum());
-		}
-		//将付款的状态转化为字符串  封装到订单
-		for (Orders orders2 : orders) {
-			orders2.setDeId(map.get(orders2.getDeId()));
-			switch(orders2.getoStatus()){
-				case "0":orders2.setoStatus("已下单 ");break;
-				case "1":orders2.setoStatus("代付款 ");break;
-				case "2":orders2.setoStatus("已结账 ");break;
-				default :break;
+			/**
+			 * //查询相应的桌号  封装到订单 
+			 * @param orders
+			 * @return orders
+			 */
+			public List<Orders>  setdeNumToOrders(List<Orders> orders){
+				List<Desk> desks=deskMapper.selectAllDesk();
+				Map<String, String> map=new HashMap<String, String>();
+				for (Desk desk : desks) {
+					map.put(desk.getId().toString(), desk.getDeNum());
+				}
+				for (Orders orders2 : orders) {
+					orders2.setDeId(map.get(orders2.getDeId()));
+				}
+				return orders;
 			}
-		}
-		return ServerResponse.createBySuccess(orders);
-	}
+			/**
+			 * 将付款的状态转化为字符串  封装到订单  
+			 * @param orders
+			 * @return orders
+			 */
+			public List<Orders> setOrdersStatus(List<Orders> orders){
+				for (Orders orders2 : orders) {
+					switch(orders2.getoStatus()){
+					 case "0":orders2.setoStatus("已下单 ");break;
+					 case "1":orders2.setoStatus("代付款 ");break;
+					 case "2":orders2.setoStatus("已结账 ");break;
+					 default :break;
+					}
+				}
+				return orders;
+			}
 	/**
 	 * 从订单中获取订单号，桌号，总金额，下单时间
 	 */
