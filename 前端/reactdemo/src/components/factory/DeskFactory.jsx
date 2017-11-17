@@ -22,6 +22,7 @@ class DeskFactory extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            nowClassName:'',
         }
         this.nowDeskNumber=this.nowDeskNumber.bind(this);
         this.handleGetDeskAll=this.handleGetDeskAll.bind(this);
@@ -37,6 +38,9 @@ class DeskFactory extends React.Component{
          const { pointNowDesk } = this.props;
          pointNowDesk(number);
         console.log("现在指定的桌号为："+number);
+         this.setState({
+             nowClassName:number,
+         })
     }
     render(){
         const desk=new Array();
@@ -52,8 +56,10 @@ class DeskFactory extends React.Component{
            let number=index+1;
            if(item.deStatus!=0){
                return  <Card.Grid style={gridStyle} className="deskError" onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>
+           }else if(this.state.nowClassName==number){
+               return  <Card.Grid style={gridStyle} className="deskSelect" onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>
            }else
-           return  <Card.Grid style={gridStyle} onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>
+           return  <Card.Grid style={gridStyle}  onClick={number=>this.nowDeskNumber(index+1)}>{number}</Card.Grid>
        }) }
         return(
             <Card noHovering bordered={false}>

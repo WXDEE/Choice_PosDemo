@@ -31,7 +31,7 @@ class LackFoodFactory extends React.Component{
         let factory=null;
         if(this.props.foodMain!=null){
           factory =this.props.foodMain.map(function (item) {
-          if(item.dCount==0) return  <Card.Grid className="foodButton lackFood" onClick={error}>{item.dName} {item.dPrice}¥</Card.Grid>
+          if(item.dCount==0) return  <Card.Grid className="foodButton lackFood" >{item.dName} {item.dPrice}¥</Card.Grid>
        })}
         return(
             <Spin size="large" spinning={loading} >

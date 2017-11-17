@@ -74,7 +74,7 @@ class FoodFactory extends React.Component{
 
             if(item.dcId==this.props.fid){
            /* if(item.dCount>0&&item.dCount<50) return  <Card.Grid className="foodButton normalFood edFood">{item.dName} {item.dPrice}¥</Card.Grid>
-            else*/ if(item.dCount==0) return  <Card.Grid className="foodButton normalFood lackFood" onClick={error}>{item.dName} {item.dPrice}¥</Card.Grid>
+            else*/ if(item.dCount==0) return  <Card.Grid className="foodButton normalFood lackFood">{item.dName} {item.dPrice}¥</Card.Grid>
             else return  <Card.Grid className="foodButton normalFood"
                                     onClick={index=>this.addFoods(item.id,nowDeskNum,nowFoodNum,item.dName,item.dPrice,item.dCount)}>
                     {item.dName} {item.dPrice}¥
