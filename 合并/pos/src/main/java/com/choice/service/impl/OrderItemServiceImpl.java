@@ -19,11 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
+	private static final Logger log = Logger.getLogger(OrdersServiceImpl.class);
 	@Autowired
 	private OrdersService ordersService;
 	@Autowired
@@ -60,6 +62,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 			ordersDTO.setoDate(orderMap.get("o_date"));
 			ordersDTO.setoTotal(orderMap.get("o_total"));
 			ordersDTO.setOrderItemList(orderItemList);
+			log.debug("订单明细：" + ordersDTO);
 			ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
 			return result;
 		}

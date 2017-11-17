@@ -68,6 +68,7 @@ public class DishController {
 	@ResponseBody
 	public ServerResponse updateDish(@Valid Dish dish, BindingResult result,HttpServletResponse response)throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
+		System.out.println(dish);
 		if(result.hasErrors()){
 			StringBuffer sb = new StringBuffer();
 			List<FieldError> fieldErrorList = result.getFieldErrors();

@@ -11,6 +11,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -38,6 +39,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
 public class OrdersServiceImpl implements OrdersService {
+	private static final Logger log = Logger.getLogger(OrdersServiceImpl.class);
 	@Autowired
 	private OrderItemService orderItemService;
 	@Autowired
@@ -74,7 +76,7 @@ public class OrdersServiceImpl implements OrdersService {
 		ordersDTO.setOrderItemList(orderItemList);
 		//封装为响应对象
 		ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
-        System.out.println("订单生成");
+        log.debug("订单生成:" + ordersDTO);
         //异步向mq发送订单消息
         printOrder(ordersDTO);
         //根据桌子号将桌子改为已使用状态
