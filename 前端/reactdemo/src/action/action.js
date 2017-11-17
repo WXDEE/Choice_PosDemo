@@ -2,7 +2,7 @@
  * Created by Knove on 2017/11/10.
  */
 import * as type from './type';
-import * as url from './url';
+import * as url from './url.js';
 
 //删除菜品从右侧信息栏
 

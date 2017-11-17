@@ -80,9 +80,18 @@ class FoodFactory extends React.Component{
         console.log("现在指定的桌号为："+number);
     }
     render(){
+        let deskTable=new Array(); //当前桌子菜品详情
         let nowDeskNum=this.props.nowDeskNumber;
         let nowFoodNum=this.props.getDeskFoodArraynum;
         let factory=null;
+
+        if(nowDeskNum!=null&&this.props.deskTable!=null){
+            deskTable=this.props.deskTable[nowDeskNum].foodArray;
+            for(let i=0;i<deskTable.length;i++){
+
+            }
+            console.log(deskTable);
+        }
         if(this.props.loading)loading=false;
 
         if(this.props.foodMain!=null){
@@ -91,8 +100,8 @@ class FoodFactory extends React.Component{
         factory =this.props.foodMain.map( (item,index) =>{
 
             if(item.dcId==this.props.fid){
-           /* if(item.dCount>0&&item.dCount<50) return  <Card.Grid className="foodButton normalFood edFood">{item.dName} {item.dPrice}¥</Card.Grid>
-            else*/ if(item.dCount==0) return  <Card.Grid className="foodButton normalFood lackFood">{item.dName} {item.dPrice}¥</Card.Grid>
+          if(deskTable.includes(item.dName)) return  <Card.Grid className="foodButton normalFood edFood">{item.dName} {item.dPrice}¥</Card.Grid>
+            else if(item.dCount==0) return  <Card.Grid className="foodButton normalFood lackFood">{item.dName} {item.dPrice}¥</Card.Grid>
             else return  <Card.Grid className="foodButton normalFood"
                                     onClick={index=>this.addFoods(item.id,nowDeskNum,nowFoodNum,item.dName,item.dPrice,item.dCount)}>
                     {item.dName} {item.dPrice}¥
@@ -119,6 +128,7 @@ const mapStateToProps  = (state) => {
         foodMain:state.httpData.foodTable,
         loading:state.httpData.foodSuccess,
         deskInfo:state.httpData.deskInfo,
+        deskTable:state.httpData.deskTable,
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
