@@ -315,7 +315,7 @@ export function deskSearch() {
                 return ;
             }
             response.json().then(json=>{
-               console.log(json);
+               console.log("查询桌子"+json);
                 dispatch(deskAllToStore(json));
             })
         }).catch(err=>{

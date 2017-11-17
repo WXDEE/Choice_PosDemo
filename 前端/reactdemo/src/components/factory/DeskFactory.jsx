@@ -50,6 +50,7 @@ class DeskFactory extends React.Component{
         let factory=null;
          if(this.props.nowDeskInfo!=null){
           let array=this.props.nowDeskInfo;
+        console.log("获取到目前的桌子情况:");
         console.log(array);
 
         factory =array.map( (item,index)=> {
