@@ -6,6 +6,7 @@ import { Button,Input,DatePicker ,Table,Icon,Modal} from 'antd';
 import { addNum ,orderInit,orderSearch,seeOrderDetails} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
+const {RangePicker}=DatePicker;
 let g_date;
 let g_date1;
 //表格状态
@@ -70,12 +71,9 @@ class OrderInfo extends React.Component{
         if(this.props.loading1)loading1=false;
 
         function onChange(date, dateString) {
-            g_date=dateString;
+            g_date=dateString[0];
+            g_date1=dateString[1];
         }
-        function onChange1(date, dateString) {
-            g_date1=dateString;
-        }
-
         const columns = [{
             title: '订单编号',
             dataIndex: 'oNum',
@@ -136,8 +134,7 @@ class OrderInfo extends React.Component{
                 <section className="funcTitle">
                     <div className="normalInput">订单编号 <Input  className="datePicker" value={this.state.value} onChange={this.handleChange}/></div>
                     <div className="normalInput">下单时间
-                        <DatePicker onChange={onChange} className="datePicker" />
-                        至<DatePicker onChange={onChange1} className="datePicker" />
+                        <RangePicker onChange={onChange} className="datePicker" />
                     </div>
                     <div className="normalInput">
                         <Button type="primary" icon="search" onClick={this.handleSearch}>查询</Button>
