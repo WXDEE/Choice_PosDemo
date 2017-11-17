@@ -2,7 +2,7 @@
  * Created by Knove on 2017/11/9.
  */
 import React from 'react';
-import { Button,Input,DatePicker ,Table,Icon,Modal} from 'antd';
+import { Button,Input,DatePicker ,Table,Icon,Modal,Carousel} from 'antd';
 import { addNum ,orderInit,orderSearch,seeOrderDetails} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
@@ -73,6 +73,9 @@ class OrderInfo extends React.Component{
         function onChange(date, dateString) {
             g_date=dateString[0];
             g_date1=dateString[1];
+        }
+        function onChange1(a,b,c) {
+            console.log(a,b,c);
         }
         const columns = [{
             title: '订单编号',
@@ -189,6 +192,35 @@ class OrderInfo extends React.Component{
                         <hr  className="doLine" />
                         <div style={{marginLeft:'10%'}}>共计金额：¥{this.props.orderDetail.oTotal}</div>
                     </Modal>
+                    {/*<Modal*/}
+                        {/*className={"text-center"}*/}
+                        {/*onCancel={this.handleCancel}*/}
+                        {/*visible={this.state.visible}*/}
+                        {/*title={"雄鹰订餐系统使用指南"}*/}
+                        {/*footer={<Button type="primary" onClick={this.handleCancel}>关闭</Button>}*/}
+                    {/*>*/}
+                        {/*<Carousel afterChange={onChange1}>*/}
+                            {/*<div>*/}
+                                {/*<p><b>使用步骤说明</b></p>*/}
+                                {/*<p className={"text-left1"}>*/}
+                                    {/*<p>1、选择可使用餐桌</p>*/}
+                                    {/*<p>2、选择未售完菜品，可对菜品进行数量、删除操作</p>*/}
+                                    {/*<p>3、提交订单</p>*/}
+                                    {/*<p>4、对已上菜品进行上菜标记</p>*/}
+                                    {/*<p>5、结账</p>*/}
+                                {/*</p>*/}
+
+                            {/*</div>*/}
+                            {/*<div>*/}
+                                {/*<p><b>各区域详细说明</b></p>*/}
+                                {/*<p className={"text-left"}><b>选桌区：</b>显示所有餐桌的使用情况。红色表示餐桌正在使用，灰色表示餐桌未使用，绿色表示餐桌正在点单。</p>*/}
+                                {/*<p className={"text-left"}><b>售空菜品区：</b>显示当前已售空的所有菜品。</p>*/}
+                                {/*<p className={"text-left"}><b>选餐区：</b>显示餐厅提供的所有菜品。灰色表示菜品可选，红色表示菜品已售空。</p>*/}
+                                {/*<p className={"text-left"}><b>订单明细区：</b>显示当前订单的信息。未提交订单前可删除菜品，提交订单后，菜品不可删除；*/}
+                                    {/*上菜后，点击上菜表示菜品已上；点击结账后，此餐桌处于可使用状态。</p>*/}
+                            {/*</div>*/}
+                        {/*</Carousel>*/}
+                    {/*</Modal>*/}
                 </div>
 
 
