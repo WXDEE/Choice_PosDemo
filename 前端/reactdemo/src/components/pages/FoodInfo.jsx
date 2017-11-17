@@ -8,6 +8,7 @@ import {dataSearch, foodInit, addFood, deleteFood,uploadFood} from '../../action
 import { connect } from 'react-redux'; // 引入connect
 import {Table, Icon, DatePicker, Input, Button, Modal, Form,Select} from 'antd';
 const { TextArea } = Input;
+const {RangePicker}=DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
 let g_date;
@@ -216,10 +217,8 @@ class FoodInfo extends React.Component {
         if(this.props.loading)
             loading=false;
         function onChange(date, dateString) {
-            g_date=dateString;
-        }
-        function onChange1(date, dateString) {
-            g_date1=dateString;
+            g_date=dateString[0];
+            g_date1=dateString[1];
         }
         const columns = [{
             title: '菜品名称',
@@ -265,8 +264,7 @@ class FoodInfo extends React.Component {
                         菜品名称<Input className="datePicker" value={this.state.value} onChange={this.handleChange}/>
                     </div>
                     <div className="smallInput">
-                        上架时间<DatePicker onChange={onChange} className="datePicker"/>
-                        至<DatePicker onChange={onChange1} className="datePicker"/>
+                        上架时间<RangePicker onChange={onChange} className="datePicker"/>
                     </div>
                     <div className="smallInput">
                         <Button type="primary" icon="search" onClick={this.handleSearch}>查询</Button>
