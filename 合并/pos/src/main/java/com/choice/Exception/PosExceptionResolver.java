@@ -21,7 +21,7 @@ public class PosExceptionResolver implements HandlerExceptionResolver {
             httpServletResponse.setContentType("text/html;charset=utf-8");
             PrintWriter printWriter = httpServletResponse.getWriter();
             printWriter.print(JsonUtils.objectToJson(serverResponse));
-            logger.info(e.getClass()+":"+e.getMessage());
+            logger.error(e.getClass()+":"+e.getMessage());
         } catch (IOException e1) {
             e1.printStackTrace();
         }

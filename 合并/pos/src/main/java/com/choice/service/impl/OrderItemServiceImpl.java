@@ -43,9 +43,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 	@Transactional
     public ServerResponse<OrdersDTO> queryOrderItemByOrdersId(String ordersId) throws Exception{
 		OrdersDTO ordersDTO = new OrdersDTO();
+		Map<String, String> map = new HashMap<String, String>();
 		//取dish列表
 		List<Dish> dishList = queryAllDish();
-		Map<String, String> map = new HashMap<String, String>();
 		//将菜品id，菜品名称封装进map
 		List<OrderItem> orderItemList = orderItemMapper.selectByOid(ordersId);
 		for (Dish dish : dishList) {
@@ -67,6 +67,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 			ordersDTO.setoTotal(orderMap.get("o_total"));
 			ordersDTO.setOrderItemList(orderItemList);
 			log.debug("订单明细：" + ordersDTO);
+			//封装为响应对象
 			ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
 			return result;
 		}

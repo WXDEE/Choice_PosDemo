@@ -17,7 +17,7 @@ public class WSHandler implements WebSocketHandler{
 	@Override  
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {  
         System.out.println("connect to the websocket success......");  
-        session.sendMessage(new TextMessage("Server:connected OK!"));  
+        session.sendMessage(new TextMessage("Server:connected OK!")); 
     }  
   
     @Override  
@@ -33,6 +33,7 @@ public class WSHandler implements WebSocketHandler{
         if(wss.isOpen()){  
             wss.close();  
         }  
+       thrwbl.printStackTrace();
        System.out.println("websocket connection closed......");  
     }  
   
