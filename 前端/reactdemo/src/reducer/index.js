@@ -31,7 +31,11 @@ const httpData = (state = initialList, action) => {
             return subEach11;
             break;
         case type.ORDER_LIST_PAGENUMBER:
-            return Object.assign({},state, {orderTableByPageNumber:action.data.data.list,success:action.data.success,allOrderNumber:action.data.data.total});
+            return Object.assign({},state, {orderTableByPageNumber:action.data.data.olist,
+                success:action.data.success,
+                allOrderNumber:action.data.data.totalOrders,
+                allMoney:action.data.data.ototal
+            });
             break;
         case type.REQUEST_ORDER:
             return Object.assign({},state, {orderTable:action.data.data,success:action.data.success});

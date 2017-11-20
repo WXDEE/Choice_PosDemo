@@ -152,9 +152,9 @@ class OrderInfo extends React.Component{
 
                 </section>
                 <div className="tableMain">
-                    <span className="tableDate">营业额：<span className="tableMoney">¥{this.props.OrderPriceSum}</span></span>
+                    <span className="tableDate">营业额：<span className="tableMoney">¥{this.props.allMoney}</span></span>
                     <span className="tableDate">| </span>
-                    <span className="tableDate">订单量：<span className="tableMoney">{this.props.OrderSum}笔</span></span>
+                    <span className="tableDate">订单量：<span className="tableMoney">{this.props.pageTotal}笔</span></span>
                     <Table
                         columns={columns}
                       /*  dataSource={this.props.mainTable}*/
@@ -241,7 +241,9 @@ const mapStateToProps  = (state) => {
         orderDetailTable:array, //订单详情表格
         loading1:state.httpData.success1,
         orderTableByPageNumber:state.httpData.orderTableByPageNumber,
-        pageTotal:state.httpData.allOrderNumber
+        pageTotal:state.httpData.allOrderNumber,
+        allMoney:state.httpData.allMoney
+
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上

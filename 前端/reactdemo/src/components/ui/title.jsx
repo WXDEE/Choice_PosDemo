@@ -3,6 +3,16 @@
  */
 import React from 'react';
 import {  Menu, Dropdown,Icon,Modal,Carousel,Button} from 'antd';
+function send_echo() {
+    let wsUri = "ws://30.87.246.189:8080/websocket";
+    let echo_websocket = new WebSocket(wsUri);
+    echo_websocket.onmessage = function (evt) {
+        writeToScreen(JSON.parse(evt.data));//转为数组
+    };
+}
+function writeToScreen(message) {
+       console.log(message);
+}
 
 const rightMenu = (
     <Menu>
@@ -27,6 +37,7 @@ class Title extends React.Component{
         }
         this.showModal=this.showModal.bind(this);
         this.handleCancel=this.handleCancel.bind(this);
+        send_echo();
     }
     showModal(){
         this.setState({
