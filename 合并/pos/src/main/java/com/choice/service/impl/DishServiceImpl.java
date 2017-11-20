@@ -190,31 +190,31 @@ public class DishServiceImpl implements DishService {
 	}
 	public void DishUndefinedToNull(Dish dish){
 
-		if(dish.getDcId()!=null&&dish.getDcId().equals("undefined")){
+		if(dish.getDcId()!=null&&(dish.getDcId().equals("undefined")||dish.getDcId().equals("null"))){
 			dish.setDcId(null);
 		}
-		if(dish.getdName()!=null&&dish.getdName().equals("undefined")) {
+		if(dish.getdName()!=null&&(dish.getdName().equals("undefined")||dish.getdName().equals("null"))) {
 			dish.setdName(null);
 		}
-		if(dish.getdCn()!=null&&dish.getdCn().equals("undefined")) {
+		if(dish.getdCn()!=null&&(dish.getdCn().equals("undefined")||dish.getdCn().equals("null"))) {
 			dish.setdCn(null);
 		}
-		if(dish.getdDate()!=null&&dish.getdDate().equals("undefined")) {
+		if(dish.getdDate()!=null&&(dish.getdDate().equals("undefined")||dish.getdDate().equals("null"))) {
 			dish.setdDate(null);
 		}
-		if(dish.getdMaterial()!=null&&dish.getdMaterial().equals("undefined")) {
+		if(dish.getdMaterial()!=null&&(dish.getdMaterial().equals("undefined")||dish.getdMaterial().equals("null"))) {
 			dish.setdMaterial(null);
 		}
-		if(dish.getdRemark()!=null&&dish.getdRemark().equals("undefined")){
+		if(dish.getdRemark()!=null&&(dish.getdRemark().equals("undefined")||dish.getdRemark().equals("null"))){
 			dish.setdRemark(null);
 		}
-		if(dish.getDcId()!=null&&dish.getdCount().equals("undefined")){
+		if(dish.getdCount()!=null&&(dish.getdCount().equals("undefined")||dish.getdCount().equals("null"))){
 			dish.setdCount(null);
 		}
-		if(dish.getdPrice()!=null&&dish.getdPrice().equals("undefined")){
+		if(dish.getdPrice()!=null&&(dish.getdPrice().equals("undefined")||dish.getdPrice().equals("null"))){
 			dish.setdPrice(null);
 		}
-		if(dish.getdStatus()!=null&&dish.getdStatus().equals("undefined")){
+		if(dish.getdStatus()!=null&&(dish.getdStatus().equals("undefined")||dish.getdStatus().equals("null"))){
 			dish.setdStatus(null);
 		}
 	}
