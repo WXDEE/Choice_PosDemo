@@ -71,13 +71,21 @@ class OrderInfo extends React.Component {
             sdDate: g_date,
             edDate: g_date1,
         };
-        const {orderSearch} = this.props;
-        orderSearch(data);
+      /*  const {orderSearch} = this.props;
+        orderSearch(data);*/
+        const {getOrderListByPageNumber} = this.props;
+        getOrderListByPageNumber(1,data.dName,data.sdDate,data.edDate);
+
     }
 
     changePage(page, pageSize) {
+        let data = {
+            dName: this.state.value,
+            sdDate: g_date,
+            edDate: g_date1,
+        };
         const {getOrderListByPageNumber} = this.props;
-        getOrderListByPageNumber(page);
+        getOrderListByPageNumber(page,data.dName,data.sdDate,data.edDate);
         console.log("分页啦！" + "page:" + page + ",pageSize=" + pageSize);
     }
 

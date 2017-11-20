@@ -25,7 +25,7 @@ class UserOrdering extends React.Component {
                     <PendOrder/>
                 </section>
                 <section className="mainCenter" style={{height: ScreenHeight}}>
-                    <LackFood style={{height: '30%'}}/>
+              {/*      <LackFood style={{height: '30%'}}/>*/}
                     <SelectFood style={{height: '70%'}}/>
                 </section>
                 <section className="mainRight">

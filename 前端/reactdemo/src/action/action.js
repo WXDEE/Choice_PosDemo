@@ -511,7 +511,8 @@ export const getOrderInfoByIdToStore = (data) => {
 };
 
 //根据页码数查询订单LIST
-export function getOrderListByPageNumber(pageNumber) {
+export function getOrderListByPageNumber(pageNumber,oNum,sDate,eDate) {
+    console.log('pageNum=' + pageNumber+"&oNum="+oNum+"&sDate="+sDate+"&eDate="+eDate);
     return dispatch => {
         fetch(url.GET_ORDER_BY_PAGENUMBER, {
             method: 'POST',
@@ -522,7 +523,7 @@ export function getOrderListByPageNumber(pageNumber) {
             mode: 'cors',
             credentials: 'credentials',
             cache: 'default',
-            body: 'pageNum=' + pageNumber,
+            body: 'pageNum='+ pageNumber+"&oNum="+oNum+"&sDate="+sDate+"&eDate="+eDate,
         }).then((response) => {
             if (response.status !== 200) {
                 console.log("查看订单明细时出错，状态码为" + response.status);

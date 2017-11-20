@@ -235,7 +235,7 @@ class FoodInfo extends React.Component {
         if (record.dCount == 0) {
             return " bgRed";
         }
-        if (record.dCount < 21) {
+        if (record.dCount < 11) {
             return " bgYellow";
         }
         return "";
