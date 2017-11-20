@@ -73,6 +73,8 @@ public class OrdersServiceImpl implements OrdersService {
 		//获取订单明细，插入订单明细表
 		List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
 		orderItemList = insertOrderItem(orderItemList,orders);
+		//根据桌子号将桌子改为已使用状态
+		deskMapper.updateDeskStatusByNum(ordersDTO.getDeId(), "1");
 		//将orderdto补全
 		ordersDTO.setId(orders.getId());
 		ordersDTO.setoDate(orders.getoDate());
@@ -84,8 +86,6 @@ public class OrdersServiceImpl implements OrdersService {
         log.debug("订单生成:" + ordersDTO);
         //异步向mq发送订单消息
         printOrder(ordersDTO);
-        //根据桌子号将桌子改为已使用状态
-        deskMapper.updateDeskStatusByNum(ordersDTO.getDeId(), "1");
 		return result;
     }
 

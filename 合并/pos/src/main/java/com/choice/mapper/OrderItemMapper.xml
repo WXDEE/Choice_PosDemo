@@ -8,7 +8,7 @@
        </foreach>
     </insert>
     <select id="selectByOid" parameterType="java.lang.String" resultType="OrderItem">
-       select * from order_item where o_id = #{id};
+       select id,o_id,d_id,oi_count,oi_status from order_item where o_id = #{id};
     </select>
     <update id="updateDishStatus">
         update order_item set oi_status="1" where id=#{_parament};
