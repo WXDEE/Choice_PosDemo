@@ -84,9 +84,6 @@ class OrderInfo extends React.Component{
             g_date=dateString[0];
             g_date1=dateString[1];
         }
-        function onChange1(a,b,c) {
-            console.log(a,b,c);
-        }
         const columns = [{
             title: '订单编号',
             dataIndex: 'oNum',
@@ -208,6 +205,7 @@ class OrderInfo extends React.Component{
                         <hr  className="doLine" />
                         <div style={{marginLeft:'10%'}}>共计金额：¥{this.props.orderDetail.oTotal}</div>
                     </Modal>
+
                 </div>
 
 
