@@ -480,3 +480,34 @@ export function getOrderInfoById(id) {
 export const getOrderInfoByIdToStore=(data)=>{
     return {type: type.ORDER_DETAILS_ID,data:data}
 }
+
+//根据页码数查询订单LIST
+export function getOrderListByPageNumber(pageNumber) {
+    return dispatch=>{
+        fetch(url.GET_ORDER_BY_PAGENUMBER,{
+            method:'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            mode: 'cors',
+            credentials: 'credentials',
+            cache: 'default',
+            body:'pageNum='+pageNumber,
+        }).then((response)=>{
+            if(response.status!==200){
+                console.log("查看订单明细时出错，状态码为"+response.status);
+                return ;
+            }
+            response.json().then(json=>{
+                console.log(json);
+                dispatch(getOrderListByPageNumberToStore(json));
+            })
+        }).catch(err=>{
+            console.log("fetch错误"+err);
+        })
+    }
+}
+export const getOrderListByPageNumberToStore=(data)=>{
+    return {type: type.ORDER_LIST_PAGENUMBER,data:data}
+}

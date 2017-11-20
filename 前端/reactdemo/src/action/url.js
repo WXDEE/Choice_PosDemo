@@ -30,7 +30,8 @@ export const SEE_ORDER_DETAILS = url+'orderitem/ordersId';
 export const SUBMIT_FOOD = url+'orderitem/updish';
 //根据订单id查询订单明细
 export const GET_ORDER_INFO = url+'orderitem/ordersId';
-
+//根据页码请求订单list
+export const GET_ORDER_BY_PAGENUMBER = url+'orders/slist';
 
 
 

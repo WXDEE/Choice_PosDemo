@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Button,Input,DatePicker ,Table,Icon,Modal,Carousel} from 'antd';
-import { addNum ,orderInit,orderSearch,seeOrderDetails} from '../../action/action';
+import { addNum ,orderInit,orderSearch,seeOrderDetails,getOrderListByPageNumber} from '../../action/action';
 import { connect } from 'react-redux'; // 引入connect
 import InfoTab from './InfoComponents/InfoTab';
 const {RangePicker}=DatePicker;
@@ -26,8 +26,13 @@ class OrderInfo extends React.Component{
         this.handleCancel=this.handleCancel.bind(this);
         this.handleChange=this.handleChange.bind(this);
         this.handleSearch=this.handleSearch.bind(this);
-        const { orderInit } = this.props;
-        orderInit();
+        this.changePage=this.changePage.bind(this);
+
+        //一次获取全部数据
+    /*    const { orderInit } = this.props;
+        orderInit();*/
+        const {getOrderListByPageNumber}=this.props;
+        getOrderListByPageNumber(1);
     }
     add() {
         const { addNum } = this.props;
@@ -61,6 +66,11 @@ class OrderInfo extends React.Component{
             edDate:g_date1};
         const {orderSearch}=this.props;
         orderSearch(data);
+    }
+    changePage(page,pageSize){
+        const {getOrderListByPageNumber}=this.props;
+        getOrderListByPageNumber(page);
+        console.log("分页啦！"+"page:"+page+",pageSize="+pageSize);
     }
     render(){
 
@@ -150,11 +160,17 @@ class OrderInfo extends React.Component{
                     <span className="tableDate">订单量：<span className="tableMoney">{this.props.OrderSum}笔</span></span>
                     <Table
                         columns={columns}
-                        dataSource={this.props.mainTable}
+                      /*  dataSource={this.props.mainTable}*/
+                        dataSource={this.props.orderTableByPageNumber}
                         className=""
                         size="small"
                         loading={loading}
-                        pagination={{pageSize:5}}
+                        pagination={{
+                            pageSize:5,
+                            onChange:(page,pageSize)=>this.changePage(page,pageSize),
+                            total:this.props.pageTotal
+                        }
+                        }
                     />
                     <Modal
                         title="订单明细"
@@ -192,35 +208,6 @@ class OrderInfo extends React.Component{
                         <hr  className="doLine" />
                         <div style={{marginLeft:'10%'}}>共计金额：¥{this.props.orderDetail.oTotal}</div>
                     </Modal>
-                    {/*<Modal*/}
-                        {/*className={"text-center"}*/}
-                        {/*onCancel={this.handleCancel}*/}
-                        {/*visible={this.state.visible}*/}
-                        {/*title={"雄鹰订餐系统使用指南"}*/}
-                        {/*footer={<Button type="primary" onClick={this.handleCancel}>关闭</Button>}*/}
-                    {/*>*/}
-                        {/*<Carousel afterChange={onChange1}>*/}
-                            {/*<div>*/}
-                                {/*<p><b>使用步骤说明</b></p>*/}
-                                {/*<p className={"text-left1"}>*/}
-                                    {/*<p>1、选择可使用餐桌</p>*/}
-                                    {/*<p>2、选择未售完菜品，可对菜品进行数量、删除操作</p>*/}
-                                    {/*<p>3、提交订单</p>*/}
-                                    {/*<p>4、对已上菜品进行上菜标记</p>*/}
-                                    {/*<p>5、结账</p>*/}
-                                {/*</p>*/}
-
-                            {/*</div>*/}
-                            {/*<div>*/}
-                                {/*<p><b>各区域详细说明</b></p>*/}
-                                {/*<p className={"text-left"}><b>选桌区：</b>显示所有餐桌的使用情况。红色表示餐桌正在使用，灰色表示餐桌未使用，绿色表示餐桌正在点单。</p>*/}
-                                {/*<p className={"text-left"}><b>售空菜品区：</b>显示当前已售空的所有菜品。</p>*/}
-                                {/*<p className={"text-left"}><b>选餐区：</b>显示餐厅提供的所有菜品。灰色表示菜品可选，红色表示菜品已售空。</p>*/}
-                                {/*<p className={"text-left"}><b>订单明细区：</b>显示当前订单的信息。未提交订单前可删除菜品，提交订单后，菜品不可删除；*/}
-                                    {/*上菜后，点击上菜表示菜品已上；点击结账后，此餐桌处于可使用状态。</p>*/}
-                            {/*</div>*/}
-                        {/*</Carousel>*/}
-                    {/*</Modal>*/}
                 </div>
 
 
@@ -255,10 +242,12 @@ const mapStateToProps  = (state) => {
         orderDetail:data,
         orderDetailTable:array, //订单详情表格
         loading1:state.httpData.success1,
+        orderTableByPageNumber:state.httpData.orderTableByPageNumber,
+        pageTotal:state.httpData.allOrderNumber
     };
 }
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
-OrderInfo = connect(mapStateToProps , {addNum,orderInit,orderSearch,seeOrderDetails})(OrderInfo);
+OrderInfo = connect(mapStateToProps , {addNum,orderInit,orderSearch,seeOrderDetails,getOrderListByPageNumber})(OrderInfo);
 export default OrderInfo;
 
 
