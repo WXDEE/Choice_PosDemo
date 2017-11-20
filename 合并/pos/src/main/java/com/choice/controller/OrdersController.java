@@ -70,9 +70,9 @@ public class OrdersController {
 	//根据订单编号和下单时间查询订单（若条件为空不参与查询,分页）
 	@RequestMapping("slist")
 	@ResponseBody
-	public ServerResponse<PageInfo<Orders>> queryOrdersBySearch(HttpServletResponse response,String oNum, String sDate, String eDate,Integer pageNum, Integer pageSize) throws Exception{
+	public ServerResponse<PageInfo<Orders>> queryOrdersBySearch(HttpServletResponse response,String oNum, String sDate, String eDate,Integer pageNum) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		return ordersService.queryOrdersBySearch(oNum, sDate, eDate, pageNum, pageSize);
+		return ordersService.queryOrdersBySearch(oNum, sDate, eDate, pageNum);
 	}
 	//查询订单数量
 	@RequestMapping("count")

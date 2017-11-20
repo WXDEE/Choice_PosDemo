@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.choice.common.Const;
 import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
 import com.choice.entity.Desk;
@@ -169,8 +170,8 @@ public class OrdersServiceImpl implements OrdersService {
 		//订单的模糊查询---分页查询
 		@Override
 		public ServerResponse<PageInfo<Orders>> queryOrdersBySearch(String oNum,
-				String sDate, String eDate, Integer pageNum, Integer pageSize) {
-				PageHelper.startPage(pageNum, pageSize);
+				String sDate, String eDate, Integer pageNum) {
+				PageHelper.startPage(pageNum, Const.ORDERS_NUM);
 				if("undefined".equals(sDate)||"undefined".equals(eDate)
 						||StringUtils.isBlank(sDate)||StringUtils.isBlank(eDate)){
 					sDate=null;
