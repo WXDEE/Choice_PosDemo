@@ -48,6 +48,12 @@ public class DishServiceImpl implements DishService {
 	private MQService mQService;
 	@Autowired
 	private JedisClient jedisClient;
+	/**
+	 * 根据菜品种类id查询菜品
+	 * @param catelog
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse<List<Dish>> queryDishByCatelog(String catelog) throws Exception{
 
 		String json = jedisClient.hget(Const.DISH_CACHE, catelog);
@@ -71,6 +77,12 @@ public class DishServiceImpl implements DishService {
 		return ServerResponse.createBySuccess(dishList);
 	}
 
+	/**
+	 * 新增菜品
+	 * @param dish
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse addDish(Dish dish) throws Exception{
 
 		DishUndefinedToNull(dish);
@@ -104,6 +116,12 @@ public class DishServiceImpl implements DishService {
 		});
 	}
 
+	/**
+	 * 更新菜品
+	 * @param dish
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse updateDish(Dish dish) throws Exception{
 
 		DishUndefinedToNull(dish);
@@ -120,6 +138,12 @@ public class DishServiceImpl implements DishService {
 		}
 	}
 
+	/**
+	 * 删除菜品
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse deleteDish(Integer id) throws Exception{
 		Dish dish = dishMapper.selectDishById(id);
 		Integer result = dishMapper.deleteDishById(id);
@@ -134,12 +158,26 @@ public class DishServiceImpl implements DishService {
 		}
 	}
 
+	/**
+	 * 根据菜品汉拼首字母模糊查询菜品
+	 * @param cn
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse<List<Dish>> queryDishByCn(String cn) throws Exception{
 		List<Dish> dishList = dishMapper.selectDishByCn(cn);
 		dishCatelogIdToName(dishList);
 		return ServerResponse.createBySuccess(dishList);
 	}
 
+	/**
+	 * 根据菜品名称和上架日期查询菜品
+	 * @param dName
+	 * @param sdDate
+	 * @param edDate
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse<List<Dish>> queryDishByNameAndDate(String dName, String sdDate, String edDate) throws Exception{
 
 		if(Strings.isNullOrEmpty(sdDate) || Strings.isNullOrEmpty(edDate)||
@@ -152,6 +190,15 @@ public class DishServiceImpl implements DishService {
 
 	}
 
+	/**
+	 * 先从缓存获取全部的菜
+	 * 若缓存没有，从数据库获取，再放到缓存
+	 * 对日期数据特殊处理
+	 * @param dName
+	 * @param sdDate
+	 * @param edDate
+	 * @return
+	 */
 	public List<Dish> getDishList(String dName, String sdDate, String edDate){
 		List<Dish> dishList  = null;
 		if(Strings.isNullOrEmpty(dName)&&Strings.isNullOrEmpty(sdDate)&&Strings.isNullOrEmpty(edDate)){
@@ -178,6 +225,10 @@ public class DishServiceImpl implements DishService {
 		return dishList;
 	}
 
+	/**
+	 * 把菜品类别id替换为菜品类别名称
+	 * @param dishList
+	 */
 	public void dishCatelogIdToName(List<Dish> dishList) {
 		List<DishCatelog> dishCatelogList = dishCatelogMapper.selectList();
 		Map<String,String> map = new HashMap();
@@ -188,6 +239,12 @@ public class DishServiceImpl implements DishService {
 			dish.setDcId(map.get(dish.getDcId()));
 		}
 	}
+
+
+	/**
+	 * 把"undefined"和"null"替换为null
+	 * @param dish
+	 */
 	public void DishUndefinedToNull(Dish dish){
 
 		if(dish.getDcId()!=null&&(dish.getDcId().equals("undefined")||dish.getDcId().equals("null"))){
@@ -218,6 +275,14 @@ public class DishServiceImpl implements DishService {
 			dish.setdStatus(null);
 		}
 	}
+
+	/**
+	 * 查询全部菜品(分页)
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse<PageInfo> queryDish(Integer pageNum, Integer pageSize) throws Exception{
 		PageHelper.startPage(pageNum,pageSize);
 		List<Dish> dishList = dishMapper.selectDish();
@@ -225,6 +290,12 @@ public class DishServiceImpl implements DishService {
 		return ServerResponse.createBySuccess(pageInfo);
 	}
 
+	/**
+	 * 参数验证
+	 * @param result
+	 * @return
+	 * @throws Exception
+	 */
 	public ServerResponse judgeAttribute(BindingResult result) throws Exception{
 		StringBuffer sb = new StringBuffer();
 		List<FieldError> fieldErrorList = result.getFieldErrors();
