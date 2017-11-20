@@ -5,9 +5,23 @@
 import React from 'react';
 import { Card,Input  } from 'antd';
 import DeskFactory from '../../factory/DeskFactory';
+let inputNumber=null;
 class PendOrder extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            inputNumber:'',
+        }
+        this.doSearch=this.doSearch.bind(this);
+    }
     doSearch(value){
-    console.log(value);
+        inputNumber = value.target.value;
+        this.setState({
+            inputNumber:inputNumber,
+        })
+        console.log("正在搜索桌号："+inputNumber+", Type="+typeof inputNumber);
+
+
     }
 
     render(){
@@ -22,9 +36,10 @@ class PendOrder extends React.Component{
                         ref="search"
                         placeholder="输入桌号"
                         style={{ width: '100%' }}
-                        onSearch={value=>this.doSearch(value)}
+                       /* onSearch={value=>this.doSearch(value)}*/
+                        onChange={value=>this.doSearch(value)}
                     />
-                      <DeskFactory />
+                      <DeskFactory deskNumber={this.state.inputNumber} />
 
                 </Card>
             </div>

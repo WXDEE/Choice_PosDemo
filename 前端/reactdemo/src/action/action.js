@@ -2,7 +2,7 @@
  * Created by Knove on 2017/11/10.
  */
 import * as type from './type';
-import * as url from './url';
+import * as url from './url.js';
 
 //删除菜品从右侧信息栏
 
@@ -361,6 +361,7 @@ export const orderStateToStore=(data)=>{
 }
 //结账
 export function endOrder(orderNumber,nowDesk) {
+    console.log("id="+orderNumber+"&deNum="+nowDesk);
     return dispatch=>{
         fetch(url.END_ORDER,{
             method:'POST',

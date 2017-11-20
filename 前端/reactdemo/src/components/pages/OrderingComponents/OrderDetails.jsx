@@ -9,7 +9,7 @@ import { deleteFoodDetails,numberFoodDetails,pushOrder,endOrder,pointNowDesk,sub
 
 let orderNumber='';
 let orderTime='';
-let orderId=''
+let orderId='';
 function info() {
     Modal.info({
         title: 'This is a notification message',
@@ -67,7 +67,6 @@ class SelectFood extends React.Component{
               deleteFoodDetails(this.props.nowDeskNumber,record.key);
             else if(event.target.innerHTML=="上菜"){
                 g_stats=2;
-                console.log(record);
                 if(record['orderID']!=null){
                     const { submitFood } = this.props;
 
@@ -112,14 +111,21 @@ class SelectFood extends React.Component{
     }
    endOrder(orderNumber){
        const { endOrder,ClearStoreBydeskNumber } = this.props;
-       endOrder(orderNumber,this.props.nowDeskNumber);
-       success('您已成功结账！');
 
-       //删除储存的信息
-       ClearStoreBydeskNumber(this.props.nowDeskNumber);
+              if(orderNumber!=null){
+                  endOrder(orderNumber,this.props.nowDeskNumber);
+                  success('您已成功结账！');
+                  //删除储存的信息
+                  ClearStoreBydeskNumber(this.props.nowDeskNumber);
 
-       //指定目前桌号为空
-       this.nowDeskNumber(null);
+                  //指定目前桌号为空
+                  this.nowDeskNumber(null);
+              }else{
+                  error("错误！");
+              }
+
+
+
 
 
    }
