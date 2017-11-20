@@ -1,51 +1,71 @@
 package com.choice.filter;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.google.common.reflect.TypeToken;
+public class WSHandler extends TextWebSocketHandler{
 
-public class WSHandler implements WebSocketHandler{
-
-	@Override  
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {  
-        System.out.println("connect to the websocket success......");  
-        session.sendMessage(new TextMessage("Server:connected OK!")); 
-    }  
-  
-    @Override  
-    public void handleMessage(WebSocketSession wss, WebSocketMessage<?> wsm) throws Exception {  
-        TextMessage returnMessage = new TextMessage(wsm.getPayload()  
-                + " received at server");  
-        System.out.println(wss.getHandshakeHeaders().getFirst("Cookie"));  
-        wss.sendMessage(returnMessage);  
-    }  
-  
-    @Override
-    public void handleTransportError(WebSocketSession wss, Throwable thrwbl) throws Exception {  
-        if(wss.isOpen()){  
-            wss.close();  
-        }  
-       thrwbl.printStackTrace();
-       System.out.println("websocket connection closed......");  
-    }  
-  
-    @Override  
-    public void afterConnectionClosed(WebSocketSession wss, CloseStatus cs) throws Exception {  
-        System.out.println("websocket connection closed......");  
-    }  
-  
-    @Override  
-    public boolean supportsPartialMessages() {  
-        return false;  
+	
+	private static final ArrayList<WebSocketSession> users;
+	
+	 
+    static {
+        users = new ArrayList<>();
     }
+	
+    @Override
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        super.handleTextMessage(session, message);  
+        TextMessage returnMessage = new TextMessage(message.getPayload()+" received at server");  
+        session.sendMessage(returnMessage);  
+    }
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        System.out.println("connect to the websocket success......");
+        // 从session中取在线用户Cd
+        users.add(session);
+       
+    }
+    
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+        if(session.isOpen()){
+            session.close();
+        }
+        System.out.println("websocket connection closed......");
+        users.remove(session);
+    }
+    
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+    	System.out.println("websocket connection closed......");
+        users.remove(session);
+    }
+    
+    /**
+     * 给所有在线用户发送消息
+     *
+     * @param message
+     */
+    public void sendMessageToUsers(TextMessage message) {
+        for (WebSocketSession user : users) {
+            try {
+                if (user.isOpen()) {
+                    user.sendMessage(message);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+ 
+
 
 
 }

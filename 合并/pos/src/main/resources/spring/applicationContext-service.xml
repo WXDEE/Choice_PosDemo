@@ -54,4 +54,5 @@
         默认使用注解来管理事务
     -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+   <!--  <bean class="com.choice.filter.WSHandler"></bean> -->
 </beans>
