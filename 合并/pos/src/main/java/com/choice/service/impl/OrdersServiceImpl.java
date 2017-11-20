@@ -153,7 +153,10 @@ public class OrdersServiceImpl implements OrdersService {
 		@Override
 		public ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum, String sDate, String eDate) throws Exception{
 			// TODO Auto-generated method stub
-				//前端未选择查询条件时  为全部查询  
+				//前端未选择查询条件时  为全部查询 
+				if("undefined".equals(oNum)){
+					oNum=null;
+				}
 				if("undefined".equals(sDate)||"undefined".equals(eDate)
 						||StringUtils.isBlank(sDate)||StringUtils.isBlank(eDate)){
 					sDate=null;
@@ -173,6 +176,9 @@ public class OrdersServiceImpl implements OrdersService {
 		public ServerResponse<OrdersPage> queryOrdersBySearch(String oNum,
 				String sDate, String eDate, Integer pageNum) {
 				PageHelper.startPage(pageNum, Const.ORDERS_NUM);
+				if("undefined".equals(oNum)){
+					oNum=null;
+				}
 				if("undefined".equals(sDate)||"undefined".equals(eDate)
 						||StringUtils.isBlank(sDate)||StringUtils.isBlank(eDate)){
 					sDate=null;
@@ -186,9 +192,12 @@ public class OrdersServiceImpl implements OrdersService {
 				List<Orders> orders1=setdeNumToOrders(orders);
 				List<Orders> orders2=setOrdersStatus(orders1);
 				PageInfo<Orders> pageInfo = new PageInfo<Orders>(orders2);
-				String ototal=ordersMapper.selectOrdersToatal();
+				Integer ototal=0;
+				for (Orders orders3 : orders2) {
+				ototal=Integer.parseInt(orders3.getOdCount());
+				}
 				OrdersPage ordersPage=
-						new OrdersPage(String.valueOf(pageInfo.getTotal()), ototal, pageInfo.getPageSize(), pageInfo.getPageNum(), pageInfo.getList());
+						new OrdersPage(String.valueOf(pageInfo.getTotal()), String.valueOf(ototal), pageInfo.getPageSize(), pageInfo.getPageNum(), pageInfo.getList());
 				return ServerResponse.createBySuccess(ordersPage);
 		}
 			/**
