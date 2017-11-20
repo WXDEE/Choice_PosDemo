@@ -2,6 +2,7 @@ package com.choice.service;
 
 import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
+import com.choice.entity.Dish;
 import com.choice.entity.Orders;
 import com.choice.vo.OrdersPage;
 import com.github.pagehelper.PageInfo;

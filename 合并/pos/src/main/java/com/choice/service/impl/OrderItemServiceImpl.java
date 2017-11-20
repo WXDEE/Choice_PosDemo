@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 	@Autowired
 	private DishService dishService;
 	@Autowired
-	private JedisClient jedisClient;
-	@Autowired
 	private DishMapper dishMapper;
+	@Autowired
+	private JedisClient jedisClient;
 	/***
 	 * 通过订单id查询订单明细
 	 */
@@ -109,6 +111,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 	public List<Dish> queryAllDish() throws Exception{
 		List<Dish> dishList = null;
 		//先从redis中获取全部菜品
+		System.out.println(jedisClient == null);
 		String json = jedisClient.hget(Const.DISH_CACHE, "alldish");
 		//若json不为空将json转换为dish列表
 		if(!StringUtils.isBlank(json)){

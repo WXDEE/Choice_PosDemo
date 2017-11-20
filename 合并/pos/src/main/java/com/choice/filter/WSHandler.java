@@ -22,7 +22,6 @@ public class WSHandler extends TextWebSocketHandler{
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         super.handleTextMessage(session, message);  
         String str = message.getPayload();
-        System.out.println(str);
         if(str.equals("online")){
         	sendUserCount();
         }
@@ -69,7 +68,6 @@ public class WSHandler extends TextWebSocketHandler{
     }
     public void sendUserCount() {
     	int count = users.size();
-    	System.out.println(count);
         for (WebSocketSession user : users) {
             try {
                 if (user.isOpen()) {

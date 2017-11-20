@@ -1,5 +1,6 @@
 package com.choice.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import com.choice.filter.WSHandler;
 import com.choice.mapper.DeskMapper;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
+import com.choice.service.DishService;
 import com.choice.service.MQService;
 import com.choice.service.OrderItemService;
 import com.choice.service.OrdersService;
@@ -63,6 +65,8 @@ public class OrdersServiceImpl implements OrdersService {
 	private OrderItemMapper orderItemMapper;
 	@Autowired
 	private WSHandler wsHandler;
+	@Autowired
+	private DishService dishService;
 	
 	/***
 	 * 增加订单
@@ -70,9 +74,21 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Transactional
     public ServerResponse<OrdersDTO> addOrders(String data) throws Exception{
-		System.out.println(data);
 		//将json数据转换为orderdto
 		OrdersDTO ordersDTO = JsonUtils.jsonToPojo(data, OrdersDTO.class);
+		//查询桌子是否被占用
+		Desk desk = deskMapper.selectDeskById(ordersDTO.getDeId());
+		if(desk.getDeStatus().equals("1")){
+			return ServerResponse.createByErrorMessage("桌子被占用！！！");
+		}
+		//查询菜品是否足够
+		List<Dish> dishList = qualifyDishCount(ordersDTO);
+		if(dishList != null){
+			System.out.println(JsonUtils.objectToJson(dishList));
+			return ServerResponse.createByErrorMessage(JsonUtils.objectToJson(dishList));
+		}
+		//更新菜品数量
+		updateDishCount(ordersDTO);
 		//插入订单表
 		Orders orders = insertOrders(ordersDTO);
 		//获取订单明细，插入订单明细表
@@ -183,27 +199,29 @@ public class OrdersServiceImpl implements OrdersService {
 		@Override
 		public ServerResponse<OrdersPage> queryOrdersBySearch(String oNum,
 				String sDate, String eDate, Integer pageNum) {
+			if("undefined".equals(oNum)){
+				oNum=null;
+			}
+			if("undefined".equals(sDate)||"undefined".equals(eDate)
+					||StringUtils.isBlank(sDate)||StringUtils.isBlank(eDate)){
+				sDate=null;
+				eDate=null;
+			}
+			if(sDate!=null){
+				sDate = sDate + " 00:00:00";
+				eDate = eDate + " 23:59:59";
+			}
+			//总金额
+			List<Orders> orders5=ordersMapper.selectAllSearch(oNum, sDate, eDate);
+			Integer ototal=0;
+			for (Orders orders3 : orders5) {
+			ototal+=Integer.parseInt(orders3.getoTotal());
+			}
 				PageHelper.startPage(pageNum, Const.ORDERS_NUM);
-				if("undefined".equals(oNum)){
-					oNum=null;
-				}
-				if("undefined".equals(sDate)||"undefined".equals(eDate)
-						||StringUtils.isBlank(sDate)||StringUtils.isBlank(eDate)){
-					sDate=null;
-					eDate=null;
-				}
-				if(sDate!=null){
-					sDate = sDate + " 00:00:00";
-					eDate = eDate + " 23:59:59";
-				}
 				List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
 				List<Orders> orders1=setdeNumToOrders(orders);
 				List<Orders> orders2=setOrdersStatus(orders1);
 				PageInfo<Orders> pageInfo = new PageInfo<Orders>(orders2);
-				Integer ototal=0;
-				for (Orders orders3 : orders2) {
-				ototal+=Integer.parseInt(orders3.getoTotal());
-				}
 				OrdersPage ordersPage=
 						new OrdersPage(String.valueOf(pageInfo.getTotal()), String.valueOf(ototal), pageInfo.getPageSize(), pageInfo.getPageNum(), pageInfo.getList());
 				return ServerResponse.createBySuccess(ordersPage);
@@ -313,6 +331,56 @@ public class OrdersServiceImpl implements OrdersService {
 		ServerResponse<OrdersDTO> result = orderItemService.queryOrderItemByOrdersId(orders.getId().toString());
 		return result;
 	}
-
+	/***
+	 * 查询菜品是否足够
+	 * @param ordersDTO
+	 * @return List<Dish>
+	 * @throws Exception 
+	 */
+	public List<Dish> qualifyDishCount(OrdersDTO ordersDTO) throws Exception{
+		Map<String, String> countmap = new HashMap<String, String>();
+		Map<String, String> namemap = new HashMap<String, String>();
+		List<Dish> list = new ArrayList<Dish>();
+		List<Dish> dishList = orderItemService.queryAllDish();
+		for (Dish dish : dishList) {
+			countmap.put(dish.getId()+"", dish.getdCount());
+		}
+		for (Dish dish : dishList) {
+			namemap.put(dish.getId()+"", dish.getdName());
+		}
+		List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
+		for (OrderItem orderItem : orderItemList) {
+			if(Integer.parseInt(countmap.get(orderItem.getdId()))<Integer.parseInt((orderItem.getOiCount()))){
+				Dish temp = new Dish();
+				temp.setdName(namemap.get(orderItem.getdId()));
+				temp.setdCount(countmap.get(orderItem.getdId()));
+				list.add(temp);
+			}
+		}
+		return list;
+	}
+	/***
+	 * 更新菜品数量
+	 * @param ordersDTO
+	 * @return List<Dish>
+	 * @throws Exception 
+	 */
+	@Transactional
+	public void updateDishCount(OrdersDTO ordersDTO) throws Exception{
+		Map<String, String> map = new HashMap<String, String>();
+		List<OrderItem> dishList = ordersDTO.getOrderItemList();
+		
+		List<Dish> allDishList = orderItemService.queryAllDish();
+		for (Dish dish : allDishList) {
+			map.put(dish.getId()+"", dish.getdCount());
+		}
+		for (OrderItem orderItem : dishList) {
+			Dish dish = new Dish();
+			dish.setId(Integer.parseInt(orderItem.getdId()));
+			int num = Integer.parseInt(map.get(orderItem.getdId())) - Integer.parseInt(orderItem.getOiCount());
+			dish.setdCount(num+"");
+			dishService.updateDish(dish);
+		}
+	}
 
 }
