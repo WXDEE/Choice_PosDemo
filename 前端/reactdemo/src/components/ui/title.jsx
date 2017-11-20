@@ -2,22 +2,21 @@
  * Created by Knove on 2017/11/9.
  */
 import React from 'react';
-import {Menu, Dropdown, Icon, Modal, Carousel, Button} from 'antd';
+import {Menu, Dropdown, Icon, Modal, Carousel, Button,notification } from 'antd';
+import {connect} from 'react-redux'; // 引入connect
+import {getOnlineNumber} from '../../action/socket';
+import { foodInit} from '../../action/action';
 
-function send_echo() {
-    let wsUri = "ws://30.87.246.189:8080/websocket";
-    let echo_websocket = new WebSocket(wsUri);
-    echo_websocket.onmessage = function (evt) {
-        writeToScreen(JSON.parse(evt.data));//转为数组
-    };
-}
-
-function writeToScreen(message) {
-    if (message.type == "online") {
-        //如果形式为在线人数
-
-    }
-}
+const openNotification = (type,title,message) => {
+    notification.config({
+        placement: 'bottomLeft',
+        duration:15,
+    });
+    notification[type]({
+        message:title,
+        description:message,
+    });
+};
 
 const rightMenu = (
     <Menu>
@@ -36,6 +35,37 @@ const rightMenu = (
 );
 
 class Title extends React.Component {
+
+    send_echo() {
+
+        const {getOnlineNumber,foodInit} = this.props;
+        let wsUri = "ws://30.87.246.189:8080/websocket";
+        let echo_websocket = new WebSocket(wsUri);
+        echo_websocket.onopen = function (evt) {
+            echo_websocket.send("online");
+        }
+        echo_websocket.onmessage = function (evt) {
+            let message=JSON.parse(evt.data);//转为数组
+            console.log(message);
+            if (message.type == "online") {
+                //如果形式为在线人数
+                getOnlineNumber(message.text);
+            }else if(message.type == "dish"){
+                //提示上新菜
+                if(message.status==1){
+                    openNotification("info","新上菜品",message.data+"上线了！");
+                }else  if(message.status==2){
+                    openNotification("warning","修改菜品",message.data+"被修改！");
+                }else if(message.status==3){
+                    openNotification("error","菜品下架",message.data+"下架了！");
+                }
+
+                //刷新 菜品页面
+                foodInit();
+            }
+        };
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -43,7 +73,8 @@ class Title extends React.Component {
         };
         this.showModal = this.showModal.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        send_echo();
+        this.send_echo = this.send_echo.bind(this);
+        this.send_echo();
     }
 
     showModal() {
@@ -71,7 +102,7 @@ class Title extends React.Component {
 
                     <Dropdown overlay={rightMenu} trigger={['click']} className="icon">
                         <a className="ant-dropdown-link icon" href="#">
-                            <span className="onlineText">在线 ：3人 </span>
+                            <span className="onlineText">在线 ：{this.props.onlineNumber}人 </span>
                             <Icon type="ellipsis"/>
                         </a>
                     </Dropdown>
@@ -113,4 +144,11 @@ class Title extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        onlineNumber: state.httpData.Socket.onlineNumber,
+    };
+};
+Title = connect(mapStateToProps, {getOnlineNumber,foodInit})(Title);
+//后面的FoodInfo是UI组件，前面的FoodInfo是通过connect生成的容器组件
 export default Title;

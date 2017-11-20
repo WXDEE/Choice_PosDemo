@@ -20,5 +20,6 @@ export const CLEAR_ORDER_STORE='CLEAR_ORDER_STORE' //清除在Store中已经结�
 
 
 //webSocket 区域
-export const WS_ONLINE_NUMBER = 'WS_ONLINE_NUMBER';
+export const WS_ONLINE_NUMBER = 'WS_ONLINE_NUMBER';   //获取当前在线人数
+
 

@@ -8,9 +8,15 @@ const initialList = {
     theNumber: 0,
     theString: "initial string!",
     orderState: {},
+    Socket: {onlineNumber:0}
 };
 const httpData = (state = initialList, action) => {
     switch (action.type) {
+        //WS
+        case type.WS_ONLINE_NUMBER:
+            return Object.assign({}, state, {Socket: {onlineNumber:action.onLineNumber}});
+            break;
+        //内部
         case type.RECEIVE_DATA:
             return Object.assign({}, state, {theNumber: state.theNumber + 1});
             break;
