@@ -110,16 +110,17 @@ public class OrderItemServiceImpl implements OrderItemService {
 		List<Dish> dishList = null;
 		//先从redis中获取全部菜品
 		String json = jedisClient.hget(Const.DISH_CACHE, "alldish");
-		//若redis不为空将json转换为dish列表
+		//若json不为空将json转换为dish列表
 		if(!StringUtils.isBlank(json)){
+			//设置过期时间为1000s
 			jedisClient.expire(Const.DISH_CACHE, 1000);
 			dishList = JsonUtils.jsonToList(json, Dish.class);	
 		}else{
 			//若没有，从数据库中取然后转换为json放入redis
 			dishList = dishService.queryDishByNameAndDate(null, null, null).getData();
-			System.out.println(dishList);
 			String dishjson = JsonUtils.objectToJson(dishList);
 			jedisClient.hset(Const.DISH_CACHE, "alldish",dishjson);
+			//设置过期时间为1000s
 			jedisClient.expire(Const.DISH_CACHE, 1000);
 		}
 		//返回dish列表
