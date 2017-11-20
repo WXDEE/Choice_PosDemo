@@ -9,7 +9,8 @@ const initialList = {
     theString: "initial string!",
     orderState: {},
     Socket: {onlineNumber:0},
-    OKType:{Order_SE:true}
+    OKType:{Order_SE:true,dishOrderSE:null}
+
 };
 const httpData = (state = initialList, action) => {
     switch (action.type) {
@@ -27,8 +28,12 @@ const httpData = (state = initialList, action) => {
         case type.ORDER_DETAILS:
             return Object.assign({}, state, {orderDetailsTable: action.data.data, success1: action.data.success});
             break;
+
         case type.GET_ORDER_SE:
             return Object.assign({}, state, {OKType: {Order_SE:action.data}});
+            break;
+        case type.GET_UP_ORDER:
+            return Object.assign({}, state, {OKType: {dishOrderSE:action.data}});
             break;
 
         case type.ORDER_DETAILS_ID:
@@ -38,12 +43,17 @@ const httpData = (state = initialList, action) => {
             return subEach11;
             break;
         case type.ORDER_LIST_PAGENUMBER:
-            return Object.assign({}, state, {
-                orderTableByPageNumber: action.data.data.olist,
-                success: action.data.success,
-                allOrderNumber: action.data.data.totalOrders,
-                allMoney: action.data.data.ototal,
-            });
+            if(action.data.data!=null){
+                return Object.assign({}, state, {
+                    orderTableByPageNumber: action.data.data.olist,
+                    success: action.data.success,
+                    allOrderNumber: action.data.data.totalOrders,
+                    allMoney: action.data.data.ototal,
+                });
+            }else{
+                return state;
+            }
+
             break;
         case type.REQUEST_ORDER:
             return Object.assign({}, state, {orderTable: action.data.data, success: action.data.success});
@@ -75,7 +85,11 @@ const httpData = (state = initialList, action) => {
             }
             return subEach12;
             break;
-
+        case type.CLEAR_ORDER_SE:
+            let subEach13 = deepCopy(state, {});
+            subEach13.OKType.dishOrderSE = null;
+            return subEach13;
+            break;
         case type.PUSH_ORDER:
             let subEach0 = deepCopy(state, {});
             if (action.data.data != null)

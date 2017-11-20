@@ -13,12 +13,13 @@ import {
     pointNowDesk,
     submitFood,
     ClearStoreBydeskNumber,
+    ClearStoreByOrderSE,
 } from '../../../action/action';
 
 let orderNumber = '';
 let orderTime = '';
 let orderId = '';
-
+let putOrderSE;  //提交订单状态
 function info() {
     Modal.info({
         title: 'This is a notification message',
@@ -40,10 +41,17 @@ function success(text) {
     });
 }
 
-function error(text) {
+function error(text,title) {
+    let array=text.map((item)=>{
+        return  <p>{item}</p>
+    });
     Modal.error({
-        title: '请选择菜品！',
-        content: text,
+        title: title,
+        content: (
+            <div>
+                {array}
+            </div>
+        ),
     });
 }
 
@@ -119,11 +127,7 @@ class SelectFood extends React.Component {
         }
         const {pushOrder} = this.props;
         pushOrder(data);
-        if (data.deId !== null && data.odCount != 0) {
-            if(this.props.OKTypeOrderSE==true)
-            success('您已成功提交订单！');
-        }
-        else error();
+
     }
 
     endOrder(orderNumber) {
@@ -157,6 +161,25 @@ class SelectFood extends React.Component {
         orderId = '';
         let ScreenHeight = document.body.clientHeight - 104; //获取 全屏幕减去title的高度
         let deskNumber = this.props.nowDeskNumber;
+        const {ClearStoreByOrderSE} = this.props;
+        //提交订单后的状态判定
+     if(this.props.putOrderSE==false){
+         let msg=JSON.parse(this.props.dishOrderSE.msg);
+         let msgText=[];
+         for(let i=0,index=msg.length;i<index;i++){
+             msgText[i]="菜品："+msg[i].dName+"不足！目前剩余"+Number(msg[i].dCount)+"份！\n";
+         }
+
+         error(msgText,"菜品不足！");
+         //清空 订单 成功失败信息
+         ClearStoreByOrderSE();
+
+        }else if(this.props.putOrderSE==true){
+           success("成功提交订单！");
+         //清空 订单 成功失败信息
+         ClearStoreByOrderSE();
+     }
+
 
         if (this.props.getDeskFoodArray != null) {
             for (let i = 0, index = this.props.getDeskFoodArray.length; i < index; i++) {
@@ -340,9 +363,14 @@ const mapStateToProps = (state) => {
     }
     if(state.httpData.OKType.Order_SE== false){
         error("上菜失败！余量不足！");
-        state.httpData.OKType.Order_SE=true;
+       state.httpData.OKType.Order_SE=true;
     }
     console.log(state.httpData.orderState);
+
+    putOrderSE=null;
+    if(state.httpData.OKType.dishOrderSE!=null){
+        putOrderSE=state.httpData.OKType.dishOrderSE.success;
+    }
     return {
 
         nowDeskNumber: state.httpData.deskNumber,
@@ -350,6 +378,8 @@ const mapStateToProps = (state) => {
         orderState: state.httpData.orderState,
         afterEndFoodArray: afterEndFoodArray,
         OKTypeOrderSE:state.httpData.OKType.Order_SE,
+        dishOrderSE:state.httpData.OKType.dishOrderSE,
+        putOrderSE:putOrderSE,
     };
 };
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上
@@ -361,6 +391,7 @@ SelectFood = connect(mapStateToProps, {
     pointNowDesk,
     submitFood,
     ClearStoreBydeskNumber,
+    ClearStoreByOrderSE
 })(SelectFood);
 
 

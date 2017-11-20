@@ -39,6 +39,16 @@ export const ClearStoreBydeskNumbertoStore = (deskNumber) => {
     return {type: type.CLEAR_ORDER_STORE, deskNumber: deskNumber};
 };
 
+//清空储存的订单信息
+export function ClearStoreByOrderSE() {
+    return (dispatch) => {
+        dispatch(ClearStoreByOrderSEtoStore());
+    };
+}
+
+export const ClearStoreByOrderSEtoStore = () => {
+    return {type: type.CLEAR_ORDER_SE};
+};
 
 //订单页面的初始化
 export function orderInit() {
@@ -371,8 +381,15 @@ export function pushOrder(data) {
             }
             response.json().then(json => {
                 console.log(json);
-                dispatch(orderStateToStore(json));
+                if(json.success==true){
+                    dispatch(orderStateToStore(json));
+                }
+                    dispatch(UpOrderSEToStore(json));
                 deskSearch()(dispatch);
+
+
+
+
             });
         }).catch(err => {
             console.log("fetch错误" + err);
@@ -478,8 +495,13 @@ export function submitFood(orderID, orderIdMain) {
         });
     };
 }
+//获取上菜的成功状况
 export const submitFoodSEToStore = (data) => {
     return {type: type.GET_ORDER_SE, data: data.success};
+};
+//获取提交订单的成功状况
+export const UpOrderSEToStore = (data) => {
+    return {type: type.GET_UP_ORDER, data: data};
 };
 
 //根据订单id查询订单明细

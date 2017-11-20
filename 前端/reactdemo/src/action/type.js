@@ -2,7 +2,9 @@
  * Created by  Knove on 2017/11/10.
  */
 //逻辑区域
-export const GET_ORDER_SE = 'GET_ORDER_SE';  //获取提交订单的成功状况
+export const GET_ORDER_SE = 'GET_ORDER_SE';  //获取上菜的成功状况
+export const GET_UP_ORDER = 'GET_UP_ORDER'; //获取提交订单的成功状况
+export const CLEAR_ORDER_SE = 'CLEAR_ORDER_SE'; //清空储存的订单信息
 
 // 内部区域
 export const REQUEST_DATA = 'REQUEST_DATA';
