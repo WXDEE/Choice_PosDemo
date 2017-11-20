@@ -6,6 +6,14 @@
     <sql id="Base_Column_List" >
         id, dc_id, d_name, d_cn, d_date, d_material, d_remark, d_price, d_count, d_status
     </sql>
+
+    <select id="selectDishById" resultType="Dish">
+        select
+        <include refid="Base_Column_List" />
+        from dish
+        where id = #{Id}
+        and d_status = '1'
+    </select>
     <select id="selectDishByCatelog" resultType="Dish" parameterType="map">
         select
         <include refid="Base_Column_List" />

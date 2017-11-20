@@ -5,6 +5,7 @@ import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
 import com.choice.entity.Dish;
 import com.choice.entity.DishCatelog;
+import com.choice.filter.WSHandler;
 import com.choice.mapper.DishCatelogMapper;
 import com.choice.mapper.DishMapper;
 import com.choice.mapper.JedisClient;
@@ -33,6 +34,9 @@ import org.springframework.validation.FieldError;
 @Service
 public class DishServiceImpl implements DishService {
 	private Logger logger = Logger.getLogger(DishServiceImpl.class);
+
+	@Autowired
+	private WSHandler wsHandler;
 	@Autowired
 	private DishMapper dishMapper;
 	@Autowired
@@ -77,6 +81,8 @@ public class DishServiceImpl implements DishService {
 			jedisClient.expire(Const.DISH_CACHE, 0);
 			logger.info("新增菜品"+dish.toString());
 			printDish(dish);
+			String msg = "{\"type\":\"dish\",\"status\":\"1\",\"data\":\""+dish.getdName()+"\"}";
+			wsHandler.sendMessage(msg);
 			return ServerResponse.createBySuccess();
 		}else {
 			return ServerResponse.createByError();
@@ -105,6 +111,9 @@ public class DishServiceImpl implements DishService {
 		if(result.equals(1)){
 			jedisClient.expire(Const.DISH_CACHE, 0);
 			logger.info("修改菜品"+dish.toString());
+			dish = dishMapper.selectDishById(dish.getId());
+			String msg = "{\"type\":\"dish\",\"status\":\"2\",\"data\":\""+dish.getdName()+"\"}";
+			wsHandler.sendMessage(msg);
 			return ServerResponse.createBySuccess();
 		}else {
 			return ServerResponse.createByError();
@@ -116,6 +125,9 @@ public class DishServiceImpl implements DishService {
 		if(result.equals(1)){
 			jedisClient.expire(Const.DISH_CACHE, 0);
 			logger.info("删除菜品"+id);
+			Dish dish = dishMapper.selectDishById(id);
+			String msg = "{\"type\":\"dish\",\"status\":\"3\",\"data\":\""+dish.getdName()+"\"}";
+			wsHandler.sendMessage(msg);
 			return ServerResponse.createBySuccess();
 		}else {
 			return ServerResponse.createByError();

@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface DishMapper {
+
+    //根据id查询菜品
+    Dish selectDishById(Integer Id);
     //根据菜品分类id查询该分类下的全部菜品(特价菜品可能要单独写查询方法)
     List<Dish> selectDishByCatelog(String dcId);
     //新增菜品

@@ -80,7 +80,14 @@ public class WSHandler extends TextWebSocketHandler{
             }
         }
     }
- 
+
+    public void sendMessage(String message) throws IOException {
+
+        for (WebSocketSession user : users) {
+            user.sendMessage(new TextMessage(message));
+        }
+    }
+
 
 
 
