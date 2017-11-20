@@ -119,7 +119,10 @@ class SelectFood extends React.Component {
         }
         const {pushOrder} = this.props;
         pushOrder(data);
-        if (data.deId !== null && data.odCount != 0) success('您已成功提交订单！');
+        if (data.deId !== null && data.odCount != 0) {
+            if(this.props.OKTypeOrderSE==true)
+            success('您已成功提交订单！');
+        }
         else error();
     }
 
@@ -263,6 +266,8 @@ class SelectFood extends React.Component {
             }
 
         }
+
+
         return (
             <div>
                 <Card title="订单明细区" bodyStyle={{width: '100%', height: ScreenHeight}} className="orderDetails">
@@ -333,12 +338,18 @@ const mapStateToProps = (state) => {
 
         }
     }
+    if(state.httpData.OKType.Order_SE== false){
+        error("上菜失败！余量不足！");
+        state.httpData.OKType.Order_SE=true;
+    }
     console.log(state.httpData.orderState);
     return {
+
         nowDeskNumber: state.httpData.deskNumber,
         getDeskFoodArray: state.httpData.deskTable[nowDeskNumber].foodArray,
         orderState: state.httpData.orderState,
         afterEndFoodArray: afterEndFoodArray,
+        OKTypeOrderSE:state.httpData.OKType.Order_SE,
     };
 };
 //connect 实现， mapStateToProps将state传入props，参数2 将 action 作为 props 绑定到 MyComp 上

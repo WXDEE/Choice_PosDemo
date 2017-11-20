@@ -470,6 +470,7 @@ export function submitFood(orderID, orderIdMain) {
             }
             response.json().then(json => {
                 console.log(json);
+                dispatch(submitFoodSEToStore(json));
                 getOrderInfoById(orderIdMain)(dispatch);//获取现在订单情况
             });
         }).catch(err => {
@@ -477,6 +478,9 @@ export function submitFood(orderID, orderIdMain) {
         });
     };
 }
+export const submitFoodSEToStore = (data) => {
+    return {type: type.GET_ORDER_SE, data: data.success};
+};
 
 //根据订单id查询订单明细
 export function getOrderInfoById(id) {

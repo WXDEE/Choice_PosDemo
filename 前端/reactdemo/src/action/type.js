@@ -1,6 +1,9 @@
 /**
  * Created by  Knove on 2017/11/10.
  */
+//逻辑区域
+export const GET_ORDER_SE = 'GET_ORDER_SE';  //获取提交订单的成功状况
+
 // 内部区域
 export const REQUEST_DATA = 'REQUEST_DATA';
 export const RECEIVE_DATA = 'RECEIVE_DATA';

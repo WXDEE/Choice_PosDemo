@@ -5,12 +5,12 @@ import React from 'react';
 import {Menu, Dropdown, Icon, Modal, Carousel, Button,notification } from 'antd';
 import {connect} from 'react-redux'; // 引入connect
 import {getOnlineNumber} from '../../action/socket';
-import { foodInit} from '../../action/action';
+import { foodInit,deskSearch} from '../../action/action';
 
 const openNotification = (type,title,message) => {
     notification.config({
         placement: 'bottomLeft',
-        duration:15,
+        duration:10,
     });
     notification[type]({
         message:title,
@@ -38,7 +38,7 @@ class Title extends React.Component {
 
     send_echo() {
 
-        const {getOnlineNumber,foodInit} = this.props;
+        const {getOnlineNumber,foodInit,deskSearch} = this.props;
         let wsUri = "ws://30.87.246.189:8080/websocket";
         let echo_websocket = new WebSocket(wsUri);
         echo_websocket.onopen = function (evt) {
@@ -62,6 +62,17 @@ class Title extends React.Component {
 
                 //刷新 菜品页面
                 foodInit();
+            }else  if(message.type == "desk"){
+
+                if(message.status==1){
+                    openNotification("warning","桌位被占用","桌位"+message.data+"现在已经被占用！");
+                }else if(message.status==2){
+                    openNotification("success","桌位已经空置","桌位"+message.data+"现在已经留空！");
+                }
+
+                deskSearch();
+
+
             }
         };
     }
@@ -149,6 +160,6 @@ const mapStateToProps = (state) => {
         onlineNumber: state.httpData.Socket.onlineNumber,
     };
 };
-Title = connect(mapStateToProps, {getOnlineNumber,foodInit})(Title);
+Title = connect(mapStateToProps, {getOnlineNumber,foodInit,deskSearch})(Title);
 //后面的FoodInfo是UI组件，前面的FoodInfo是通过connect生成的容器组件
 export default Title;

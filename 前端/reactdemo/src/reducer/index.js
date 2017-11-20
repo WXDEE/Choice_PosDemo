@@ -8,7 +8,8 @@ const initialList = {
     theNumber: 0,
     theString: "initial string!",
     orderState: {},
-    Socket: {onlineNumber:0}
+    Socket: {onlineNumber:0},
+    OKType:{Order_SE:true}
 };
 const httpData = (state = initialList, action) => {
     switch (action.type) {
@@ -26,7 +27,9 @@ const httpData = (state = initialList, action) => {
         case type.ORDER_DETAILS:
             return Object.assign({}, state, {orderDetailsTable: action.data.data, success1: action.data.success});
             break;
-
+        case type.GET_ORDER_SE:
+            return Object.assign({}, state, {OKType: {Order_SE:action.data}});
+            break;
 
         case type.ORDER_DETAILS_ID:
             let subEach11 = deepCopy(state, {});
