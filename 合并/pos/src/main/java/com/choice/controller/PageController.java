@@ -10,11 +10,9 @@ import com.choice.filter.WSHandler;
 @Controller
 public class PageController {
 	
-	/*private WSHandler wsHandler = new WSHandler();*/
 	
 	@RequestMapping("/")
 	public String index(){
-		/*wsHandler.sendMessageToUsers(new TextMessage("进入首页"));*/
 		return "index";
 	}
 

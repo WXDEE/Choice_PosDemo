@@ -21,8 +21,11 @@ public class WSHandler extends TextWebSocketHandler{
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         super.handleTextMessage(session, message);  
-        TextMessage returnMessage = new TextMessage(message.getPayload()+" received at server");  
-        session.sendMessage(returnMessage);  
+        String str = message.getPayload();
+        System.out.println(str);
+        if(str.equals("online")){
+        	sendUserCount();
+        }
     }
 
     @Override
@@ -58,6 +61,19 @@ public class WSHandler extends TextWebSocketHandler{
             try {
                 if (user.isOpen()) {
                     user.sendMessage(message);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void sendUserCount() {
+    	int count = users.size();
+    	System.out.println(count);
+        for (WebSocketSession user : users) {
+            try {
+                if (user.isOpen()) {
+                    user.sendMessage(new TextMessage("{\"type\":\"online\",\"text\":"+count+"}"));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
