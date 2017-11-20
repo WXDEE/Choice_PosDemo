@@ -121,11 +121,11 @@ public class DishServiceImpl implements DishService {
 	}
 
 	public ServerResponse deleteDish(Integer id) throws Exception{
+		Dish dish = dishMapper.selectDishById(id);
 		Integer result = dishMapper.deleteDishById(id);
 		if(result.equals(1)){
 			jedisClient.expire(Const.DISH_CACHE, 0);
 			logger.info("删除菜品"+id);
-			Dish dish = dishMapper.selectDishById(id);
 			String msg = "{\"type\":\"dish\",\"status\":\"3\",\"data\":\""+dish.getdName()+"\"}";
 			wsHandler.sendMessage(msg);
 			return ServerResponse.createBySuccess();
