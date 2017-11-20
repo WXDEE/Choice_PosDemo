@@ -83,7 +83,8 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 		//查询菜品是否足够
 		List<Dish> dishList = qualifyDishCount(ordersDTO);
-		if(dishList != null){
+		//若不够则返回error
+		if(dishList != null && dishList.size()>0){
 			System.out.println(JsonUtils.objectToJson(dishList));
 			return ServerResponse.createByErrorMessage(JsonUtils.objectToJson(dishList));
 		}
@@ -341,16 +342,21 @@ public class OrdersServiceImpl implements OrdersService {
 		Map<String, String> countmap = new HashMap<String, String>();
 		Map<String, String> namemap = new HashMap<String, String>();
 		List<Dish> list = new ArrayList<Dish>();
+		//查询全部菜品
 		List<Dish> dishList = orderItemService.queryAllDish();
+		//将菜品id，菜品数量封装进map
 		for (Dish dish : dishList) {
 			countmap.put(dish.getId()+"", dish.getdCount());
 		}
+		//将菜品id，菜品名称封装进map
 		for (Dish dish : dishList) {
 			namemap.put(dish.getId()+"", dish.getdName());
 		}
+		//获得菜品详情list
 		List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
 		for (OrderItem orderItem : orderItemList) {
-			if(Integer.parseInt(countmap.get(orderItem.getdId()))<Integer.parseInt((orderItem.getOiCount()))){
+			//若菜品详情中菜品数量大于菜品总数将名称和总数封装为dish添加到dishlist中
+			if(Integer.parseInt(countmap.get(orderItem.getdId()))-Integer.parseInt(orderItem.getOiCount())<0){
 				Dish temp = new Dish();
 				temp.setdName(namemap.get(orderItem.getdId()));
 				temp.setdCount(countmap.get(orderItem.getdId()));
@@ -368,17 +374,21 @@ public class OrdersServiceImpl implements OrdersService {
 	@Transactional
 	public void updateDishCount(OrdersDTO ordersDTO) throws Exception{
 		Map<String, String> map = new HashMap<String, String>();
+		//获取订单详情list
 		List<OrderItem> dishList = ordersDTO.getOrderItemList();
-		
+		//查询所有菜品
 		List<Dish> allDishList = orderItemService.queryAllDish();
+		//将菜品id，菜品数量封装进map
 		for (Dish dish : allDishList) {
 			map.put(dish.getId()+"", dish.getdCount());
 		}
 		for (OrderItem orderItem : dishList) {
 			Dish dish = new Dish();
 			dish.setId(Integer.parseInt(orderItem.getdId()));
+			//计算剩余菜品数量
 			int num = Integer.parseInt(map.get(orderItem.getdId())) - Integer.parseInt(orderItem.getOiCount());
 			dish.setdCount(num+"");
+			//更新菜品数量
 			dishService.updateDish(dish);
 		}
 	}

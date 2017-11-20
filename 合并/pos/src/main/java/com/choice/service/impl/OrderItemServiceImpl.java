@@ -111,7 +111,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 	public List<Dish> queryAllDish() throws Exception{
 		List<Dish> dishList = null;
 		//先从redis中获取全部菜品
-		System.out.println(jedisClient == null);
 		String json = jedisClient.hget(Const.DISH_CACHE, "alldish");
 		//若json不为空将json转换为dish列表
 		if(!StringUtils.isBlank(json)){
