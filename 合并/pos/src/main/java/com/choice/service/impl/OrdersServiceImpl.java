@@ -29,6 +29,7 @@ import com.choice.entity.Desk;
 import com.choice.entity.Dish;
 import com.choice.entity.OrderItem;
 import com.choice.entity.Orders;
+import com.choice.filter.WSHandler;
 import com.choice.mapper.DeskMapper;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
@@ -60,6 +61,8 @@ public class OrdersServiceImpl implements OrdersService {
 	private DeskMapper deskMapper;
 	@Autowired
 	private OrderItemMapper orderItemMapper;
+	@Autowired
+	private WSHandler wsHandler;
 	
 	/***
 	 * 增加订单
@@ -86,6 +89,9 @@ public class OrdersServiceImpl implements OrdersService {
 		//封装为响应对象
 		ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
         log.debug("订单生成:" + ordersDTO);
+        //通知前端
+        String msg = "{\"type\":\"desk\",\"status\":\"1\",\"data\":\""+ordersDTO.getDeId()+"\"}";
+		wsHandler.sendMessage(msg);
         //异步向mq发送订单消息
         printOrder(ordersDTO);
 		return result;
@@ -131,6 +137,8 @@ public class OrdersServiceImpl implements OrdersService {
 		//修改付款状态
 		Integer sta=ordersMapper.updateOrdersStatus(id);
 		printCount(deNum+"号桌顾客结账！");
+		String msg = "{\"type\":\"desk\",\"status\":\"2\",\"data\":\""+deNum+"\"}";
+		wsHandler.sendMessage(msg);
 		return ServerResponse.createBySuccess();
 	}
 	/**
