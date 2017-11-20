@@ -15,6 +15,7 @@ public class PosExceptionResolver implements HandlerExceptionResolver {
     private Logger logger = Logger.getLogger(PosExceptionResolver.class);
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+    	e.printStackTrace();
         ServerResponse serverResponse = ServerResponse.createByErrorMessage(e.getMessage());
         try {
             httpServletResponse.setCharacterEncoding("utf-8");
