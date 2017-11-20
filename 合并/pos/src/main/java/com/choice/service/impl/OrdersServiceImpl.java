@@ -202,7 +202,7 @@ public class OrdersServiceImpl implements OrdersService {
 				PageInfo<Orders> pageInfo = new PageInfo<Orders>(orders2);
 				Integer ototal=0;
 				for (Orders orders3 : orders2) {
-				ototal=Integer.parseInt(orders3.getOdCount());
+				ototal+=Integer.parseInt(orders3.getoTotal());
 				}
 				OrdersPage ordersPage=
 						new OrdersPage(String.valueOf(pageInfo.getTotal()), String.valueOf(ototal), pageInfo.getPageSize(), pageInfo.getPageNum(), pageInfo.getList());
