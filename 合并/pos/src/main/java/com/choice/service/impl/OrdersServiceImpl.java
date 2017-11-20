@@ -6,22 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.choice.common.Const;
 import com.choice.common.ServerResponse;
@@ -32,6 +23,7 @@ import com.choice.entity.OrderItem;
 import com.choice.entity.Orders;
 import com.choice.filter.WSHandler;
 import com.choice.mapper.DeskMapper;
+import com.choice.mapper.DishMapper;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
 import com.choice.service.DishService;
@@ -67,6 +59,8 @@ public class OrdersServiceImpl implements OrdersService {
 	private WSHandler wsHandler;
 	@Autowired
 	private DishService dishService;
+	@Autowired
+	private DishMapper dishMapper;
 	
 	/***
 	 * 增加订单
@@ -149,15 +143,33 @@ public class OrdersServiceImpl implements OrdersService {
 	 */
 	@Transactional
 	public ServerResponse settleAccount(String id,String deNum) throws Exception{
+		//根据订单的id 查询订单详情
+		List<OrderItem> items=orderItemMapper.selectByOid(id);
+		//遍历订单详情  如果未上菜 在库存中添加相应库存数量
+		for (OrderItem orderItem : items) {
+			//如果未上菜，修改菜的库存数量
+			if(orderItem.getOiStatus().equals("0")){
+				/*根据菜品的id获取菜品的库存*/
+				Dish dish=dishMapper.selectDishByIdCount(orderItem.getdId());
+				Integer a=Integer.parseInt(dish.getdCount());
+				/*更新库存*/
+				dish.setId(Integer.parseInt(orderItem.getdId()));
+				dish.setdCount(dish.getdCount()+Integer.parseInt(orderItem.getOiCount()));
+				dishMapper.updateDish(dish);
+			}
+			
+		}
 		//释放桌子
 		Integer stb=deskMapper.updateDeskStatusByNum(deNum, "0");
 		//修改付款状态
 		Integer sta=ordersMapper.updateOrdersStatus(id);
+		
 		printCount(deNum+"号桌顾客结账！");
 		String msg = "{\"type\":\"desk\",\"status\":\"2\",\"data\":\""+deNum+"\"}";
 		wsHandler.sendMessage(msg);
 		return ServerResponse.createBySuccess();
 	}
+
 	/**
 	 * 异步向mq发送消息
 	 * @param dish
