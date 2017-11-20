@@ -38,6 +38,7 @@ import com.choice.service.OrdersService;
 import com.choice.util.DateTimeUtil;
 import com.choice.util.IDUtils;
 import com.choice.util.JsonUtils;
+import com.choice.vo.OrdersPage;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
@@ -169,7 +170,7 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 		//订单的模糊查询---分页查询
 		@Override
-		public ServerResponse<PageInfo<Orders>> queryOrdersBySearch(String oNum,
+		public ServerResponse<OrdersPage> queryOrdersBySearch(String oNum,
 				String sDate, String eDate, Integer pageNum) {
 				PageHelper.startPage(pageNum, Const.ORDERS_NUM);
 				if("undefined".equals(sDate)||"undefined".equals(eDate)
@@ -185,9 +186,10 @@ public class OrdersServiceImpl implements OrdersService {
 				List<Orders> orders1=setdeNumToOrders(orders);
 				List<Orders> orders2=setOrdersStatus(orders1);
 				PageInfo<Orders> pageInfo = new PageInfo<Orders>(orders2);
-				ServerResponse<PageInfo<Orders>> result = ServerResponse.createBySuccess(pageInfo);
-				return result;
-	
+				String ototal=ordersMapper.selectOrdersToatal();
+				OrdersPage ordersPage=
+						new OrdersPage(String.valueOf(pageInfo.getTotal()), ototal, pageInfo.getPageSize(), pageInfo.getPageNum(), pageInfo.getList());
+				return ServerResponse.createBySuccess(ordersPage);
 		}
 			/**
 			 * //查询相应的桌号  封装到订单 

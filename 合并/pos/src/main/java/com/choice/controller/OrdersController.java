@@ -10,6 +10,7 @@ import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
 import com.choice.entity.Orders;
 import com.choice.service.OrdersService;
+import com.choice.vo.OrdersPage;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class OrdersController {
 	//根据订单编号和下单时间查询订单（若条件为空不参与查询,分页）
 	@RequestMapping("slist")
 	@ResponseBody
-	public ServerResponse<PageInfo<Orders>> queryOrdersBySearch(HttpServletResponse response,String oNum, String sDate, String eDate,Integer pageNum) throws Exception{
+	public ServerResponse<OrdersPage> queryOrdersBySearch(HttpServletResponse response,String oNum, String sDate, String eDate,Integer pageNum) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return ordersService.queryOrdersBySearch(oNum, sDate, eDate, pageNum);
 	}

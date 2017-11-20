@@ -3,6 +3,7 @@ package com.choice.service;
 import com.choice.common.ServerResponse;
 import com.choice.dto.OrdersDTO;
 import com.choice.entity.Orders;
+import com.choice.vo.OrdersPage;
 import com.github.pagehelper.PageInfo;
 import com.mysql.fabric.Server;
 
@@ -17,7 +18,7 @@ public interface OrdersService {
     //根据订单编号和下单时间查询订单（若条件为空不参与查询）
     ServerResponse<List<Orders>> queryOrdersByNumAndDate(String oNum,String sDate,String eDate) throws Exception;
   //根据订单编号和下单时间查询订单（若条件为空不参与查询,实现分页）
-    ServerResponse<PageInfo<Orders>> queryOrdersBySearch(String oNum,String sDate,String eDate,Integer pageNum);
+    ServerResponse<OrdersPage> queryOrdersBySearch(String oNum,String sDate,String eDate,Integer pageNum);
     //查询订单数量
     ServerResponse<String> queryOrdersCount() throws Exception;
     //查询总营业额
