@@ -109,6 +109,7 @@ class FoodInfo extends React.Component {
         this.handleDelete=this.handleDelete.bind(this);
         const {foodInit}=this.props;
         foodInit();
+        this.setColor=this.setColor.bind(this);
 
     }
     //添加菜品
@@ -212,6 +213,16 @@ class FoodInfo extends React.Component {
         const {deleteFood}=this.props;
         deleteFood(id);
      }
+     setColor(record){
+        console.log(record);
+        if(record.dCount==0) {
+            return " bgRed";
+        }
+        if(record.dCount<21){
+            return" bgYellow";
+        }
+        return "";
+     }
     render() {
         let loading=true;
         if(this.props.loading)
@@ -283,7 +294,12 @@ class FoodInfo extends React.Component {
                        <div><span className="redLine"></span>已售空菜品</div>
                        <div><span className="yellowLine"></span>余量不足菜品</div>
                     </span>
-                    <Table dataSource={this.props.foodMain} columns={columns} size={"small"} loading={loading} pagination={{pageSize:5}}/>
+                    <Table
+                        dataSource={this.props.foodMain}
+                        columns={columns} size={"small"}
+                        loading={loading}
+                        pagination={{pageSize:5}}
+                        rowClassName={(record) => this.setColor(record) }/>
                     <InfoForm
                         ref={this.saveFormRef}
                         visible={this.state.visible}
