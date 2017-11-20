@@ -65,6 +65,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Transactional
     public ServerResponse<OrdersDTO> addOrders(String data) throws Exception{
+		System.out.println(data);
 		//将json数据转换为orderdto
 		OrdersDTO ordersDTO = JsonUtils.jsonToPojo(data, OrdersDTO.class);
 		//插入订单表
@@ -164,6 +165,28 @@ public class OrdersServiceImpl implements OrdersService {
 				List<Orders> orders1=setdeNumToOrders(orders);
 				List<Orders> orders2=setOrdersStatus(orders1);
 				return ServerResponse.createBySuccess(orders2);
+		}
+		//订单的模糊查询---分页查询
+		@Override
+		public ServerResponse<PageInfo<Orders>> queryOrdersBySearch(String oNum,
+				String sDate, String eDate, Integer pageNum, Integer pageSize) {
+				PageHelper.startPage(pageNum, pageSize);
+				if("undefined".equals(sDate)||"undefined".equals(eDate)
+						||StringUtils.isBlank(sDate)||StringUtils.isBlank(eDate)){
+					sDate=null;
+					eDate=null;
+				}
+				if(sDate!=null){
+					sDate = sDate + " 00:00:00";
+					eDate = eDate + " 23:59:59";
+				}
+				List<Orders> orders=ordersMapper.selectAllSearch(oNum, sDate, eDate);
+				List<Orders> orders1=setdeNumToOrders(orders);
+				List<Orders> orders2=setOrdersStatus(orders1);
+				PageInfo<Orders> pageInfo = new PageInfo<Orders>(orders2);
+				ServerResponse<PageInfo<Orders>> result = ServerResponse.createBySuccess(pageInfo);
+				return result;
+	
 		}
 			/**
 			 * //查询相应的桌号  封装到订单 
@@ -270,4 +293,6 @@ public class OrdersServiceImpl implements OrdersService {
 		ServerResponse<OrdersDTO> result = orderItemService.queryOrderItemByOrdersId(orders.getId().toString());
 		return result;
 	}
+
+
 }

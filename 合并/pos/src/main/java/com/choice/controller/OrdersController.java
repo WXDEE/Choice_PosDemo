@@ -60,12 +60,19 @@ public class OrdersController {
 		return result;
 	}*/
 
-	//根据订单编号和下单时间查询订单（若条件为空不参与查询，分页）
+	//根据订单编号和下单时间查询订单（若条件为空不参与查询）
 	@RequestMapping("list")
 	@ResponseBody
 	public ServerResponse<List<Orders>> queryOrdersByNumAndDate(HttpServletResponse response,String oNum, String sDate, String eDate) throws Exception{
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		return ordersService.queryOrdersByNumAndDate(oNum, sDate, eDate);
+	}
+	//根据订单编号和下单时间查询订单（若条件为空不参与查询,分页）
+	@RequestMapping("slist")
+	@ResponseBody
+	public ServerResponse<PageInfo<Orders>> queryOrdersBySearch(HttpServletResponse response,String oNum, String sDate, String eDate,Integer pageNum, Integer pageSize) throws Exception{
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		return ordersService.queryOrdersBySearch(oNum, sDate, eDate, pageNum, pageSize);
 	}
 	//查询订单数量
 	@RequestMapping("count")
