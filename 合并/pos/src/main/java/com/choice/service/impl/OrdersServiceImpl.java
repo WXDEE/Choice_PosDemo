@@ -24,6 +24,7 @@ import com.choice.entity.Orders;
 import com.choice.filter.WSHandler;
 import com.choice.mapper.DeskMapper;
 import com.choice.mapper.DishMapper;
+import com.choice.mapper.JedisClient;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
 import com.choice.service.DishService;
@@ -61,12 +62,14 @@ public class OrdersServiceImpl implements OrdersService {
 	private DishService dishService;
 	@Autowired
 	private DishMapper dishMapper;
+	@Autowired
+	private JedisClient jedisClient;
 	
 	/***
 	 * 增加订单
 	 * 1.查询桌子是否被占用
 	 * 2.查询库存中菜品是否足够
-	 * 3.将菜品库存余量更新
+	 * 3.若足够将菜品库存余量更新
 	 * 4.插入订单表
 	 * 5.插入订单明细表
 	 * 6.更改桌子状态为已使用
@@ -116,7 +119,10 @@ public class OrdersServiceImpl implements OrdersService {
         ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
 		return result;
     }
-
+	
+	/***
+	 * 查询全部订单
+	 */
     public ServerResponse<PageInfo<Orders>> queryOrders(Integer pageNum, Integer pageSize) {
     	try {
 			PageHelper.startPage(pageNum, pageSize);
@@ -412,7 +418,9 @@ public class OrdersServiceImpl implements OrdersService {
 			int num = Integer.parseInt(map.get(orderItem.getdId())) - Integer.parseInt(orderItem.getOiCount());
 			dish.setdCount(num+"");
 			//更新菜品数量
-			dishService.updateDish(dish);
+			dishMapper.updateDish(dish);
+			//缓存失效
+			jedisClient.expire(Const.DISH_CACHE, 0);
 		}
 	}
 
