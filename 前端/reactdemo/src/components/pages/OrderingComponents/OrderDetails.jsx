@@ -169,10 +169,9 @@ class SelectFood extends React.Component {
         const {ClearStoreByOrderSE} = this.props;
         //提交订单后的状态判定
      if(this.props.putOrderSE==false){
-         if(this.props.dishOrderSE.msg==1){
-             warning("错误","此桌已经被占用！");
-             ClearStoreByOrderSE();
-         }else{
+         if(this.props.dishOrderSE.msg==1){   //如果是 1 ，则提示此桌被占用
+             warning("此桌已经被占用！","抱歉！");
+         }else if(this.props.dishOrderSE.msg!=null){
              let msg=JSON.parse(this.props.dishOrderSE.msg);
              let msgText=[];
              for(let i=0,index=msg.length;i<index;i++){
@@ -181,14 +180,16 @@ class SelectFood extends React.Component {
 
              error(msgText,"菜品不足！");
              //清空 订单 成功失败信息
-             ClearStoreByOrderSE();
+         }else if(this.props.dishOrderSE.msg==null){
+             warning("请选择桌号以及点餐再提交订单！","抱歉！");
          }
-        }else if(this.props.putOrderSE==true){
+         //清空订单报错信息
+         ClearStoreByOrderSE();
+     }else if(this.props.putOrderSE==true){
            success("成功提交订单！");
          //清空 订单 成功失败信息
          ClearStoreByOrderSE();
      }
-
 
         if (this.props.getDeskFoodArray != null) {
             for (let i = 0, index = this.props.getDeskFoodArray.length; i < index; i++) {
