@@ -24,7 +24,6 @@ import com.choice.entity.Orders;
 import com.choice.filter.WSHandler;
 import com.choice.mapper.DeskMapper;
 import com.choice.mapper.DishMapper;
-import com.choice.mapper.JedisClient;
 import com.choice.mapper.OrderItemMapper;
 import com.choice.mapper.OrdersMapper;
 import com.choice.service.DishService;
@@ -62,8 +61,6 @@ public class OrdersServiceImpl implements OrdersService {
 	private DishService dishService;
 	@Autowired
 	private DishMapper dishMapper;
-	@Autowired
-	private JedisClient jedisClient;
 	
 	/***
 	 * 增加订单
@@ -169,9 +166,8 @@ public class OrdersServiceImpl implements OrdersService {
 				Integer a=Integer.parseInt(dish.getdCount());
 				/*更新库存*/
 				dish.setId(Integer.parseInt(orderItem.getdId()));
-				dish.setdCount(String.valueOf(a+Integer.parseInt(orderItem.getOiCount())));
+				dish.setdCount(dish.getdCount()+Integer.parseInt(orderItem.getOiCount()));
 				dishMapper.updateDish(dish);
-				jedisClient.expire(Const.DISH_CACHE, 0);
 			}
 			
 		}
