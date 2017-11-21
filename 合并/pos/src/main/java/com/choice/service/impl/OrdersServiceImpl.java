@@ -86,7 +86,7 @@ public class OrdersServiceImpl implements OrdersService {
 		//查询桌子是否被占用
 		Desk desk = deskMapper.selectDeskById(ordersDTO.getDeId());
 		if(desk.getDeStatus().equals("1")){
-			return ServerResponse.createByErrorMessage("桌子被占用！！！");
+			return ServerResponse.createByErrorMessage("1");
 		}
 		//查询菜品是否足够
 		List<Dish> dishList = qualifyDishCount(ordersDTO);
