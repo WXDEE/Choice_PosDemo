@@ -40,7 +40,12 @@ function success(text) {
         content: text,
     });
 }
-
+function warning(text,title) {
+    Modal.warning({
+        title:title,
+        content: text,
+    });
+}
 function error(text,title) {
     let array=text.map((item)=>{
         return  <p>{item}</p>
@@ -164,16 +169,20 @@ class SelectFood extends React.Component {
         const {ClearStoreByOrderSE} = this.props;
         //提交订单后的状态判定
      if(this.props.putOrderSE==false){
-         let msg=JSON.parse(this.props.dishOrderSE.msg);
-         let msgText=[];
-         for(let i=0,index=msg.length;i<index;i++){
-             msgText[i]="菜品："+msg[i].dName+"不足！目前剩余"+Number(msg[i].dCount)+"份！\n";
+         if(this.props.dishOrderSE.msg==1){
+             warning("错误","此桌已经被占用！");
+             ClearStoreByOrderSE();
+         }else{
+             let msg=JSON.parse(this.props.dishOrderSE.msg);
+             let msgText=[];
+             for(let i=0,index=msg.length;i<index;i++){
+                 msgText[i]="菜品："+msg[i].dName+"不足！目前剩余"+Number(msg[i].dCount)+"份！\n";
+             }
+
+             error(msgText,"菜品不足！");
+             //清空 订单 成功失败信息
+             ClearStoreByOrderSE();
          }
-
-         error(msgText,"菜品不足！");
-         //清空 订单 成功失败信息
-         ClearStoreByOrderSE();
-
         }else if(this.props.putOrderSE==true){
            success("成功提交订单！");
          //清空 订单 成功失败信息
