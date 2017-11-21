@@ -169,8 +169,9 @@ public class OrdersServiceImpl implements OrdersService {
 				Integer a=Integer.parseInt(dish.getdCount());
 				/*更新库存*/
 				dish.setId(Integer.parseInt(orderItem.getdId()));
-				dish.setdCount(dish.getdCount()+Integer.parseInt(orderItem.getOiCount()));
+				dish.setdCount(String.valueOf(a+Integer.parseInt(orderItem.getOiCount())));
 				dishMapper.updateDish(dish);
+				jedisClient.expire(Const.DISH_CACHE, 0);
 			}
 			
 		}
