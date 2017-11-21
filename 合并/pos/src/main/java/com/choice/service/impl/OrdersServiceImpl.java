@@ -64,6 +64,16 @@ public class OrdersServiceImpl implements OrdersService {
 	
 	/***
 	 * 增加订单
+	 * 1.查询桌子是否被占用
+	 * 2.查询库存中菜品是否足够
+	 * 3.将菜品库存余量更新
+	 * 4.插入订单表
+	 * 5.插入订单明细表
+	 * 6.更改桌子状态为已使用
+	 * 7.打印日志
+	 * 8.通过websocket向前端发送桌子被占用的消息
+	 * 9.异步向mq发送订单消息
+	 * 10.将dto信息补全返回
 	 */
 
 	@Transactional
@@ -79,7 +89,6 @@ public class OrdersServiceImpl implements OrdersService {
 		List<Dish> dishList = qualifyDishCount(ordersDTO);
 		//若不够则返回error
 		if(dishList != null && dishList.size()>0){
-			System.out.println(JsonUtils.objectToJson(dishList));
 			return ServerResponse.createByErrorMessage(JsonUtils.objectToJson(dishList));
 		}
 		//更新菜品数量
@@ -97,14 +106,14 @@ public class OrdersServiceImpl implements OrdersService {
 		ordersDTO.setoNum(orders.getoNum());
 		ordersDTO.setoStatus("已下单");
 		ordersDTO.setOrderItemList(orderItemList);
-		//封装为响应对象
-		ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
         log.debug("订单生成:" + ordersDTO);
         //通知前端
         String msg = "{\"type\":\"desk\",\"status\":\"1\",\"data\":\""+ordersDTO.getDeId()+"\"}";
 		wsHandler.sendMessage(msg);
         //异步向mq发送订单消息
         printOrder(ordersDTO);
+        //封装为响应对象返回
+        ServerResponse<OrdersDTO> result = ServerResponse.createBySuccess(ordersDTO);
 		return result;
     }
 
@@ -368,7 +377,8 @@ public class OrdersServiceImpl implements OrdersService {
 		List<OrderItem> orderItemList = ordersDTO.getOrderItemList();
 		for (OrderItem orderItem : orderItemList) {
 			//若菜品详情中菜品数量大于菜品总数将名称和总数封装为dish添加到dishlist中
-			if(Integer.parseInt(countmap.get(orderItem.getdId()))-Integer.parseInt(orderItem.getOiCount())<0){
+			if(Integer.parseInt(countmap.get(orderItem.getdId()))
+					- Integer.parseInt(orderItem.getOiCount())<0){
 				Dish temp = new Dish();
 				temp.setdName(namemap.get(orderItem.getdId()));
 				temp.setdCount(countmap.get(orderItem.getdId()));
@@ -395,6 +405,7 @@ public class OrdersServiceImpl implements OrdersService {
 			map.put(dish.getId()+"", dish.getdCount());
 		}
 		for (OrderItem orderItem : dishList) {
+			//新建用于更新的对象
 			Dish dish = new Dish();
 			dish.setId(Integer.parseInt(orderItem.getdId()));
 			//计算剩余菜品数量

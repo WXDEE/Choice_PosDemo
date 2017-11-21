@@ -61,7 +61,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 		//取订单表中的订单号，桌子号，下单时间，总金额
 		Map<String, String> orderMap = ordersService.selectToItem(ordersId);
 		//封装进ordersdto
-		while(orderMap != null && orderMap.size() > 0){
+		if (orderMap != null && orderMap.size() > 0){
 			ordersDTO.setId(Integer.parseInt(ordersId));
 			ordersDTO.setoNum(orderMap.get("o_num"));
 			ordersDTO.setDeId(orderMap.get("de_id"));
