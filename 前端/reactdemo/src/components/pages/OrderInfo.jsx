@@ -275,5 +275,3 @@ OrderInfo = connect(mapStateToProps, {
     getOrderListByPageNumber,
 })(OrderInfo);
 export default OrderInfo;
-
-
